@@ -1,0 +1,3463 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description"
+    content="LearnToBot Spring Camp 2026 — kids build real robotics & coding projects and take home their kit." />
+  <title>LearnToBot — Spring Camp 2026</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+
+  <!-- Icons -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" defer></script>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              navy: '#071f4e',
+              blue: '#0b2d6b',
+              orange: '#ffa100',
+              orangeHover: '#e69100',
+              light: '#f0f4ff'
+            }
+          },
+          animation: {
+            'scroll': 'scroll 40s linear infinite',
+            'marquee': 'marquee 30s linear infinite',
+          },
+          keyframes: {
+            scroll: {
+              '0%': { transform: 'translateX(0)' },
+              '100%': { transform: 'translateX(-50%)' },
+            },
+            marquee: {
+              '0%': { transform: 'translateX(0)' },
+              '100%': { transform: 'translateX(-50%)' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap');
+
+    /* ======= SMOOTH SCROLLING ======= */
+    html {
+      scroll-behavior: smooth;
+    }
+
+    /* Mobile Text Scaling Fix for Wix Embed */
+    @media (max-width: 640px) {
+      html {
+        font-size: 13px;
+      }
+    }
+
+    /* Custom Utilities */
+    body {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    /* Preloader Styles */
+    #preloader {
+      position: fixed;
+      inset: 0;
+      z-index: 10000;
+      background-color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.5s ease;
+    }
+
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #ffa100;
+      /* brand-orange */
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    details>summary {
+      list-style: none;
+    }
+
+    details>summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .fade-enter {
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
+    }
+
+    .fade-enter-active {
+      opacity: 1;
+    }
+
+    /* Toast Animation */
+    @keyframes bounceIn {
+      0% {
+        opacity: 0;
+        transform: translate(-50%, -20px) scale(0.9);
+      }
+
+      50% {
+        transform: translate(-50%, 5px) scale(1.02);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translate(-50%, 0) scale(1);
+      }
+    }
+
+    .animate-bounce-in {
+      animation: bounceIn 0.4s ease-out forwards;
+    }
+
+    /* ======= SCROLL REVEAL ANIMATIONS ======= */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    }
+
+    .reveal.revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Staggered reveals for card grids */
+    .reveal-stagger>* {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+    }
+
+    .reveal-stagger.revealed>*:nth-child(1) {
+      transition-delay: 0.1s;
+    }
+
+    .reveal-stagger.revealed>*:nth-child(2) {
+      transition-delay: 0.2s;
+    }
+
+    .reveal-stagger.revealed>*:nth-child(3) {
+      transition-delay: 0.3s;
+    }
+
+    .reveal-stagger.revealed>*:nth-child(4) {
+      transition-delay: 0.4s;
+    }
+
+    .reveal-stagger.revealed>*:nth-child(5) {
+      transition-delay: 0.5s;
+    }
+
+    .reveal-stagger.revealed>*:nth-child(6) {
+      transition-delay: 0.6s;
+    }
+
+    .reveal-stagger.revealed>* {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Fade in from sides */
+    .reveal-left {
+      opacity: 0;
+      transform: translateX(-40px);
+      transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+    }
+
+    .reveal-left.revealed {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .reveal-right {
+      opacity: 0;
+      transform: translateX(40px);
+      transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+    }
+
+    .reveal-right.revealed {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* ======= ENHANCED HOVER EFFECTS ======= */
+    /* Card Hover - Lift & Glow */
+    .hover-lift {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .hover-lift:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Button Pulse on Hover */
+    .hover-pulse:hover {
+      animation: pulse 1s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.03);
+      }
+    }
+
+    /* Image Zoom on Hover */
+    .hover-zoom {
+      overflow: hidden;
+    }
+
+    .hover-zoom img {
+      transition: transform 0.4s ease;
+    }
+
+    .hover-zoom:hover img {
+      transform: scale(1.08);
+    }
+
+    /* Glow Effect */
+    .hover-glow:hover {
+      box-shadow: 0 0 30px rgba(255, 161, 0, 0.4);
+    }
+
+    /* Camp Row Hover */
+    .camp-row-wrapper:hover>div:first-child {
+      background-color: rgba(255, 161, 0, 0.05);
+    }
+
+    /* Service Card Enhanced Hover */
+    .service-card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+    }
+
+    .service-card:hover {
+      transform: translateY(-3px) scale(1.01);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+    }
+
+    /* ======= BUTTON ANIMATIONS ======= */
+    .btn-animated {
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .btn-animated::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: width 0.6s ease, height 0.6s ease;
+    }
+
+    .btn-animated:hover::after {
+      width: 300px;
+      height: 300px;
+    }
+
+    /* Shine Effect on Hover */
+    .btn-shine {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-shine::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .btn-shine:hover::before {
+      left: 100%;
+    }
+
+    /* --- Parent Testimonials (Custom Styles) --- */
+    :root {
+      --pt-gap: 16px;
+      --pt-thumb-w: 190px;
+      --pt-radius: 12px;
+      --pt-shadow: 0 10px 20px rgba(0, 0, 0, .12);
+    }
+
+    .pt-wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px;
+      overflow: hidden;
+    }
+
+    .pt-mask {
+      position: relative;
+      overflow: hidden;
+      margin-top: 16px;
+      border-radius: 16px;
+    }
+
+    .pt-track {
+      display: flex;
+      gap: var(--pt-gap);
+      width: max-content;
+      animation: pt-scroll 40s linear infinite;
+    }
+
+    .pt-item {
+      width: var(--pt-thumb-w);
+      flex: 0 0 auto;
+      position: relative;
+      border-radius: var(--pt-radius);
+      overflow: hidden;
+      box-shadow: var(--pt-shadow);
+      cursor: pointer;
+      background: #000;
+      border: none;
+      padding: 0;
+    }
+
+    .pt-item img {
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 9/16;
+      object-fit: cover;
+    }
+
+    .pt-play {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      background: rgba(0, 0, 0, .18);
+    }
+
+    .pt-play svg {
+      width: 44px;
+      height: 44px;
+      fill: #111;
+      background: #fff;
+      border-radius: 50%;
+      padding: 8px;
+      opacity: .9;
+      transition: transform .2s;
+    }
+
+    .pt-item:hover .pt-play svg {
+      transform: scale(1.08);
+    }
+
+    /* Parent Lightbox */
+    .pt-lb {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .8);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 9999;
+    }
+
+    .pt-lb.open {
+      display: flex;
+    }
+
+    .pt-screen {
+      width: min(360px, 92vw);
+      position: relative;
+    }
+
+    .pt-close {
+      position: absolute;
+      top: -44px;
+      right: 0;
+      color: #fff;
+      font: 700 32px/1 sans-serif;
+      border: 0;
+      background: none;
+      cursor: pointer;
+    }
+
+    .pt-portrait {
+      position: relative;
+      width: 100%;
+      padding-top: 177.78%;
+      background: #000;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, .25);
+    }
+
+    .pt-portrait iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    @keyframes pt-scroll {
+      from {
+        transform: translateX(0)
+      }
+
+      to {
+        transform: translateX(-50%)
+      }
+    }
+
+    @media (max-width: 640px) {
+      .pt-track {
+        animation: none;
+      }
+
+      .pt-mask {
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        padding-bottom: 4px;
+      }
+
+      .pt-item {
+        scroll-snap-align: start;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .pt-track {
+        animation: none;
+      }
+    }
+
+    /* Review Card Styles */
+    .review-card {
+      background: white;
+      border-radius: 12px;
+      padding: 16px;
+      border: 1px solid #f3f4f6;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+      height: 100%;
+    }
+
+    .review-tab.active {
+      background-color: #071f4e;
+      color: white;
+      border-color: #071f4e;
+    }
+
+    .camp-img-square {
+      width: 100%;
+      aspect-ratio: 1/1;
+      object-fit: contain;
+      background-color: #f9fafb;
+      padding: 16px;
+      border-radius: 16px;
+    }
+
+    /* ======= PROJECT SHOWCASE STYLES ======= */
+    :root {
+      --ltb-orange: #FF6B00;
+      --ltb-navy: #0A1128;
+      --ltb-blue: #0055FF;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+    }
+
+    .project-card {
+      transition: all 0.3s ease;
+    }
+
+    .project-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .video-container {
+      /* Changed to a taller 3:4 aspect ratio to accommodate portrait clips */
+      aspect-ratio: 3 / 4;
+      overflow: hidden;
+      border-radius: 16px;
+      /* Background matches the navy theme for a "letterbox" look on mixed ratios */
+      background: #0A1128;
+      border: 2px solid #f1f5f9;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .project-card:hover .video-container {
+      border-color: var(--ltb-orange);
+      box-shadow: 0 10px 25px -5px rgba(255, 107, 0, 0.15);
+    }
+
+    .video-container video {
+      width: 100%;
+      height: 100%;
+      /* Changed from 'cover' to 'contain' to ensure the entire GIF is visible */
+      object-fit: contain;
+    }
+
+    /* Hide scrollbar logic */
+    .hide-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .hide-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    .accent-text {
+      color: var(--ltb-orange);
+    }
+
+    .category-tag {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 700;
+      color: #64748b;
+      margin-bottom: 4px;
+      display: block;
+    }
+
+    /* --- Parent Testimonials (Carousel) --- */
+    :root {
+      --pt-gap: 16px;
+      --pt-thumb-w: 260px;
+      /* Wider to accommodate text */
+      --pt-radius: 12px;
+      --pt-shadow: 0 10px 20px rgba(0, 0, 0, .12);
+    }
+
+    .pt-wrap {
+      max-width: 100%;
+      margin: 0 auto;
+      padding: 24px 0;
+      overflow: hidden;
+    }
+
+    .pt-mask {
+      position: relative;
+      overflow: hidden;
+      margin-top: 16px;
+    }
+
+    .pt-track {
+      display: flex;
+      gap: var(--pt-gap);
+      width: max-content;
+      animation: pt-scroll 40s linear infinite;
+    }
+
+    .pt-track:hover {
+      animation-play-state: paused;
+    }
+
+    .pt-card {
+      width: var(--pt-thumb-w);
+      flex: 0 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .pt-quote {
+      text-align: center;
+      font-weight: 700;
+      color: #0A1128;
+      font-size: 1.1rem;
+      line-height: 1.3;
+      min-height: 3.2em;
+      /* Ensure alignment */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .pt-item {
+      width: 100%;
+      position: relative;
+      border-radius: var(--pt-radius);
+      overflow: hidden;
+      box-shadow: var(--pt-shadow);
+      cursor: pointer;
+      background: #000;
+      border: none;
+      padding: 0;
+      aspect-ratio: 9/16;
+    }
+
+    .pt-item img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    .pt-item:hover img {
+      transform: scale(1.05);
+    }
+
+    .pt-play {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      background: rgba(0, 0, 0, .18);
+    }
+
+    .pt-play svg {
+      width: 44px;
+      height: 44px;
+      fill: #111;
+      background: #fff;
+      border-radius: 50%;
+      padding: 8px;
+      opacity: .9;
+      transition: transform .2s, opacity .2s;
+    }
+
+    .pt-item:hover .pt-play svg {
+      transform: scale(1.1);
+      opacity: 1;
+    }
+
+    /* Parent Lightbox */
+    .pt-lb {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .9);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 9999;
+      backdrop-filter: blur(5px);
+    }
+
+    .pt-lb.open {
+      display: flex;
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    .pt-screen {
+      width: min(800px, 92vw);
+      position: relative;
+    }
+
+    .pt-close {
+      position: absolute;
+      top: -44px;
+      right: -10px;
+      color: #fff;
+      font: 700 32px/1 sans-serif;
+      border: 0;
+      background: none;
+      cursor: pointer;
+      opacity: 0.8;
+      transition: opacity 0.2s;
+    }
+
+    .pt-close:hover {
+      opacity: 1;
+    }
+
+    .pt-portrait {
+      position: relative;
+      width: 100%;
+      padding-top: 177.77%;
+      /* 9:16 */
+      background: #000;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, .25);
+    }
+
+
+    .pt-portrait iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    @keyframes pt-scroll {
+      from {
+        transform: translateX(0)
+      }
+
+      to {
+        transform: translateX(-50%)
+      }
+    }
+  </style>
+</head>
+
+<body class="bg-white text-gray-900 font-sans overflow-x-hidden">
+  <!-- Preloader -->
+  <div id="preloader">
+    <div class="spinner"></div>
+  </div>
+  <script>
+    window.addEventListener('load', function () {
+      const preloader = document.getElementById('preloader');
+      preloader.style.opacity = '0';
+      setTimeout(() => {
+        preloader.style.display = 'none';
+      }, 500);
+    });
+  </script>
+
+  <!-- Header -->
+  <header class="bg-[#071f4e] text-white border-b border-white/10 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="flex justify-between items-center h-16">
+
+        <!-- Logo -->
+        <a href="https://www.learntobot.com/" class="flex items-center gap-3 group">
+          <img src="https://res.cloudinary.com/drr3ss2j7/image/upload/v1771530035/logo_x5vjnd.png" alt="LearnToBot"
+            class="h-10 w-auto transition-transform group-hover:scale-110">
+          <span class="text-2xl font-black tracking-tighter uppercase"
+            style="font-family: 'Montserrat', sans-serif;">LearnToBot</span>
+        </a>
+
+        <!-- Desktop Navigation -->
+        <nav class="hidden xl:flex items-center gap-8 text-[15px] font-bold tracking-wide"
+          style="font-family: 'Montserrat', sans-serif;">
+
+          <a href="https://www.learntobot.com/" class="hover:text-brand-orange transition-colors">HOME</a>
+
+          <a href="https://www.learntobot.com/trial" class="hover:text-brand-orange transition-colors">BOOK A TRIAL</a>
+
+          <!-- Camps Dropdown -->
+          <div class="relative group h-16 flex items-center">
+            <button
+              class="flex items-center gap-1.5 hover:text-brand-orange transition-colors focus:outline-none uppercase">
+              CAMPS <i
+                class="fa-solid fa-chevron-down text-[10px] opacity-70 group-hover:rotate-180 transition-transform"></i>
+            </button>
+            <div
+              class="absolute top-full left-1/2 -translate-x-1/2 w-64 bg-[#071f4e] border border-white/10 rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform group-hover:translate-y-0 translate-y-2 z-50 overflow-hidden">
+              <div class="py-2">
+                <a href="https://springbreakcamps.learntobot.com"
+                  class="block px-6 py-3 hover:bg-white/5 hover:text-brand-orange transition-colors">Spring Break
+                  Camps</a>
+                <a href="#" class="block px-6 py-3 hover:bg-white/5 hover:text-brand-orange transition-colors">Summer
+                  Camps</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Weekly Classes Dropdown -->
+          <div class="relative group h-16 flex items-center">
+            <button
+              class="flex items-center gap-1.5 hover:text-brand-orange transition-colors focus:outline-none uppercase">
+              WEEKLY CLASSES <i
+                class="fa-solid fa-chevron-down text-[10px] opacity-70 group-hover:rotate-180 transition-transform"></i>
+            </button>
+            <div
+              class="absolute top-full left-1/2 -translate-x-1/2 w-64 bg-[#071f4e] border border-white/10 rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform group-hover:translate-y-0 translate-y-2 z-50 overflow-hidden">
+              <div class="py-2">
+                <a href="https://www.learntobot.com/schedule"
+                  class="block px-6 py-3 hover:bg-white/5 hover:text-brand-orange transition-colors">Locations &
+                  Schedules</a>
+                <a href="https://www.learntobot.com/register"
+                  class="block px-6 py-3 hover:bg-white/5 hover:text-brand-orange transition-colors">Pricing &
+                  Schedules</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Events Dropdown -->
+          <div class="relative group h-16 flex items-center">
+            <button
+              class="flex items-center gap-1.5 hover:text-brand-orange transition-colors focus:outline-none uppercase">
+              EVENTS <i
+                class="fa-solid fa-chevron-down text-[10px] opacity-70 group-hover:rotate-180 transition-transform"></i>
+            </button>
+            <div
+              class="absolute top-full left-1/2 -translate-x-1/2 w-72 bg-[#071f4e] border border-white/10 rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform group-hover:translate-y-0 translate-y-2 z-50 overflow-hidden">
+              <div class="py-2">
+                <a href="https://www.learntobot.com/sugarland"
+                  class="block px-6 py-3 hover:bg-white/5 hover:text-brand-orange transition-colors">TRIAL CAMP -
+                  SUGARLAND</a>
+                <a href="https://www.learntobot.com/libraryfreecamp"
+                  class="block px-6 py-3 hover:bg-white/5 hover:text-brand-orange transition-colors">Library Free
+                  Camp</a>
+                <a href="https://www.learntobot.com/competition"
+                  class="block px-6 py-3 hover:bg-white/5 hover:text-brand-orange transition-colors">LearnToBot VEX
+                  TEAM</a>
+                <a href="https://www.learntobot.com/demoday"
+                  class="block px-6 py-3 hover:bg-white/5 hover:text-brand-orange transition-colors">DEMO DAY</a>
+                <a href="https://www.learntobot.com/codebusters"
+                  class="block px-6 py-3 hover:bg-white/5 hover:text-brand-orange transition-colors">CODE BUSTERS
+                  COMPETITION</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Schools Dropdown -->
+          <div class="relative group h-16 flex items-center">
+            <button
+              class="flex items-center gap-1.5 hover:text-brand-orange transition-colors focus:outline-none uppercase">
+              SCHOOLS <i
+                class="fa-solid fa-chevron-down text-[10px] opacity-70 group-hover:rotate-180 transition-transform"></i>
+            </button>
+            <div
+              class="absolute top-full right-0 w-72 bg-[#071f4e] border border-white/10 rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform group-hover:translate-y-0 translate-y-2 z-50 overflow-hidden">
+              <div class="py-2">
+                <a href="https://www.learntobot.com/schoolpartnerships"
+                  class="block px-6 py-3 hover:bg-white/5 hover:text-brand-orange transition-colors">School
+                  Partnerships</a>
+                <a href="https://www.learntobot.com/afterschoolprogram"
+                  class="block px-6 py-3 hover:bg-white/5 hover:text-brand-orange transition-colors">AFTER SCHOOL
+                  PROGRAM</a>
+                <a href="https://www.learntobot.com/sstspring"
+                  class="block px-6 py-3 hover:bg-white/5 hover:text-brand-orange transition-colors">SST - Spring
+                  Campus</a>
+                <a href="https://www.learntobot.com/sstwoodlands"
+                  class="block px-6 py-3 hover:bg-white/5 hover:text-brand-orange transition-colors">SST - Woodlands
+                  Campus</a>
+                <a href="https://www.learntobot.com/westbury"
+                  class="block px-6 py-3 hover:bg-white/5 hover:text-brand-orange transition-colors">Westbury Christian
+                  School</a>
+                <a href="https://www.learntobot.com/kinkaidsignup"
+                  class="block px-6 py-3 hover:bg-white/5 hover:text-brand-orange transition-colors">KINKAID - SPRING
+                  2026</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- More Dropdown -->
+          <div class="relative group h-16 flex items-center">
+            <button
+              class="flex items-center gap-1.5 hover:text-brand-orange transition-colors focus:outline-none uppercase">
+              MORE <i
+                class="fa-solid fa-chevron-down text-[10px] opacity-70 group-hover:rotate-180 transition-transform"></i>
+            </button>
+            <div
+              class="absolute top-full right-0 w-64 bg-[#071f4e] border border-white/10 rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform group-hover:translate-y-0 translate-y-2 z-50 overflow-hidden">
+              <div class="py-2">
+                <a href="https://www.learntobot.com/curriculum"
+                  class="block px-6 py-3 hover:bg-white/5 hover:text-brand-orange transition-colors">CURRICULUM</a>
+                <a href="https://www.learntobot.com/copy-of-curriculum-1"
+                  class="block px-6 py-3 hover:bg-white/5 hover:text-brand-orange transition-colors">PROJECTS
+                  GALLERY</a>
+                <a href="https://www.learntobot.com/blog"
+                  class="block px-6 py-3 hover:bg-white/5 hover:text-brand-orange transition-colors">BLOG</a>
+                <a href="https://www.learntobot.com/faqpage"
+                  class="block px-6 py-3 hover:bg-white/5 hover:text-brand-orange transition-colors">FAQs</a>
+                <a href="https://www.learntobot.com/event-list"
+                  class="block px-6 py-3 hover:bg-white/5 hover:text-brand-orange transition-colors">Events</a>
+              </div>
+            </div>
+          </div>
+
+        </nav>
+
+        <!-- Mobile Menu Button -->
+        <button id="mobile-menu-btn" class="xl:hidden text-white p-2">
+          <i class="fa-solid fa-bars text-2xl"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu"
+      class="absolute top-full left-0 w-full bg-[#071f4e] border-t border-white/10 shadow-2xl overflow-hidden transition-all duration-300 max-h-0">
+      <div
+        class="flex flex-col p-6 space-y-2 font-bold text-sm tracking-wide overflow-y-auto max-h-[calc(100vh-4rem)] pb-20">
+        <a href="https://www.learntobot.com/"
+          class="block py-2 text-white hover:text-brand-orange border-b border-white/5">HOME</a>
+        <a href="https://www.learntobot.com/trial"
+          class="block py-2 text-white hover:text-brand-orange border-b border-white/5">BOOK A TRIAL</a>
+
+        <!-- Mobile Dropdown: Camps -->
+        <div class="mobile-dropdown group border-b border-white/5">
+          <button
+            class="w-full flex justify-between items-center py-3 text-white hover:text-brand-orange transition-colors focus:outline-none">
+            <span class="uppercase tracking-widest text-xs font-black text-brand-orange/90">Camps</span>
+            <i class="fa-solid fa-chevron-down text-xs transition-transform duration-300"></i>
+          </button>
+          <div
+            class="mobile-dropdown-content overflow-hidden max-h-0 transition-all duration-300 ease-in-out bg-[#05183d] rounded-lg">
+            <div class="py-2 space-y-1">
+              <a href="https://springbreakcamps.learntobot.com"
+                class="block pl-4 py-2 text-gray-300 hover:text-white hover:bg-white/5 rounded-md transition-colors text-xs font-medium">Spring
+                Break Camps</a>
+              <a href="#"
+                class="block pl-4 py-2 text-gray-300 hover:text-white hover:bg-white/5 rounded-md transition-colors text-xs font-medium">Summer
+                Camps</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mobile Dropdown: Weekly Classes -->
+        <div class="mobile-dropdown group border-b border-white/5">
+          <button
+            class="w-full flex justify-between items-center py-3 text-white hover:text-brand-orange transition-colors focus:outline-none">
+            <span class="uppercase tracking-widest text-xs font-black text-brand-orange/90">Weekly Classes</span>
+            <i class="fa-solid fa-chevron-down text-xs transition-transform duration-300"></i>
+          </button>
+          <div
+            class="mobile-dropdown-content overflow-hidden max-h-0 transition-all duration-300 ease-in-out bg-[#05183d] rounded-lg">
+            <div class="py-2 space-y-1">
+              <a href="https://www.learntobot.com/schedule"
+                class="block pl-4 py-2 text-gray-300 hover:text-white hover:bg-white/5 rounded-md transition-colors text-xs font-medium">Locations
+                & Schedules</a>
+              <a href="https://www.learntobot.com/register"
+                class="block pl-4 py-2 text-gray-300 hover:text-white hover:bg-white/5 rounded-md transition-colors text-xs font-medium">Pricing
+                & Schedules</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mobile Dropdown: Events -->
+        <div class="mobile-dropdown group border-b border-white/5">
+          <button
+            class="w-full flex justify-between items-center py-3 text-white hover:text-brand-orange transition-colors focus:outline-none">
+            <span class="uppercase tracking-widest text-xs font-black text-brand-orange/90">Events</span>
+            <i class="fa-solid fa-chevron-down text-xs transition-transform duration-300"></i>
+          </button>
+          <div
+            class="mobile-dropdown-content overflow-hidden max-h-0 transition-all duration-300 ease-in-out bg-[#05183d] rounded-lg">
+            <div class="py-2 space-y-1">
+              <a href="https://www.learntobot.com/sugarland"
+                class="block pl-4 py-2 text-gray-300 hover:text-white hover:bg-white/5 rounded-md transition-colors text-xs font-medium">Trial
+                Camp - Sugarland</a>
+              <a href="https://www.learntobot.com/libraryfreecamp"
+                class="block pl-4 py-2 text-gray-300 hover:text-white hover:bg-white/5 rounded-md transition-colors text-xs font-medium">Library
+                Free Camp</a>
+              <a href="https://www.learntobot.com/competition"
+                class="block pl-4 py-2 text-gray-300 hover:text-white hover:bg-white/5 rounded-md transition-colors text-xs font-medium">VEX
+                Team</a>
+              <a href="https://www.learntobot.com/demoday"
+                class="block pl-4 py-2 text-gray-300 hover:text-white hover:bg-white/5 rounded-md transition-colors text-xs font-medium">Demo
+                Day</a>
+              <a href="https://www.learntobot.com/codebusters"
+                class="block pl-4 py-2 text-gray-300 hover:text-white hover:bg-white/5 rounded-md transition-colors text-xs font-medium">Code
+                Busters</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mobile Dropdown: Schools -->
+        <div class="mobile-dropdown group border-b border-white/5">
+          <button
+            class="w-full flex justify-between items-center py-3 text-white hover:text-brand-orange transition-colors focus:outline-none">
+            <span class="uppercase tracking-widest text-xs font-black text-brand-orange/90">Schools</span>
+            <i class="fa-solid fa-chevron-down text-xs transition-transform duration-300"></i>
+          </button>
+          <div
+            class="mobile-dropdown-content overflow-hidden max-h-0 transition-all duration-300 ease-in-out bg-[#05183d] rounded-lg">
+            <div class="py-2 space-y-1">
+              <a href="https://www.learntobot.com/schoolpartnerships"
+                class="block pl-4 py-2 text-gray-300 hover:text-white hover:bg-white/5 rounded-md transition-colors text-xs font-medium">Partnerships</a>
+              <a href="https://www.learntobot.com/afterschoolprogram"
+                class="block pl-4 py-2 text-gray-300 hover:text-white hover:bg-white/5 rounded-md transition-colors text-xs font-medium">After
+                School</a>
+              <a href="https://www.learntobot.com/sstspring"
+                class="block pl-4 py-2 text-gray-300 hover:text-white hover:bg-white/5 rounded-md transition-colors text-xs font-medium">SST
+                - Spring</a>
+              <a href="https://www.learntobot.com/sstwoodlands"
+                class="block pl-4 py-2 text-gray-300 hover:text-white hover:bg-white/5 rounded-md transition-colors text-xs font-medium">SST
+                - Woodlands</a>
+              <a href="https://www.learntobot.com/westbury"
+                class="block pl-4 py-2 text-gray-300 hover:text-white hover:bg-white/5 rounded-md transition-colors text-xs font-medium">Westbury</a>
+              <a href="https://www.learntobot.com/kinkaidsignup"
+                class="block pl-4 py-2 text-gray-300 hover:text-white hover:bg-white/5 rounded-md transition-colors text-xs font-medium">Kinkaid</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mobile Dropdown: More -->
+        <div class="mobile-dropdown group border-b border-white/5">
+          <button
+            class="w-full flex justify-between items-center py-3 text-white hover:text-brand-orange transition-colors focus:outline-none">
+            <span class="uppercase tracking-widest text-xs font-black text-brand-orange/90">More</span>
+            <i class="fa-solid fa-chevron-down text-xs transition-transform duration-300"></i>
+          </button>
+          <div
+            class="mobile-dropdown-content overflow-hidden max-h-0 transition-all duration-300 ease-in-out bg-[#05183d] rounded-lg">
+            <div class="py-2 space-y-1">
+              <a href="https://www.learntobot.com/curriculum"
+                class="block pl-4 py-2 text-gray-300 hover:text-white hover:bg-white/5 rounded-md transition-colors text-xs font-medium">CURRICULUM</a>
+              <a href="https://www.learntobot.com/copy-of-curriculum-1"
+                class="block pl-4 py-2 text-gray-300 hover:text-white hover:bg-white/5 rounded-md transition-colors text-xs font-medium">PROJECTS
+                GALLERY</a>
+              <a href="https://www.learntobot.com/blog"
+                class="block pl-4 py-2 text-gray-300 hover:text-white hover:bg-white/5 rounded-md transition-colors text-xs font-medium">BLOG</a>
+              <a href="https://www.learntobot.com/faqpage"
+                class="block pl-4 py-2 text-gray-300 hover:text-white hover:bg-white/5 rounded-md transition-colors text-xs font-medium">FAQs</a>
+              <a href="https://www.learntobot.com/event-list"
+                class="block pl-4 py-2 text-gray-300 hover:text-white hover:bg-white/5 rounded-md transition-colors text-xs font-medium">Events</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Mobile Menu Script -->
+    <script>
+      const btn = document.getElementById('mobile-menu-btn');
+      const menu = document.getElementById('mobile-menu');
+
+      // Toggle Mobile Menu
+      btn.addEventListener('click', () => {
+        if (menu.style.maxHeight) {
+          menu.style.maxHeight = null;
+          // Reset icon if needed
+        } else {
+          // Open to full viewport height to allow inner scrolling
+          menu.style.maxHeight = "100vh";
+        }
+      });
+
+      // Mobile Accordion Logic
+      const dropdowns = document.querySelectorAll('.mobile-dropdown');
+
+      dropdowns.forEach(dropdown => {
+        const trigger = dropdown.querySelector('button');
+        const content = dropdown.querySelector('.mobile-dropdown-content');
+        const icon = trigger.querySelector('.fa-chevron-down');
+
+        trigger.addEventListener('click', (e) => {
+          e.preventDefault();
+
+          // Toggle current
+          if (content.style.maxHeight) {
+            content.style.maxHeight = null;
+            icon.style.transform = 'rotate(0deg)';
+          } else {
+            // Close others (optional - for accordion behavior where only one is open at a time)
+            // dropdowns.forEach(d => {
+            //   if(d !== dropdown) {
+            //     d.querySelector('.mobile-dropdown-content').style.maxHeight = null;
+            //     d.querySelector('.fa-chevron-down').style.transform = 'rotate(0deg)';
+            //   }
+            // });
+
+            content.style.maxHeight = content.scrollHeight + "px";
+            icon.style.transform = 'rotate(180deg)';
+          }
+        });
+      });
+    </script>
+  </header>
+
+  <!-- Hero Section - Sales Funnel with Background Video -->
+  <section
+    class="relative min-h-[calc(100vh-4rem)] flex items-center justify-center px-4 sm:px-6 pt-16 pb-20 md:py-20 overflow-hidden">
+
+    <!-- Fullscreen Background Video -->
+    <div class="absolute inset-0 -z-10">
+      <video autoplay muted loop playsinline class="absolute inset-0 w-full h-full object-cover">
+        <source src="https://video.wixstatic.com/video/cf38b9_5e0de87ad7174dfb89d8d41def05ad1d/1080p/mp4/file.mp4"
+          type="video/mp4">
+      </video>
+      <!-- Dark overlay for text readability -->
+      <div class="absolute inset-0 bg-gradient-to-b from-black/0 via-black/0 to-black/0"></div>
+    </div>
+
+    <div
+      class="max-w-4xl mx-auto text-center relative z-10 bg-black/40 backdrop-blur-sm rounded-3xl p-4 sm:p-10 border border-white/10">
+
+      <!-- Prominent Category Header -->
+      <div class="flex flex-col items-center justify-center mb-6">
+        <span
+          class="text-brand-orange font-black uppercase tracking-widest text-xl sm:text-2xl md:text-3xl drop-shadow-lg mb-3 leading-tight">
+          SPRING BREAK ROBOTICS CAMP
+        </span>
+        <div
+          class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 shadow-lg">
+          <i class="fa-solid fa-location-dot text-brand-orange text-xs"></i>
+          <span class="text-white text-xs sm:text-sm font-bold uppercase tracking-wider">
+            WOODLANDS & KATY TEXAS
+          </span>
+        </div>
+      </div>
+
+      <!-- Main Headline -->
+      <h1
+        class="text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.15] mb-2 md:mb-8 drop-shadow-lg">
+        Build & Keep Your Own Robot This Spring.
+      </h1>
+
+      <!-- Supporting Subheadline -->
+      <p class="text-lg sm:text-xl text-white/80 leading-relaxed max-w-2xl mx-auto mb-4 md:mb-10">
+        Includes a Professional Robotics Kit ($100 Value) — Yours to Keep Forever.
+      </p>
+
+      <!-- Trust Icons Row -->
+      <div class="flex flex-wrap justify-center gap-6 sm:gap-8 mb-4 md:mb-10 text-sm text-white/80">
+        <div class="flex items-center gap-2">
+          <i class="fa-solid fa-shield-check text-green-400"></i>
+          <span class="font-medium">Day 1 Risk-Free: Full Refund Guarantee</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <i class="fa-solid fa-calendar-check text-brand-orange"></i>
+          <span class="font-medium">Flex-Pass: Lock Spot Now, Change Anytime</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <i class="fa-solid fa-users text-blue-400"></i>
+          <span class="font-medium">Hands-on Projects (1:4 Ratio)</span>
+        </div>
+      </div>
+
+
+
+      <!-- Dual CTA Buttons -->
+      <div class="flex flex-col sm:flex-row justify-center gap-4">
+        <a href="#camps"
+          class="btn-shine inline-flex items-center justify-center px-8 py-4 text-base font-bold rounded-full text-white bg-brand-orange hover:bg-brand-orangeHover shadow-xl transition-all transform hover:-translate-y-1">
+          Find Your Camp
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Scroll Progress Bar -->
+  <div id="scrollProgress" class="fixed top-0 left-0 h-1 bg-brand-orange z-[60] transition-all duration-100"
+    style="width: 0%"></div>
+
+  <!-- Minimal Glass Sticky Footer (hidden initially) -->
+  <div id="stickyCta" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-[9999] transition-all duration-300">
+    <div
+      class="bg-brand-navy/90 backdrop-blur-xl rounded-full p-2 flex items-center gap-4 shadow-2xl border border-white/10">
+      <!-- <span class="text-white/80 text-sm font-medium whitespace-nowrap">Limited spots.</span> -->
+      <a href="#camps"
+        class="bg-brand-orange hover:bg-brand-orangeHover text-white font-bold text-lg py-3 px-8 rounded-full transition-all whitespace-nowrap shadow-lg hover:shadow-orange-500/50 hover:-translate-y-0.5">
+        See Camp Info
+      </a>
+    </div>
+  </div>
+
+
+  <!-- Real Engineering Tools (Moved Up) -->
+  <section class="py-14 bg-gray-50 border-b border-gray-200">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="mb-0">
+        <div
+          class="inline-block px-3 py-1 rounded-full bg-blue-100 text-brand-blue text-xs font-black uppercase tracking-wide mb-4">
+          No Toy Kits</div>
+        <h2 class="text-3xl md:text-4xl font-black text-brand-navy mb-6">Real Engineering Tools.</h2>
+        <div
+          class="bg-white rounded-[2rem] p-8 md:p-10 shadow-xl border border-gray-100 grid md:grid-cols-2 gap-8 items-center">
+          <div>
+            <p class="text-lg text-gray-600 leading-relaxed mb-6">
+              Your child works with Arduinos, Raspberry Pis, sensors, motors, and real circuitry — the
+              same platforms used in:
+            </p>
+            <ul class="space-y-3 font-bold text-brand-navy">
+              <li class="flex items-center gap-3"><i class="fa-solid fa-graduation-cap text-brand-orange"></i> High
+                school
+                engineering programs</li>
+              <li class="flex items-center gap-3"><i class="fa-solid fa-flask text-brand-orange"></i>
+                College robotics labs</li>
+              <li class="flex items-center gap-3"><i class="fa-solid fa-microchip text-brand-orange"></i> Real-world
+                product
+                development</li>
+            </ul>
+            <p class="mt-6 text-sm font-semibold text-gray-500 italic border-l-4 border-brand-orange pl-4">
+              This isn’t a "camp activity." It’s early engineering exposure.
+            </p>
+          </div>
+          <div class="relative h-64 md:h-full bg-gray-100 rounded-2xl overflow-hidden">
+            <img src="https://i.imgur.com/A2lSKgk.jpeg" alt="Real Engineering Tools" loading="lazy"
+              class="absolute inset-0 w-full h-full object-cover" loading="lazy">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Partner Marquee -->
+  <section class="py-12 border-b border-gray-100 bg-white overflow-hidden">
+    <div class="text-center mb-8">
+      <p class="text-lg font-bold text-gray-800 uppercase tracking-widest">TRUSTED BY TOP HOUSTON SCHOOLS</p>
+    </div>
+    <div class="relative w-full mask-fade">
+      <div class="absolute left-0 top-0 bottom-0 w-20 z-10 bg-gradient-to-r from-white to-transparent"></div>
+      <div class="absolute right-0 top-0 bottom-0 w-20 z-10 bg-gradient-to-l from-white to-transparent"></div>
+      <div class="flex w-max animate-scroll">
+        <!-- Set A -->
+        <div class="flex items-center gap-20 px-8">
+
+          <div class="flex flex-col items-center gap-3">
+            <img class="h-20 w-auto object-contain"
+              src="https://www.woodlandsonline.com/images/cd/WoodlandsOnline24_logo.jpg" alt="Woodlands Online"
+              loading="lazy" onerror="this.style.display='none'">
+            <span class="text-sm font-bold text-gray-500 uppercase tracking-wide">Woodlands Online</span>
+          </div>
+
+          <div class="flex flex-col items-center gap-3">
+            <img class="h-32 w-auto object-contain"
+              src="https://upload.wikimedia.org/wikipedia/en/1/1a/Kinkaid_School_Seal.png" alt="The Kinkaid School"
+              loading="lazy" onerror="this.style.display='none'">
+            <span class="text-sm font-bold text-gray-500 uppercase tracking-wide">The Kinkaid School</span>
+          </div>
+
+          <div class="flex flex-col items-center gap-3">
+            <img class="h-20 w-auto object-contain"
+              src="https://www.texastorque.org/wp-content/uploads/2021/05/Conroe-ISD-640x276.png" alt="Conroe ISD"
+              loading="lazy" onerror="this.style.display='none'">
+            <span class="text-sm font-bold text-gray-500 uppercase tracking-wide">Conroe ISD</span>
+          </div>
+
+          <div class="flex flex-col items-center gap-3">
+            <img class="h-24 w-auto object-contain"
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXlG9PGCCSYK1aVaN2WMjSZt6C1W4SklDY9A&s"
+              alt="Post Oak School" loading="lazy" onerror="this.style.display='none'">
+            <span class="text-sm font-bold text-gray-500 uppercase tracking-wide">Post Oak School</span>
+          </div>
+
+        </div>
+        <!-- Set B -->
+        <div class="flex items-center gap-20 px-8">
+
+          <div class="flex flex-col items-center gap-3">
+            <img class="h-20 w-auto object-contain"
+              src="https://www.woodlandsonline.com/images/cd/WoodlandsOnline24_logo.jpg" alt="Woodlands Online"
+              loading="lazy" onerror="this.style.display='none'">
+            <span class="text-sm font-bold text-gray-500 uppercase tracking-wide">Woodlands Online</span>
+          </div>
+
+          <div class="flex flex-col items-center gap-3">
+            <img class="h-32 w-auto object-contain"
+              src="https://upload.wikimedia.org/wikipedia/en/1/1a/Kinkaid_School_Seal.png" alt="The Kinkaid School"
+              loading="lazy" onerror="this.style.display='none'">
+            <span class="text-sm font-bold text-gray-500 uppercase tracking-wide">The Kinkaid School</span>
+          </div>
+
+          <div class="flex flex-col items-center gap-3">
+            <img class="h-20 w-auto object-contain"
+              src="https://www.texastorque.org/wp-content/uploads/2021/05/Conroe-ISD-640x276.png" alt="Conroe ISD"
+              loading="lazy" onerror="this.style.display='none'">
+            <span class="text-sm font-bold text-gray-500 uppercase tracking-wide">Conroe ISD</span>
+          </div>
+
+          <div class="flex flex-col items-center gap-3">
+            <img class="h-24 w-auto object-contain"
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXlG9PGCCSYK1aVaN2WMjSZt6C1W4SklDY9A&s"
+              alt="Post Oak School" loading="lazy" onerror="this.style.display='none'">
+            <span class="text-sm font-bold text-gray-500 uppercase tracking-wide">Post Oak School</span>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- THE VALUE STACK: LOGICALLY JUSTIFY THE PRICE -->
+  <section class="py-16 bg-gray-50 border-b border-gray-200">
+    <div class="max-w-4xl mx-auto px-4">
+      <div class="text-center mb-10">
+        <h2 class="text-3xl font-black text-brand-navy">The Engineering Bundle your child gets from this Camp</h2>
+        <p class="text-gray-500 mt-2">Here is everything included in your tuition:</p>
+      </div>
+
+      <!-- The Stack Container -->
+      <div class="bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100">
+        <!-- Header -->
+        <div class="bg-brand-navy p-4 text-center">
+          <span class="text-white font-bold uppercase tracking-widest text-sm">The "Engineering Bundle"</span>
+        </div>
+
+        <!-- Items -->
+        <div class="divide-y divide-gray-100">
+          <!-- Item 1 -->
+          <div class="flex items-center justify-between p-6 hover:bg-blue-50/50 transition-colors">
+            <div class="flex items-start gap-4">
+              <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-brand-blue shrink-0">
+                <i class="fa-solid fa-chalkboard-user"></i>
+              </div>
+              <div>
+                <h4 class="font-bold text-brand-navy text-lg">3-5 days of Engineering hands-on Project</h4>
+                <p class="text-sm text-gray-500">1:4 instructor ratio with real engineers.</p>
+              </div>
+            </div>
+            <div class="text-right hidden sm:block">
+              <div class="text-xs text-gray-400 uppercase font-bold">Value</div>
+              <div class="font-bold text-gray-600 line-through">$500</div>
+            </div>
+          </div>
+
+          <!-- Item 2 -->
+          <div class="flex items-center justify-between p-6 hover:bg-orange-50/50 transition-colors bg-orange-50/30">
+            <div class="flex items-start gap-4">
+              <div
+                class="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center text-brand-orange shrink-0">
+                <i class="fa-solid fa-robot"></i>
+              </div>
+              <div>
+                <h4 class="font-bold text-brand-navy text-lg">The Hardware Kit (You Keep It)</h4>
+                <p class="text-sm text-gray-500">Arduino/RPi, sensors, motors, chassis. Not a loaner.</p>
+              </div>
+            </div>
+            <div class="text-right hidden sm:block">
+              <div class="text-xs text-gray-400 uppercase font-bold">Value</div>
+              <div class="font-bold text-gray-600 line-through">$100</div>
+            </div>
+          </div>
+
+          <!-- Item 3 (New: Videos) -->
+          <div class="flex items-center justify-between p-6 hover:bg-blue-50/50 transition-colors">
+            <div class="flex items-start gap-4">
+              <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-600 shrink-0">
+                <i class="fa-solid fa-video"></i>
+              </div>
+              <div>
+                <h4 class="font-bold text-brand-navy text-lg">Demo Videos of your child building Robots</h4>
+                <p class="text-sm text-gray-500">So you never have to wonder what they did in camp.</p>
+              </div>
+            </div>
+            <div class="text-right hidden sm:block">
+              <div class="text-xs text-gray-400 uppercase font-bold">Value</div>
+              <div class="font-bold text-gray-600 line-through">Priceless</div>
+            </div>
+          </div>
+
+          <!-- Item 4 (Updated: Software) -->
+          <div class="flex items-center justify-between p-6 hover:bg-blue-50/50 transition-colors">
+            <div class="flex items-start gap-4">
+              <div
+                class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 shrink-0">
+                <i class="fa-solid fa-code"></i>
+              </div>
+              <div>
+                <h4 class="font-bold text-brand-navy text-lg">3-month access to our Portal</h4>
+                <p class="text-sm text-gray-500">With hundreds of projects to do later.</p>
+              </div>
+            </div>
+            <div class="text-right hidden sm:block">
+              <div class="text-xs text-gray-400 uppercase font-bold">Value</div>
+              <div class="font-bold text-gray-600 line-through">$50</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Project Showcase Strip (Moved Up) -->
+  <section class="py-16 px-4 md:px-8 bg-white overflow-hidden">
+    <div class="max-w-7xl mx-auto">
+
+      <!-- Header Section -->
+      <div class="mb-12 text-center">
+        <h2 class="text-3xl md:text-5xl font-extrabold text-[#0A1128] tracking-tight mb-4">
+          See What They <span class="accent-text">Create</span>
+        </h2>
+        <div class="w-20 h-1.5 bg-[#FF6B00] mx-auto rounded-full"></div>
+        <p class="mt-6 text-slate-600 text-lg max-w-2xl mx-auto">
+          From coding custom games to building functional robotics, our campers learn by doing.
+        </p>
+      </div>
+
+      <!-- Responsive Grid / Slider -->
+      <div class="relative w-full overflow-hidden md:overflow-visible pb-8">
+        <div class="flex w-max animate-scroll md:animate-none md:w-auto md:grid md:grid-cols-3 lg:grid-cols-5 md:gap-6">
+
+          <!-- Set 1: Original Cards -->
+          <!-- Project 1: Car Racing Game -->
+          <div class="project-card flex-shrink-0 w-64 md:w-auto mr-6 md:mr-0">
+            <div class="mb-5 px-1">
+              <span class="category-tag">Game Design</span>
+              <p class="text-[#0A1128] font-bold text-lg leading-tight">Car Racing Game</p>
+            </div>
+            <div class="video-container">
+              <video autoplay loop muted playsinline poster="https://i.imgur.com/OhkUmdAh.jpg">
+                <source src="https://i.imgur.com/OhkUmdA.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+
+          <!-- Project 2: Highway Tollway -->
+          <div class="project-card flex-shrink-0 w-64 md:w-auto mr-6 md:mr-0">
+            <div class="mb-5 px-1">
+              <span class="category-tag">Engineering</span>
+              <p class="text-[#0A1128] font-bold text-lg leading-tight">Smart Tollway</p>
+            </div>
+            <div class="video-container">
+              <video autoplay loop muted playsinline poster="https://i.imgur.com/jjm7RIth.jpg">
+                <source src="https://i.imgur.com/jjm7RIt.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+
+          <!-- Project 3: RC Car -->
+          <div class="project-card flex-shrink-0 w-64 md:w-auto mr-6 md:mr-0">
+            <div class="mb-5 px-1">
+              <span class="category-tag">Robotics</span>
+              <p class="text-[#0A1128] font-bold text-lg leading-tight">RC Explorer</p>
+            </div>
+            <div class="video-container">
+              <video autoplay loop muted playsinline poster="https://i.imgur.com/FH3XOP1h.jpg">
+                <source src="https://i.imgur.com/FH3XOP1.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+
+          <!-- Project 4: Robo Crane -->
+          <div class="project-card flex-shrink-0 w-64 md:w-auto mr-6 md:mr-0">
+            <div class="mb-5 px-1">
+              <span class="category-tag">Mechanics</span>
+              <p class="text-[#0A1128] font-bold text-lg leading-tight">Heavy Lift Crane</p>
+            </div>
+            <div class="video-container">
+              <video autoplay loop muted playsinline poster="https://i.imgur.com/c1U2inah.jpg">
+                <source src="https://i.imgur.com/c1U2ina.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+
+          <!-- Project 5: Joysticks -->
+          <div class="project-card flex-shrink-0 w-64 md:w-auto mr-6 md:mr-0">
+            <div class="mb-5 px-1">
+              <span class="category-tag">Electronics</span>
+              <p class="text-[#0A1128] font-bold text-lg leading-tight">Custom Controllers</p>
+            </div>
+            <div class="video-container">
+              <video autoplay loop muted playsinline poster="https://i.imgur.com/rFyWpkUh.jpg">
+                <source src="https://i.imgur.com/rFyWpkU.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+
+          <!-- Set 2: Duplicate Cards for Marquee (Hidden on Desktop) -->
+          <!-- Project 1 Duplicate -->
+          <div class="project-card flex-shrink-0 w-64 md:hidden mr-6">
+            <div class="mb-5 px-1">
+              <span class="category-tag">Game Design</span>
+              <p class="text-[#0A1128] font-bold text-lg leading-tight">Car Racing Game</p>
+            </div>
+            <div class="video-container">
+              <video autoplay loop muted playsinline poster="https://i.imgur.com/OhkUmdAh.jpg">
+                <source src="https://i.imgur.com/OhkUmdA.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+
+          <!-- Project 2 Duplicate -->
+          <div class="project-card flex-shrink-0 w-64 md:hidden mr-6">
+            <div class="mb-5 px-1">
+              <span class="category-tag">Engineering</span>
+              <p class="text-[#0A1128] font-bold text-lg leading-tight">Smart Tollway</p>
+            </div>
+            <div class="video-container">
+              <video autoplay loop muted playsinline poster="https://i.imgur.com/jjm7RIth.jpg">
+                <source src="https://i.imgur.com/jjm7RIt.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+
+          <!-- Project 3 Duplicate -->
+          <div class="project-card flex-shrink-0 w-64 md:hidden mr-6">
+            <div class="mb-5 px-1">
+              <span class="category-tag">Robotics</span>
+              <p class="text-[#0A1128] font-bold text-lg leading-tight">RC Explorer</p>
+            </div>
+            <div class="video-container">
+              <video autoplay loop muted playsinline poster="https://i.imgur.com/FH3XOP1h.jpg">
+                <source src="https://i.imgur.com/FH3XOP1.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+
+          <!-- Project 4 Duplicate -->
+          <div class="project-card flex-shrink-0 w-64 md:hidden mr-6">
+            <div class="mb-5 px-1">
+              <span class="category-tag">Mechanics</span>
+              <p class="text-[#0A1128] font-bold text-lg leading-tight">Heavy Lift Crane</p>
+            </div>
+            <div class="video-container">
+              <video autoplay loop muted playsinline poster="https://i.imgur.com/c1U2inah.jpg">
+                <source src="https://i.imgur.com/c1U2ina.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+
+          <!-- Project 5 Duplicate -->
+          <div class="project-card flex-shrink-0 w-64 md:hidden mr-6">
+            <div class="mb-5 px-1">
+              <span class="category-tag">Electronics</span>
+              <p class="text-[#0A1128] font-bold text-lg leading-tight">Custom Controllers</p>
+            </div>
+            <div class="video-container">
+              <video autoplay loop muted playsinline poster="https://i.imgur.com/rFyWpkUh.jpg">
+                <source src="https://i.imgur.com/rFyWpkU.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section CTA -->
+  <div class="w-full flex justify-center pb-12 bg-white">
+    <a href="#camps"
+      class="inline-flex items-center gap-2 bg-brand-orange hover:bg-brand-orangeHover text-white font-bold text-base py-3 px-8 rounded-full transition-all shadow-xl hover:shadow-orange-500/40 hover:-translate-y-1 transform">
+      See Camp Info
+      <i class="fa-solid fa-arrow-down"></i>
+    </a>
+  </div>
+
+  <!-- Unfair Advantage / Contrast Section - Redesigned -->
+  <section class="py-14 bg-brand-navy">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+
+      <!-- Section Header -->
+      <div class="text-center mb-12">
+        <span class="text-brand-orange text-xs font-bold uppercase tracking-widest block mb-3">THE ROBOTICS CAMP
+          DILEMMA</span>
+        <h2 class="text-3xl md:text-5xl font-black text-white">Other Programs vs. The LearnToBot Difference</h2>
+      </div>
+
+      <!-- Cards Container -->
+      <div class="grid md:grid-cols-2 gap-6 md:gap-0 relative">
+
+        <!-- VS Badge (Center) -->
+        <div class="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
+          <div
+            class="w-16 h-16 rounded-full bg-brand-navy border-2 border-white/20 flex items-center justify-center text-white font-black text-xl shadow-2xl">
+            VS
+          </div>
+        </div>
+
+        <!-- The Myth Card -->
+        <div class="bg-white/5 border border-white/10 rounded-2xl md:rounded-r-none p-8 backdrop-blur-sm">
+          <h3 class="text-2xl md:text-3xl font-black text-white mb-2">The Myth</h3>
+          <p class="text-white/50 text-sm mb-8">What most robotics camps offer</p>
+
+          <div class="space-y-5">
+            <div class="flex items-start gap-4">
+              <i class="fa-solid fa-xmark text-red-400 mt-1"></i>
+              <span class="text-white/70">Follow pre-made, step-by-step instructions</span>
+            </div>
+            <div class="flex items-start gap-4">
+              <i class="fa-solid fa-xmark text-red-400 mt-1"></i>
+              <span class="text-white/70">Use toy kits with limited learning</span>
+            </div>
+            <div class="flex items-start gap-4">
+              <i class="fa-solid fa-xmark text-red-400 mt-1"></i>
+              <span class="text-white/70">Everyone builds the same project</span>
+            </div>
+            <div class="flex items-start gap-4">
+              <i class="fa-solid fa-xmark text-red-400 mt-1"></i>
+              <span class="text-white/70">Equipment stays at the camp</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- The Truth Card -->
+        <div
+          class="bg-gradient-to-br from-green-900/50 to-brand-navy border border-green-600/30 rounded-2xl md:rounded-l-none p-8">
+          <h3 class="text-2xl md:text-3xl font-black text-white mb-2">The Truth</h3>
+          <p class="text-green-400/80 text-sm mb-8">The LearnToBot Engineering Model</p>
+
+          <div class="space-y-5">
+            <div class="flex items-start gap-4">
+              <i class="fa-solid fa-check text-green-400 mt-1"></i>
+              <span class="text-white">Kids build real projects with Arduinos, Raspberry Pis & sensors</span>
+            </div>
+            <div class="flex items-start gap-4">
+              <i class="fa-solid fa-check text-green-400 mt-1"></i>
+              <span class="text-white">Real electronics. Real wiring. Real circuits.</span>
+            </div>
+            <div class="flex items-start gap-4">
+              <i class="fa-solid fa-check text-green-400 mt-1"></i>
+              <span class="text-white">Every child builds a different project they love</span>
+            </div>
+            <div class="flex items-start gap-4">
+              <i class="fa-solid fa-check text-green-400 mt-1"></i>
+              <span class="text-brand-orange font-bold">Kids take home ALL robotics equipment — free</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <!-- CTA Strip -->
+    <div class="w-full flex justify-center mt-12">
+      <a href="#camps"
+        class="inline-flex items-center gap-2 bg-brand-orange hover:bg-brand-orangeHover text-white font-bold text-base py-3 px-8 rounded-full transition-all shadow-xl hover:shadow-orange-500/40 hover:-translate-y-1 transform">
+        See Camp Info
+        <i class="fa-solid fa-arrow-down"></i>
+      </a>
+    </div>
+  </section>
+
+  <!-- Proof / Carousel -->
+  <section id="proof" class="py-20 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <div class="text-brand-orange text-sm font-extrabold uppercase mb-2">Real Outcomes</div>
+          <h2 class="text-3xl md:text-4xl font-black text-brand-navy mb-6">Watch the “Aha!” Moments
+            Happen.</h2>
+          <div class="space-y-4">
+            <div class="flex items-start gap-4">
+              <div
+                class="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center text-green-600 text-xs shrink-0 mt-0.5">
+                <i class="fa-solid fa-check"></i>
+              </div>
+              <div>
+                <h4 class="font-bold text-brand-navy">Kids don’t give up when something breaks.</h4>
+                <p class="text-sm text-gray-500">We teach troubleshooting as a core skill.</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-4">
+              <div
+                class="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center text-green-600 text-xs shrink-0 mt-0.5">
+                <i class="fa-solid fa-check"></i>
+              </div>
+              <div>
+                <h4 class="font-bold text-brand-navy">Beginners aren’t overwhelmed.</h4>
+                <p class="text-sm text-gray-500">Advanced kids aren’t bored. Placement is key.</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-4">
+              <div
+                class="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center text-green-600 text-xs shrink-0 mt-0.5">
+                <i class="fa-solid fa-check"></i>
+              </div>
+              <div>
+                <h4 class="font-bold text-brand-navy">Learning continues after camp ends.</h4>
+                <p class="text-sm text-gray-500">They take the kit and the know-how home.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="relative group rounded-2xl overflow-hidden shadow-2xl aspect-[4/3] bg-gray-100"
+          id="carouselContainer">
+          <img id="carouselImg"
+            src="https://static.wixstatic.com/media/cf38b9_11e46b6479ac4edfa708822e8e06ed84~mv2.jpg/v1/fill/w_800,h_600,al_c,q_85/cf38b9_11e46b6479ac4edfa708822e8e06ed84~mv2.jpg"
+            alt="Camp Photo" class="w-full h-full object-cover transition-all duration-500 ease-out" loading="lazy"
+            onerror="this.src='https://placehold.co/800x600/071f4e/white?text=Camp+Activities'">
+          <div
+            class="absolute inset-0 flex items-center justify-between px-4 opacity-0 group-hover:opacity-100 transition-opacity">
+            <button id="prevBtn"
+              class="w-10 h-10 rounded-full bg-white/90 hover:bg-white text-brand-navy shadow-lg flex items-center justify-center transition-transform hover:scale-110"><i
+                class="fa-solid fa-chevron-left"></i></button>
+            <button id="nextBtn"
+              class="w-10 h-10 rounded-full bg-white/90 hover:bg-white text-brand-navy shadow-lg flex items-center justify-center transition-transform hover:scale-110"><i
+                class="fa-solid fa-chevron-right"></i></button>
+          </div>
+          <div class="absolute bottom-4 left-0 right-0 flex justify-center gap-2" id="dotWrap">
+            <button class="w-2 h-2 rounded-full bg-white transition-all dotBtn" data-i="0"></button>
+            <button class="w-2 h-2 rounded-full bg-white/50 hover:bg-white transition-all dotBtn" data-i="1"></button>
+            <button class="w-2 h-2 rounded-full bg-white/50 hover:bg-white transition-all dotBtn" data-i="2"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+  <!-- Parent Testimonials Section (Video) -->
+  <section class="py-14 bg-white border-t border-gray-100">
+    <div class="pt-wrap">
+      <h2 class="text-3xl font-black text-brand-navy mb-2 text-center">Hear From Our Parents</h2>
+      <p class="text-center text-gray-500 mb-8 font-medium">Short, honest video reviews. Tap to watch.</p>
+
+      <div class="pt-mask" aria-label="Parent testimonial videos">
+        <div class="pt-track" id="ptTrack">
+          <!-- duplicated list for seamless loop -->
+          <div class="flex gap-[var(--pt-gap)]" id="ptRow1"></div>
+          <div class="flex gap-[var(--pt-gap)]" id="ptRow2" aria-hidden="true"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+  <!-- Finder Wizard -->
+
+
+  <!-- Zero Risk Booking Section -->
+  <section class="py-14 bg-white border-b border-gray-100">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-12">
+        <span class="text-green-500 font-black tracking-widest uppercase text-xs">PEACE OF MIND GUARANTEE</span>
+        <h2 class="text-3xl md:text-4xl font-black text-brand-navy mt-2">Why Parents Book Early Without Hesitation</h2>
+        <p class="text-gray-500 mt-4 max-w-2xl mx-auto">We know spring break plans change. We know kids can be picky. We
+          built our policies around <i>your</i> reality.</p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-6">
+        <!-- Guarantee 1: The Refund -->
+        <div
+          class="bg-white rounded-2xl p-8 border border-gray-100 hover:shadow-lg transition-all relative overflow-hidden group">
+          <div class="absolute top-0 left-0 w-1 h-full bg-green-500"></div>
+          <div
+            class="w-14 h-14 rounded-full bg-green-100 flex items-center justify-center text-green-600 mb-6 group-hover:scale-110 transition-transform">
+            <i class="fa-solid fa-money-bill-wave text-xl"></i>
+          </div>
+          <h3 class="font-bold text-brand-navy text-lg mb-3">100% Refund Guarantee</h3>
+          <p class="text-gray-600 text-sm leading-relaxed">
+            Change your mind? Found a better option? Get a full refund until <span class="font-bold text-brand-navy">7
+              days before Camp starts.</span> No questions asked.
+          </p>
+        </div>
+
+        <!-- Guarantee 2: The Flex Pass -->
+        <div
+          class="bg-white rounded-2xl p-8 border border-gray-100 hover:shadow-lg transition-all relative overflow-hidden group">
+          <div class="absolute top-0 left-0 w-1 h-full bg-brand-orange"></div>
+          <div
+            class="w-14 h-14 rounded-full bg-orange-100 flex items-center justify-center text-brand-orange mb-6 group-hover:scale-110 transition-transform">
+            <i class="fa-solid fa-calendar-check text-xl"></i>
+          </div>
+          <h3 class="font-bold text-brand-navy text-lg mb-3">Flexible "Flex-Pass"</h3>
+          <p class="text-gray-600 text-sm leading-relaxed">
+            Can't make Spring Break? Transfer your credit to <span class="font-bold text-brand-navy">ANY future
+              program</span>—Summer Camps, Winter Camps, or Regular Weekly Classes. You never lose your credit.
+          </p>
+        </div>
+
+        <!-- Guarantee 3: The Day 1 Promise -->
+        <div
+          class="bg-white rounded-2xl p-8 border border-gray-100 hover:shadow-lg transition-all relative overflow-hidden group">
+          <div class="absolute top-0 left-0 w-1 h-full bg-brand-blue"></div>
+          <div
+            class="w-14 h-14 rounded-full bg-blue-100 flex items-center justify-center text-brand-blue mb-6 group-hover:scale-110 transition-transform">
+            <i class="fa-solid fa-heart text-xl"></i>
+          </div>
+          <h3 class="font-bold text-brand-navy text-lg mb-3">Day 1 Risk-Free</h3>
+          <p class="text-gray-600 text-sm leading-relaxed">
+            Not sure they'll like it? If your child doesn't love Day 1, you get a <span
+              class="font-bold text-brand-navy">100% refund.</span> No questions asked.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section CTA -->
+  <div class="w-full flex justify-center pb-12 bg-white">
+    <a href="#camps"
+      class="inline-flex items-center gap-2 bg-brand-orange hover:bg-brand-orangeHover text-white font-bold text-base py-3 px-8 rounded-full transition-all shadow-xl hover:shadow-orange-500/40 hover:-translate-y-1 transform">
+      See Camp Info
+      <i class="fa-solid fa-arrow-down"></i>
+    </a>
+  </div>
+
+
+
+  <!-- Camp Grid & Details Area -->
+  <section id="camps" class="py-14 bg-gray-50 min-h-[600px]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+
+      <!-- Main Grid View -->
+      <div id="campGridContainer">
+        <div class="text-center mb-8">
+          <h2 class="text-3xl md:text-4xl font-black text-brand-navy">Available Camps</h2>
+          <p class="text-gray-600 mt-2">Every camp includes a take-home kit, 1:4 Low instructor ratio, and
+            guaranteed projects.</p>
+        </div>
+
+        <!-- Dynamic Filters -->
+        <!-- Dynamic Filters (Compact) -->
+        <div
+          class="relative md:sticky md:top-0 z-30 bg-gray-50/95 backdrop-blur-sm py-2 mb-6 border-b border-gray-200 transition-all shadow-sm"
+          id="filterBar">
+          <div class="max-w-4xl mx-auto px-2">
+            <!-- Mobile: Grid (2 lines) / Desktop: Flex -->
+            <div class="grid grid-cols-12 md:flex md:flex-wrap gap-2 items-center justify-center">
+
+              <!-- Location (Row 1: 6 cols) -->
+              <div class="relative group col-span-6 md:w-auto">
+                <select id="filterLoc"
+                  class="w-full appearance-none bg-white border border-brand-orange text-brand-navy font-bold text-xs rounded-full py-2 pl-3 pr-8 shadow-sm focus:outline-none focus:ring-1 focus:ring-brand-orange cursor-pointer">
+                  <option value="">📍 Location</option>
+                </select>
+                <i
+                  class="fa-solid fa-location-dot absolute right-3 top-1/2 -translate-y-1/2 text-brand-orange text-[10px] pointer-events-none"></i>
+              </div>
+
+              <!-- Week (Row 1: 6 cols) -->
+              <div class="relative group col-span-6 md:w-auto">
+                <select id="filterWeek"
+                  class="w-full appearance-none bg-white border border-brand-orange text-brand-navy font-bold text-xs rounded-full py-2 pl-3 pr-8 shadow-sm focus:outline-none focus:ring-1 focus:ring-brand-orange cursor-pointer">
+                  <option value="">📅 Week</option>
+                  <option value="Spg26">Mar 9 - 13</option>
+                  <option value="SP26KT">Mar 16 - 20</option>
+                </select>
+                <i
+                  class="fa-solid fa-calendar-days absolute right-3 top-1/2 -translate-y-1/2 text-brand-orange text-[10px] pointer-events-none"></i>
+              </div>
+
+              <!-- Age (Row 2: 3 cols) -->
+              <div class="relative group col-span-3 md:w-auto">
+                <select id="filterAge"
+                  class="w-full appearance-none bg-white border border-gray-200 text-brand-navy font-bold text-xs rounded-full py-2 pl-3 pr-6 shadow-sm focus:outline-none focus:ring-1 focus:ring-brand-orange cursor-pointer hover:border-brand-orange transition-all">
+                  <option value="">Age</option>
+                  <option value="6">6</option>
+                  <option value="7">7</option>
+                  <option value="8">8</option>
+                  <option value="9">9</option>
+                  <option value="10">10</option>
+                  <option value="11">11</option>
+                  <option value="12">12</option>
+                  <option value="13">13</option>
+                  <option value="14">14</option>
+                  <option value="15">15</option>
+                  <option value="16">16+</option>
+                </select>
+                <i
+                  class="fa-solid fa-chevron-down absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 text-[10px] pointer-events-none group-hover:text-brand-orange"></i>
+              </div>
+
+              <!-- Experience (Row 2: 3 cols) -->
+              <div class="relative group col-span-3 md:w-auto">
+                <select id="filterExp"
+                  class="w-full appearance-none bg-white border border-gray-200 text-brand-navy font-bold text-xs rounded-full py-2 pl-3 pr-6 shadow-sm focus:outline-none focus:ring-1 focus:ring-brand-orange cursor-pointer hover:border-brand-orange transition-all">
+                  <option value="">Exp</option>
+                  <option value="none">None</option>
+                  <option value="scratch">Scratch</option>
+                  <option value="python">Python</option>
+                </select>
+                <i
+                  class="fa-solid fa-chevron-down absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 text-[10px] pointer-events-none group-hover:text-brand-orange"></i>
+              </div>
+
+              <!-- Interest (Row 2: 3 cols) -->
+              <div class="relative group col-span-3 md:w-auto">
+                <select id="filterInterest"
+                  class="w-full appearance-none bg-white border border-gray-200 text-brand-navy font-bold text-xs rounded-full py-2 pl-3 pr-6 shadow-sm focus:outline-none focus:ring-1 focus:ring-brand-orange cursor-pointer hover:border-brand-orange transition-all">
+                  <option value="">Topic</option>
+                  <option value="robotics">Robotics</option>
+                  <option value="games">Game Dev</option>
+                  <option value="ai">AI</option>
+                </select>
+                <i
+                  class="fa-solid fa-chevron-down absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 text-[10px] pointer-events-none group-hover:text-brand-orange"></i>
+              </div>
+
+              <!-- Reset (Row 2: 3 cols) -->
+              <button id="clearFilters"
+                class="col-span-3 md:w-auto text-[10px] font-black uppercase tracking-wide text-gray-400 hover:text-brand-orange border border-transparent hover:border-brand-orange/20 rounded-full px-2 py-2 transition-all hidden flex items-center justify-center gap-1 bg-white">
+                <i class="fa-solid fa-xmark"></i> Clear
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Location Address Display -->
+        <div id="locationAddressBox"
+          class="hidden mb-6 px-4 py-3 bg-gradient-to-r from-brand-navy to-brand-blue rounded-xl shadow-md border border-white/10">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center flex-shrink-0">
+              <i class="fa-solid fa-location-dot text-brand-orange text-lg"></i>
+            </div>
+            <div>
+              <p class="text-xs text-white/60 font-medium uppercase tracking-wide">Camp Location</p>
+              <p id="locationAddressText" class="text-white font-bold text-sm md:text-base"></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Compact Table Layout -->
+        <div class="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-200">
+          <!-- Table Header -->
+
+
+          <!-- Loading Indicator -->
+          <div id="loadingCamps" class="text-center py-12 hidden">
+            <i class="fa-solid fa-circle-notch fa-spin text-4xl text-brand-orange"></i>
+            <p class="mt-4 text-gray-500 font-bold">Loading...</p>
+          </div>
+
+          <!-- Table Body -->
+          <div id="campGrid" class="divide-y divide-gray-100">
+            <!-- Rows injected by JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Detail View (Initially Hidden) -->
+      <div id="campDetailsSection" class="hidden">
+        <!-- Back Button -->
+        <div class="text-center mb-8">
+          <button id="btnBackToCamps"
+            class="inline-flex items-center gap-2 bg-gray-200 text-brand-navy font-extrabold text-sm px-6 py-3 rounded-full hover:bg-gray-300 transition shadow-sm">
+            <i class="fa-solid fa-arrow-left"></i> See All Camp Options
+          </button>
+        </div>
+
+        <!-- Hero Image -->
+        <div class="mb-12 rounded-3xl overflow-hidden shadow-2xl">
+          <picture>
+            <source id="heroImageMobile" media="(max-width: 640px)" srcset="" />
+            <img id="heroImage" src="" alt="Camp Hero" class="w-full h-auto object-cover max-h-[600px]" />
+          </picture>
+        </div>
+
+        <!-- GIF Section -->
+        <div class="mb-16 overflow-hidden">
+          <h2 class="text-center text-brand-orange font-black text-3xl md:text-5xl mb-8 tracking-tight">
+            Types Of Projects They Will Make</h2>
+          <div class="relative w-full mask-fade">
+            <div class="absolute left-0 top-0 bottom-0 w-20 z-10 bg-gradient-to-r from-gray-50 to-transparent">
+            </div>
+            <div class="absolute right-0 top-0 bottom-0 w-20 z-10 bg-gradient-to-l from-gray-50 to-transparent">
+            </div>
+            <div class="flex w-max animate-marquee" id="gifMarquee">
+              <!-- GIFs injected here -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Tabs & Services Container -->
+        <div class="bg-brand-orange rounded-[2rem] p-6 md:p-10">
+          <h3 class="text-center text-3xl md:text-4xl font-black text-black mb-8" id="tabsTitle">CAMP
+            SCHEDULE</h3>
+
+          <!-- Week Tabs -->
+          <div id="weekTabs" class="flex flex-wrap justify-center gap-3 mb-10">
+            <!-- Tabs injected JS -->
+          </div>
+
+          <!-- Services List -->
+          <div id="servicesList" class="space-y-4">
+            <!-- Service Cards injected JS -->
+          </div>
+          <div id="noServices" class="hidden text-center text-black/60 py-12 font-bold text-xl">
+            No camps scheduled for this week at this location.
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Extended Day Care -->
+  <section class="py-16 bg-brand-navy border-t border-brand-navy/50">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 text-center">
+      <div
+        class="inline-block bg-brand-orange text-white text-xs font-black uppercase tracking-widest px-3 py-1 rounded-full mb-4">
+        Parent Saver</div>
+      <h2 class="text-3xl md:text-4xl font-black text-white mb-6">Working? Schedule Issues?</h2>
+
+      <div class="bg-white/5 rounded-3xl p-8 md:p-10 border border-white/10 backdrop-blur-sm">
+        <h3 class="text-2xl font-bold text-white mb-4">We Offer Extended Day Care</h3>
+        <p class="text-gray-300 text-lg mb-8 leading-relaxed">
+          Drop off as early as <span class="text-brand-orange font-bold">8:30 am</span> and pick up as late as <span
+            class="text-brand-orange font-bold">5:30 pm</span>.<br>
+          Peace of mind for only <span class="text-white font-bold text-xl">$10/day/child</span>.
+        </p>
+
+        <div
+          class="bg-brand-blue/20 border border-brand-blue/30 rounded-xl p-6 md:p-8 inline-flex flex-col md:flex-row items-center gap-6 text-left max-w-3xl mx-auto mt-4">
+          <div
+            class="w-12 h-12 rounded-full bg-brand-blue flex items-center justify-center text-white shrink-0 shadow-lg shadow-brand-blue/40">
+            <i class="fa-solid fa-envelope-open-text text-xl"></i>
+          </div>
+          <p class="text-gray-200 text-base font-medium">
+            <span class="text-brand-blue font-bold block mb-1 uppercase tracking-wide text-xs">Simple Booking
+              Process</span>
+            Once you book your camp spot, simply respond to the booking confirmation email saying you need Extended Day
+            Care. We will send you the payment link.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" class="py-20 bg-white border-t border-gray-100">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6">
+      <h2 class="text-3xl font-black text-brand-navy mb-8 text-center">Frequently Asked Questions</h2>
+      <div class="space-y-4">
+        <!-- New FAQs -->
+        <details
+          class="group bg-gray-50 rounded-xl overflow-hidden transition-all duration-300 open:bg-white open:shadow-lg open:ring-1 open:ring-gray-100">
+          <summary class="flex items-center justify-between p-6 cursor-pointer font-bold text-brand-navy">
+            100% Refund by 7 Days Before Camp<span
+              class="w-8 h-8 rounded-full bg-white border border-gray-200 flex items-center justify-center text-gray-400 group-open:rotate-180 transition-transform"><i
+                class="fa-solid fa-chevron-down text-xs"></i></span></summary>
+          <div class="px-6 pb-6 text-gray-600 leading-relaxed">
+            Change your mind? Found a better option? Get a full refund until 7 days before Camp starts. No
+            questions asked.
+          </div>
+        </details>
+
+        <details
+          class="group bg-gray-50 rounded-xl overflow-hidden transition-all duration-300 open:bg-white open:shadow-lg open:ring-1 open:ring-gray-100">
+          <summary class="flex items-center justify-between p-6 cursor-pointer font-bold text-brand-navy">
+            Flexible Scheduling<span
+              class="w-8 h-8 rounded-full bg-white border border-gray-200 flex items-center justify-center text-gray-400 group-open:rotate-180 transition-transform"><i
+                class="fa-solid fa-chevron-down text-xs"></i></span></summary>
+          <div class="px-6 pb-6 text-gray-600 leading-relaxed">
+            Don't know your plans yet? Change camp weeks any time until 14 days before camp starts.
+          </div>
+        </details>
+
+        <details
+          class="group bg-gray-50 rounded-xl overflow-hidden transition-all duration-300 open:bg-white open:shadow-lg open:ring-1 open:ring-gray-100">
+          <summary class="flex items-center justify-between p-6 cursor-pointer font-bold text-brand-navy">
+            Day 1 Risk-Free<span
+              class="w-8 h-8 rounded-full bg-white border border-gray-200 flex items-center justify-center text-gray-400 group-open:rotate-180 transition-transform"><i
+                class="fa-solid fa-chevron-down text-xs"></i></span></summary>
+          <div class="px-6 pb-6 text-gray-600 leading-relaxed">
+            Not sure they'll like it? If your child doesn't love Day 1, you get a 100% refund. No questions asked.
+          </div>
+        </details>
+
+        <details
+          class="group bg-gray-50 rounded-xl overflow-hidden transition-all duration-300 open:bg-white open:shadow-lg open:ring-1 open:ring-gray-100">
+          <summary class="flex items-center justify-between p-6 cursor-pointer font-bold text-brand-navy">
+            What is the Day 1 Risk-Free Guarantee?<span
+              class="w-8 h-8 rounded-full bg-white border border-gray-200 flex items-center justify-center text-gray-400 group-open:rotate-180 transition-transform"><i
+                class="fa-solid fa-chevron-down text-xs"></i></span></summary>
+          <div class="px-6 pb-6 text-gray-600 leading-relaxed">If your child does not like the program on Day 1,
+            complete money will be refunded - no questions asked.</div>
+        </details>
+        <details
+          class="group bg-gray-50 rounded-xl overflow-hidden transition-all duration-300 open:bg-white open:shadow-lg open:ring-1 open:ring-gray-100">
+          <summary class="flex items-center justify-between p-6 cursor-pointer font-bold text-brand-navy">
+            My child has never coded. Will they struggle?<span
+              class="w-8 h-8 rounded-full bg-white border border-gray-200 flex items-center justify-center text-gray-400 group-open:rotate-180 transition-transform"><i
+                class="fa-solid fa-chevron-down text-xs"></i></span></summary>
+          <div class="px-6 pb-6 text-gray-600 leading-relaxed">No. Beginner tracks are designed
+            specifically for first-timers. We group kids by experience so they feel capable from Day 1.
+          </div>
+        </details>
+        <details
+          class="group bg-gray-50 rounded-xl overflow-hidden transition-all duration-300 open:bg-white open:shadow-lg open:ring-1 open:ring-gray-100">
+          <summary class="flex items-center justify-between p-6 cursor-pointer font-bold text-brand-navy">
+            What does "take-home kit" mean?<span
+              class="w-8 h-8 rounded-full bg-white border border-gray-200 flex items-center justify-center text-gray-400 group-open:rotate-180 transition-transform"><i
+                class="fa-solid fa-chevron-down text-xs"></i></span></summary>
+          <div class="px-6 pb-6 text-gray-600 leading-relaxed">Your child keeps the electronics
+            (microcontrollers, motors, sensors) and projects they built so they can continue learning
+            and iterating at home.</div>
+        </details>
+        <details
+          class="group bg-gray-50 rounded-xl overflow-hidden transition-all duration-300 open:bg-white open:shadow-lg open:ring-1 open:ring-gray-100">
+          <summary class="flex items-center justify-between p-6 cursor-pointer font-bold text-brand-navy">
+            What if my child is advanced?<span
+              class="w-8 h-8 rounded-full bg-white border border-gray-200 flex items-center justify-center text-gray-400 group-open:rotate-180 transition-transform"><i
+                class="fa-solid fa-chevron-down text-xs"></i></span></summary>
+          <div class="px-6 pb-6 text-gray-600 leading-relaxed">We have specific advanced tracks (Python
+            Robotics, AI). Even within a group, challenges are open-ended allowing advanced students to
+            push further.</div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer Section -->
+  <footer class="bg-white py-8 md:py-12 border-t border-gray-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-start">
+
+        <!-- Column 1: Brand & Links -->
+        <div
+          class="md:col-span-3 space-y-4 md:space-y-6 flex flex-col items-center md:items-start text-center md:text-left">
+          <div class="flex items-center gap-2">
+            <img src="https://res.cloudinary.com/drr3ss2j7/image/upload/v1771530035/logo_x5vjnd.png"
+              alt="LearnToBot Logo" class="w-8 h-auto md:w-10" />
+            <span class="text-xl md:text-2xl font-black text-[#071f4e] tracking-tight"
+              style="font-family: 'Montserrat', sans-serif;">LearnToBot</span>
+          </div>
+          <nav class="flex flex-col gap-2 md:gap-3 w-full">
+            <a href="#gallery"
+              class="text-sm md:text-base font-bold text-[#071f4e] hover:text-brand-orange transition-colors">Gallery</a>
+            <a href="#contact"
+              class="text-sm md:text-base font-bold text-[#071f4e] hover:text-brand-orange transition-colors">Contact
+              Us</a>
+          </nav>
+        </div>
+
+        <!-- Column 2: Newsletter -->
+        <div class="md:col-span-6 space-y-4 text-center md:text-left">
+          <h3 class="text-base md:text-lg font-bold text-[#071f4e] max-w-md mx-auto md:mx-0">Be the first to know about
+            our Latest News and Updates.</h3>
+          <div class="space-y-2 max-w-lg mx-auto md:mx-0">
+            <label class="block text-xs font-bold text-[#071f4e]">Enter your email address <span
+                class="text-brand-orange">*</span></label>
+            <div
+              class="relative flex flex-col sm:flex-row items-stretch sm:items-center bg-[#071f4e] rounded-xl p-1 shadow-md overflow-hidden border-2 border-[#071f4e] gap-2 sm:gap-0">
+              <input type="email" placeholder="e.g., name@example.com"
+                class="w-full bg-white sm:bg-transparent px-4 py-2 sm:px-4 sm:py-3 text-[#071f4e] sm:text-brand-orange placeholder:text-gray-400 focus:outline-none font-medium text-sm rounded-lg sm:rounded-none" />
+              <button
+                class="bg-brand-orange sm:bg-white text-white sm:text-brand-orange px-6 py-2 rounded-lg font-bold text-sm hover:bg-orange-600 sm:hover:bg-gray-50 transition-all shadow-sm shrink-0">
+                Subscribe
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Column 3: Contact Info -->
+        <div class="md:col-span-3 text-center md:text-right space-y-4 md:space-y-6 pt-2">
+          <div class="space-y-1">
+            <p class="text-[#071f4e] font-bold text-sm">Phone:</p>
+            <a href="tel:3462151556"
+              class="text-lg font-extrabold text-[#071f4e] hover:text-brand-orange transition-colors">(346) 215-1556</a>
+          </div>
+          <div>
+            <a href="mailto:admin@learntobot.com"
+              class="text-base md:text-lg font-extrabold text-[#071f4e] hover:text-brand-orange transition-colors underline decoration-2 underline-offset-4">
+              admin@learntobot.com
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Bottom Bar -->
+      <div
+        class="mt-8 md:mt-12 pt-6 border-t border-gray-100 flex flex-col-reverse md:flex-row justify-between items-center gap-4 text-xs text-gray-400 text-center md:text-left">
+        <p>© <span id="year"></span> LearnToBot. All rights reserved.</p>
+        <div class="flex gap-6 justify-center w-full md:w-auto">
+          <a href="#" class="hover:text-[#071f4e] transition-colors">Privacy Policy</a>
+          <a href="#" class="hover:text-[#071f4e] transition-colors">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+  </main>
+
+  <!-- Video Modal (Original) -->
+  <div id="modal"
+    class="fixed inset-0 z-[60] bg-black/90 hidden place-items-center p-4 backdrop-blur-sm transition-opacity opacity-0"
+    aria-hidden="true">
+    <div
+      class="relative w-full max-w-5xl bg-black rounded-2xl overflow-hidden shadow-2xl aspect-video transform scale-95 transition-transform duration-300"
+      id="modalCard">
+      <button id="modalClose"
+        class="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-black/50 hover:bg-white hover:text-black text-white flex items-center justify-center transition-all backdrop-blur-md"><i
+          class="fa-solid fa-xmark text-lg"></i></button>
+      <iframe id="modalFrame" class="w-full h-full" src="" title="Testimonial video" frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen></iframe>
+    </div>
+  </div>
+
+  <!-- Parent Testimonials Lightbox -->
+  <div class="pt-lb" id="ptLightbox" role="dialog" aria-modal="true" aria-label="Video player">
+    <div class="pt-screen">
+      <button class="pt-close" id="ptLbClose" aria-label="Close">&times;</button>
+      <div class="pt-portrait"><iframe id="ptPlayer" allow="autoplay; encrypted-media; picture-in-picture"
+          allowfullscreen></iframe></div>
+    </div>
+  </div>
+
+  <script>
+    // ======= CONFIGURATION =======
+    const SHEET_URL = 'https://script.google.com/macros/s/AKfycbyKk5a9XrEsJm6kcbz2FhqQWp2ZaSFd5-Ed-SmWvYPlaVlSpr9r-C667Fd4MZ8jfx18qA/exec';
+    const CURRENT_TIMEFRAME = 'SPG26';
+    const TIMEFRAMES = ['SPG26'];
+    const PROMO_TEXT = '';
+
+    // ======= HELPER FUNCTIONS FOR DISPLAY FORMATTING =======
+    function formatServiceName(rawName) {
+      // Convert "Spg26-Scratch Basics - Morn - 3day-WL" to "Morning - 3 Day"
+      if (!rawName) return '';
+
+      const nameLower = rawName.toLowerCase();
+
+      // Extract session type (Morn/Aft/Full) - case insensitive
+      let sessionType = '';
+      if (nameLower.includes('- morn -') || nameLower.includes('-morn-')) {
+        sessionType = 'Morning';
+      } else if (nameLower.includes('- aft -') || nameLower.includes('-aft-')) {
+        sessionType = 'Afternoon';
+      } else if (nameLower.includes('- full -') || nameLower.includes('-full-')) {
+        sessionType = 'Full Day';
+      }
+
+      // Extract duration (3day/5day) - case insensitive
+      let duration = '';
+      if (nameLower.includes('3day') || nameLower.includes('3-day')) {
+        duration = '3 Day';
+      } else if (nameLower.includes('5day') || nameLower.includes('5-day')) {
+        duration = '5 Day';
+      }
+
+      // If we found both parts, return formatted name
+      if (sessionType && duration) {
+        return `${sessionType} - ${duration}`;
+      }
+
+      // Fallback to original name if pattern doesn't match
+      return rawName;
+    }
+
+    function formatSchedule(rawSchedule) {
+      // Convert "Mar 9, 10, 11 (Each Day - Mar 9-11, Timings: 9:30 am to 12:30 pm)" 
+      // to "Mar 9-11, Timings: 9:30 am to 12:30 pm"
+      if (!rawSchedule) return '';
+
+      // Try to extract the part inside parentheses after "Each Day - "
+      const match = rawSchedule.match(/\(Each Day[^-]*-\s*([^)]+)\)/);
+      if (match && match[1]) {
+        return match[1].trim();
+      }
+
+      // Alternative pattern: just get content after "Each Day - "
+      const altMatch = rawSchedule.match(/Each Day[^-]*-\s*(.+)/);
+      if (altMatch && altMatch[1]) {
+        return altMatch[1].replace(/\)$/, '').trim();
+      }
+      // Fallback to original
+      return rawSchedule;
+    }
+
+
+
+    // Removed fetchDescriptions and parseCSV as requested for better UX
+
+    // ======= CAMP DESCRIPTION HELPER (Updated) =======
+    // Logic moved to CAMPS object structure
+
+    // Reviews Data (Source of Truth)
+    const REVIEWS = [
+      { name: "Alan Falik", text: "My son has attended several camps, but this one was by far the best. He learned so much.", category: "growth", shortQuote: "This one was by far the best." },
+      { name: "Hear Puoy", text: "Great experience! The kids were engaged the whole time.", category: "fun", shortQuote: "Kids were engaged the whole time." },
+      { name: "Mag Franzoni", text: "Amazing camp. My daughter built a robot from scratch and understands how it works.", category: "growth", shortQuote: "My daughter built a robot from scratch." },
+      { name: "Kenneth Kim", text: "Highly recommend. We will definitely be back next year.", category: "trust", shortQuote: "We will definitely be back." },
+      { name: "Vianney Gutiérrez", text: "The instructors are fantastic. Very patient and knowledgeable.", category: "trust", shortQuote: "Instructors are fantastic." },
+      { name: "C R", text: "Unlike other camps where they just play, here they actually build.", category: "growth", shortQuote: "Here they actually build." },
+      { name: "James Dean", text: "Real engineering skills. My kid came home excited every day.", category: "fun", shortQuote: "Came home excited every day." },
+      { name: "PK Loranger", text: "Best investment for my child's education.", category: "trust", shortQuote: "Best investment for education." },
+      { name: "Priya Shetty", text: "My son loved it and wants to do more python.", category: "fun", shortQuote: "My son loved it." },
+      { name: "Jessica Wrabel", text: "Finally a camp that challenges him.", category: "growth", shortQuote: "Finally a camp that challenges him." },
+      { name: "Almira Quevedo", text: "This is our 3rd camp. It's the only one he asks to go back to.", category: "trust", shortQuote: "The only one he asks to go back to." },
+      { name: "Andrew Mills", text: "Andrew learned more in one week here than a whole semester of tech class.", category: "growth", shortQuote: "Learned more in one week than a semester." },
+      { name: "Nicholas Fernandez", text: "Highly recommended.", category: "trust", shortQuote: "Highly recommended." },
+      { name: "ussvs", text: "Great program.", category: "trust", shortQuote: "Great program." },
+      { name: "Rosana Segovia", text: "We are coming back!", category: "trust", shortQuote: "We are coming back!" }
+    ];
+
+    // Camp Configuration - only properties actively used
+    const CAMPS = [
+      {
+        title: 'Intro to Robotics: Circuits & Code with Scratch',
+        matchNames: ['Intro to Robotics: Circuits & Code with Scratch', 'Intro to Robotics(Scratch)', 'Scratch Basics'],
+        description: "Intro to Robotics: Circuits & Code with Scratch (Ages 6–8)\n\nDon’t just play with technology—invent it. Give your child the ultimate competitive advantage with a camp designed to transition them from passive screen-time consumers to active engineering creators.\n\nAges 6–8 are the \"Critical Window\" for developing computational thinking. Students who grasp logic loops now have a massive advantage when they encounter Algebra and Physics later.\n\nCourse Overview\n\nThis is not a typical \"LEGO building\" camp. This is a foundational Engineering & Computer Science course designed to take every student ages 6 to 8 to their highest potential.\n\nExpert Mentorship: Taught by industry professionals and engineers, not high school volunteers. We provide the mentorship your child needs to navigate complex fields.\n\nReal Engineering: Using MIT’s Scratch platform and real electronic hardware, students bridge the gap between software (code) and the physical world (circuits). They won’t just click blocks on a screen; they will wire breadboards, connect sensors, and write code that makes lights blink, pianos play, and robots react.\n\nThis program lays the critical groundwork for future success in Python, VEX Robotics, and AP Computer Science.\n\n🛠️ The Gear: Theirs to Keep\n\nWe are the ONLY camp that provides every student with a professional-grade Robotics & Electronics Kit ($100+ value) to use during camp and take home forever.\n\nNo Sharing: Your child gets their own personal equipment.\n\nHygiene & Safety: Brand new hardware for every student.\n\nContinued Learning: The innovation continues at home long after camp ends.\n\n🚀 The Projects: Engineering in Action\n\nWe combine classic favorites with exciting new engineering challenges to test their logic and creativity. Please note: These are just sample projects. The actual curriculum will vary and include a greater number of projects tailored to the students' pace.\n\nPhase 1: Electrical Engineering & Circuits\n\nThe Christmas Light Sequence: Master the concept of \"loops\" and \"timing\" by programming a multi-LED light show.\n\nThe \"Smart Home\" Security System: (New!) Wire a physical switch and alarm logic to create a functional intruder alert system.\n\nThe Mini-Piano: Build a working musical instrument using circuitry and touch sensors—learning how hardware inputs trigger software sounds.\n\nSunrise Alarm Clock: Program an automated LED system that mimics a sunrise, introducing the concept of \"automation.\"\n\nThe \"Smart Trash Can\": Engineer a hands-free lid using a distance sensor and servo motor to open automatically when an object is detected.\n\nPhase 2: Game Design & Logic\n\nFlappy Bird 2.0: Code a clone of the famous viral hit, learning about gravity simulation and collision detection.\n\nApple Catcher with Hardware Control: Build a physical joystick to control a digital game—understanding the X and Y axes (Cartesian coordinates).\n\nThe \"Toll Booth\" Simulator: Design an automated highway toll system that detects cars (inputs) and opens gates (outputs).\n\nPong: Recreate the arcade classic to understand variable scoring and enemy AI movement.\n\n🎓 Learning Outcomes (Hard Skills)\n\nBy the end of the week, your child will possess skills often not taught until high school physics or computer science:\n\nBuilding Circuits: How to connect wires safely to make electricity flow and light up an LED.\n\nConnecting Hardware: Making physical buttons and joysticks control the games they code.\n\nSmart Coding: Learning how to tell the computer \"If I push this, then do that\" (Logic).\n\nUnderstanding Movement: Using X and Y numbers to move characters up, down, left, and right.\n\nFixing Mistakes: Learning that when things break, we don't give up—we look for the error and fix it.\n\nLimited Seats Available. Secure your child's place in the future of innovation.",
+        imgRect: 'https://res.cloudinary.com/drr3ss2j7/image/upload/v1771521797/Intro_to_Robotics__Circuits_Code_with_Scratch_h3ahtc.png',
+        requirement: 'Ages 6–8\nNo coding experience needed',
+        msg: { minAge: 6, maxAge: 8, exp: 'none', tags: ['robotics'] }
+      },
+      {
+        title: 'Advanced Robotics: Mechanics & Sensors with Scratch',
+        matchNames: ['Advanced Robotics: Mechanics & Sensors with Scratch', 'Adv Robotics (Scratch)', 'Scratch Advanced'],
+        description: "Advanced Robotics: Mechanics & Sensors with Scratch (Ages 9–12)\n\nLevel up from \"Player\" to \"Engineer.\" This course is designed for the student who is ready to go beyond the basics, bridging the gap between block coding and real-world hardware integration.\n\nAges 9–12 are the \"Logic Years.\" This is when students transition from simple cause-and-effect thinking to complex systems thinking. Mastering these skills now lays the foundation for High School Engineering and Competitive Robotics.\n\nCourse Overview\n\nThis is an Advanced Hardware & Logic course. While others are still clicking blocks, your child will be integrating Arduino-based microcontrollers with complex sensors and motors.\n\nReal-World Tech: We move beyond simple lights. Students will work with Gyroscopes, Infrared (IR) Receivers, and Servo Motors—the same sensor technology found in modern smartphones and manufacturing robots.\n\nExpert Guidance: Taught by industry professionals who understand how to channel a child's love for video games into a passion for product design and engineering.\n\nThe Bridge to Python/C++: By controlling physical hardware with code, students learn the strict logic required for professional text-based programming languages.\n\n🛠️ The Gear: Theirs to Keep\n\nWe are the ONLY camp that provides every student with a professional-grade Robotics & Electronics Kit ($100+ value) to use during camp and take home forever.\n\nNo Sharing: Your child builds, wires, and programs their own station.\n\nAdvanced Components: Includes motors, sensors, and microcontrollers needed for high-level projects.\n\nContinued Innovation: The kit allows them to continue inventing solutions at home for years to come.\n\n🚀 The Projects: Complex Systems\n\nWe tackle projects that require multi-step logic and precise hardware calibration. Please note: These are just sample projects. The actual curriculum will vary and include a greater number of projects tailored to the students' pace.\n\nPhase 1: Hardware Engineering & Mechatronics\n\nThe Robotic Crane: Engineer a physical crane controlled by a joystick, mastering the mathematics of X & Y axis motor control.\n\nThe Lander Simulator: Use a real Gyroscope sensor to control a flight simulator by tilting the hardware board—learning about pitch, roll, and physical data processing.\n\nBuzz Lightbeam Challenge: Build a laser-aiming system that tests precision and calibration.\n\nThe RC Car: Build and code a fully functional car from scratch, learning how to control DC motors for steering and propulsion.\n\nThe \"Smart Trash Can\": Engineer a hands-free lid using a distance sensor and servo motor to open automatically when an object is detected.\n\nPhase 2: Advanced Game Algorithms\n\nPac-Man Architect: Recreate the arcade legend, exploring advanced concepts like Pathfinding and enemy AI behavior.\n\nSpace Shooter: Develop a complex shooter game that manages Clones (Object-Oriented logic), health systems, and high-score variables.\n\nBubble Frenzy: A lesson in Physics Simulation, where objects grow, float, and interact with the environment dynamically.\n\nShoot the Monster: Build a multi-level game that requires \"State Management\"—tracking player progress across different stages.\n\n🎓 Learning Outcomes (Hard Skills)\n\nBy the end of the week, your child will possess the toolset of a junior engineer:\n\nSensor Integration: How to read data from the physical world (tilt, distance, signal) and use it to control digital software.\n\nSystems Logic: Understanding how multiple components (motors + sensors + code) work together to perform a task.\n\nVariable Mastery: Using variables not just for score, but for physics (Velocity, Gravity, Acceleration).\n\nCartesian Control: Deepening the understanding of coordinate geometry (X, Y, Z axes) through physical joystick manipulation.\n\nEngineering Resilience: The maturity to test, debug, and recalibrate hardware when it doesn't work the first time.\n\nLimited Seats Available. Secure your child's place in the future of innovation.",
+        imgRect: 'https://res.cloudinary.com/drr3ss2j7/image/upload/v1771521804/Advanced_Robotics__Mechanics_Sensors_with_Scratch_i1oqwh.png',
+        requirement: 'Ages 9–10\nMust know basic Scratch',
+        msg: { minAge: 9, maxAge: 12, exp: 'scratch', tags: ['robotics'] }
+      },
+      {
+        title: 'Robotics Fundamentals with Python',
+        matchNames: ['Robotics Fundamentals with Python', 'Intro to Robotics(Python)', 'Python Basics'],
+        description: "Robotics Fundamentals with Python (Ages 11+)\n\nStop playing games. Start writing the code that powers them. This course is the definitive \"Hello World\" for the future engineer, transitioning students from drag-and-drop blocks to Python—the #1 programming language used by Google, NASA, and AI researchers.\n\nAges 11+ are the \"Professional Transition Years.\" Students are ready to type real syntax, debug case-sensitive errors, and understand the computer science principles that drive the modern world.\n\nCourse Overview\n\nThis is a Text-Based Computer Science & Hardware course. We strip away the training wheels of Scratch to teach the raw power of code.\n\nThe Language of AI: Students learn Python 3, the industry standard for Artificial Intelligence, Data Science, and Robotics.\n\nHardware-Software Bridge: We don't just code on a screen; we code a Raspberry Pi Pico microcontroller to interact with the physical world.\n\nExpert Mentorship: Curriculum made by engineers. We treat your student like a junior developer, fostering the discipline and precision required for high-level coding.\n\n🛠️ The Gear: Theirs to Keep\n\nWe are the ONLY camp that provides every student with a professional-grade Python Robotics Kit ($100+ value) to use during camp and take home forever.\n\nNo Sharing: Your teen manages their own development station.\n\nRaspberry Pi Pico: A powerful microcontroller that they can continue to program for years.\n\nComponent Library: Breadboards, jumpers, LEDs, and sensors to build limitless inventions at home.\n\n🚀 The Projects: Real Code, Real Results\n\nWe move from \"Concepts\" to \"Syntax.\" Students will write hundreds of lines of code to control both hardware and software. Please note: These are just sample projects. The actual curriculum will vary and include a greater number of projects tailored to the students' pace.\n\nPhase 1: Core Syntax & Logic (The \"Code Cracker\")\n\nThe Logic Mysteries: Master the foundational grammar of Python—Variables, Strings, and Operators (+, -, *, /)—to solve complex logic puzzles.\n\nThe \"Loop\" Architect: Use For and While loops to automate repetitive tasks, a core skill for data processing.\n\nThe Decision Maker: Program complex If-Elif-Else structures to make the computer \"think\" and make decisions based on inputs.\n\nPhase 2: Hardware Engineering (Physical Computing)\n\nBlinking Light Sequence: Program the Raspberry Pi Pico to control LED arrays, learning the difference between \"software time\" and \"hardware time.\"\n\nThe Ultrasonic Distance Detector: Engineer a \"Bat Sensor\" that measures distance using sound waves and triggers alarms—the same technology used in car backup sensors.\n\nSimon Says Memory Game: (Bonus Challenge) Build and code a memory game that tests the user's recall using light and sound patterns.\n\nPhase 3: Game Development with Pygame\n\nRetro Pong: Code the classic arcade game from scratch using the Pygame library, learning about collision detection, object velocity, and game loops.\n\n🎓 Learning Outcomes (Hard Skills)\n\nBy the end of the week, your child will possess the skills of a beginner software developer:\n\nSyntax Proficiency: The ability to write clean, error-free Python code (understanding indentation, colons, and syntax).\n\nMicrocontroller Logic: How to \"flash\" code onto a hardware chip (Raspberry Pi Pico) to run independently.\n\nSensor Feedback: Reading real-world data (distance) and processing it into digital actions.\n\nDebugging Resilience: The critical skill of reading error logs (\"Tracebacks\") to find and fix bugs without giving up.\n\nLibrary Usage: Understanding how to import external tools (like import time or import pygame) to extend the power of their code.\n\nLimited Seats Available. Secure your child's place in the future of innovation.",
+        imgRect: 'https://res.cloudinary.com/drr3ss2j7/image/upload/v1771521797/Robotics_Fundamentals_with_Python_j8m1sz.png',
+        requirement: 'Ages 10–11\nReady to start text-based coding',
+        msg: { minAge: 11, maxAge: 18, exp: 'python', tags: ['robotics'] }
+      },
+      {
+        title: 'Robotics Mastery with Python',
+        matchNames: ['Robotics Mastery with Python', 'Advanced Robotics (Python)', 'Python Adv'],
+        description: "Robotics Mastery with Python (Advanced)\n\nFrom \"Coder\" to \"Architect.\" This advanced course is for students who have conquered the basics and are ready to create exciting, real-world projects. We move beyond simple commands to teach the actual engineering architectures used in smart devices and professional software.\n\nCourse Overview\n\nThis is an Advanced Embedded Systems & Data Structures course. It requires prior Python experience because we dive immediately into the \"Heavy Lifting\" of computer science.\n\nEmbedded Systems: Students won't just blink lights; they will interface with OLED Screens, Analog Joysticks, and Sensors, & motors. They will learn how hardware communicates via real protocols.\n\nData Structures: This is the differentiator between a hobbyist and a pro. We teach Lists and Dictionaries—the fundamental ways computers store and retrieve massive amounts of data.\n\nExpert Mentorship: Curriculum made by engineers. We push students to write efficient, clean, and scalable code, preparing them for high-level competitive robotics and AP Computer Science Principles.\n\n🛠️ The Gear: Theirs to Keep\n\nWe are the ONLY camp that provides every student with a professional-grade Python Robotics Kit ($100+ value) to use during camp and take home forever.\n\nNo Sharing: Your student manages their own advanced development rig.\n\nRaspberry Pi Pico & OLED: Includes the microcontroller plus advanced interface modules like OLED screens and joystick modules.\n\nComponent Library: A full suite of sensors and wires to continue engineering at home.\n\n🚀 The Projects: Systems Integration\n\nWe focus on \"Integration\"—making code, sensors, screens, and motors work in unison. Please note: These are just sample projects. The actual curriculum will vary and include a greater number of projects tailored to the students' pace.\n\nPhase 1: Advanced Data Logic (The \"Brain\")\n\nThe Data Architect: Master Lists (Arrays) and Dictionaries (Key-Value Pairs) to manage complex datasets—skills essential for any future in Data Science.\n\nThe Joystick Controller: Program an analog joystick to control LED arrays, mastering X and Y Axis Coordinate Systems and Analog-to-Digital Conversion.\n\nPhase 2: Embedded Systems (The \"Smart Device\")\n\nThe Smart Display: Interface with an OLED Screen to display dynamic text and real-time data, learning how to write drivers for hardware screens.\n\nVisualizing Sensors: Build a tool that reads distance from an Ultrasonic Sensor and graphs the data live on the OLED screen—mimicking the dashboard of a modern car.\n\nThe \"Dial\" Interface: Connect a potentiometer (Dial) to the microcontroller to control digital values on the screen, teaching the concept of User Interface (UI) design.\n\nPhase 3: Advanced Game Engineering\n\nSpace Invaders 2.0: Build a complex shooter game with Collision Detection, Enemy Waves, and High Score Tracking using Lists.\n\nAsteroids Physics: Develop a fast-paced game with dynamic objects and \"Screen Wrapping,\" learning how to simulate inertia and momentum in code.\n\nMini-OLED Pong: Recreate the classic game, but this time rendering it entirely on the 1-inch hardware screen controlled by physical buttons.\n\n🎓 Learning Outcomes (Hard Skills)\n\nBy the end of the week, your child will possess the skills of a junior systems engineer:\n\nData Structure Mastery: Understanding when and how to use Lists and Dictionaries to manage game states and sensor logs.\n\nHardware Protocols: Learning how to send data to external devices (like screens) using digital communication.\n\nAnalog Logic: Understanding the difference between Digital (On/Off) and Analog (0–100%) signals, crucial for robotics control.\n\nObject-Oriented Concepts: Managing multiple game objects (like asteroid fields) using efficient code structures.\n\nSystem Integration: The ability to take a raw sensor input, process it with code, and display the result on a screen instantly.\n\nLimited Seats Available. Secure your child's place in the future of innovation.",
+        imgRect: 'https://res.cloudinary.com/drr3ss2j7/image/upload/v1771521799/Robotics_Mastery_with_Python_q7epmh.png',
+        requirement: 'Ages 10–13\nComfortable with variables & loops',
+        msg: { minAge: 13, maxAge: 18, exp: 'python_adv', tags: ['robotics'] }
+      },
+      {
+        title: 'Junior Game Dev with Scratch',
+        matchNames: ['Junior Game Dev with Scratch', 'Game Dev'],
+        description: "Junior Game Dev with Scratch (Ages 6–10)\n\nStop just playing video games. Start engineering them. This course transforms the \"screen time\" battle into a productive education in logic, physics, and computer science.\n\nAges 6–10 are the \"Builder Years.\" Your child is naturally creative; we provide the professional framework to turn their wild ideas into playable, working software.\n\nCourse Overview\n\nThis is a Physical Game Design course. We teach kids to build games they can control with real hardware.\n\nCreate, Don't Just Play: We turn screen time into learning time. Your child will discover the math and logic that makes their favorite games work.\n\nBuild Real Controllers: No more just tapping a keyboard. Students wire up sensors and gyroscopes to create their own custom game controllers.\n\nLearn from Pros: We guide them like junior developers, teaching them how to solve problems and improve their own creations.\n\n🛠️ The Gear: Theirs to Keep\n\nWe are the ONLY camp that provides every student with a professional-grade Robotics & Controller Kit ($100+ value) to use during camp and take home forever.\n\nNo Sharing: Your child gets their own personal equipment to ensure hygiene and ownership.\n\nPhysical Controllers: The kit includes the sensors and microcontrollers needed to turn real-world movement into game actions.\n\nContinued Learning: They can continue developing new games and controllers at home long after camp ends.\n\n🚀 The Projects: Logic & Physics\n\nWe combine creativity with \"Hard Skills\" like coordinate geometry and algorithmic logic. Please note: These are just sample projects. The actual curriculum will vary and include a greater number of projects tailored to the students' pace.\n\nPhase 1: The Classics (Logic & Coordinates)\n\nApple Catcher: Build a multi-level game from scratch, mastering the X and Y Coordinate System to move characters across the screen.\n\nRetro Pong: Recreate the arcade classic. This project teaches Object Interaction (what happens when the ball hits the paddle?) and Variable Tracking (Score & Lives).\n\nSpace Shooter: Program complex object management. Students learn to use \"Clones\" to generate infinite enemies and lasers efficiently.\n\nPhase 2: Advanced Mechanics (Physics & AI)\n\nBubble Frenzy: A lesson in Simulation. Design bubbles that grow, float, and pop based on programmed rules of physics.\n\nShoot the Monster: Create a multi-stage boss battle that introduces \"State Machines\"—changing the game's difficulty as the player progresses.\n\nPhase 3: Physical Controllers (Hardware Integration)\n\nMotion-Controlled Flappy Bird: The highlight of the week. Students wire a Distance Sensor to the computer. Instead of clicking a mouse, they physically wave their hand over the sensor to make the bird fly—learning about Sensor Input Calibration.\n\nThe Gyro Lander: Students program a Gyroscopic Sensor (Tilt Sensor). They must physically tilt their hardware board to steer a spaceship on the screen, learning about Pitch and Roll mechanics.\n\n🎓 Learning Outcomes (Hard Skills)\n\nBy the end of the week, your child will possess the foundational skills of a game designer:\n\nCoordinate Geometry: deeply understanding how X (Horizontal) and Y (Vertical) numbers control position.\n\nAlgorithmic Logic: Mastering Loops (\"Repeat until Game Over\") and Conditionals (\"If touching enemy, then lose life\").\n\nPhysics Simulation: Programming gravity, momentum, and collision detection.\n\nHardware Integration: Understanding how to make physical objects (Sensors) control digital software.\n\nDebugging: The ability to look at broken code, identify the error, and fix it without giving up.\n\nLimited Seats Available. Secure your child's place in the future of innovation.",
+        imgRect: 'https://res.cloudinary.com/drr3ss2j7/image/upload/v1771521799/Junior_Game_Dev_with_Scratch_na1jbt.png',
+        requirement: 'Ages 6–10\nMake & publish games',
+        msg: { minAge: 6, maxAge: 10, exp: 'none', tags: ['games'] }
+      },
+      {
+        title: 'Advanced Game Dev with Python',
+        matchNames: ['Advanced Game Dev with Python',],
+        description: "Advanced Game Development with Python (Ages 11+)\n\nThe transition from \"Gamer\" to \"Developer\" starts here. This course is for the student who is done with drag-and-drop blocks and ready to build professional-grade software using Python, the language used by major studios and tech giants.\n\nAges 11+ are the \"Code Fluency Years.\" We strip away the training wheels to teach the raw syntax, physics engines, and object-oriented logic that drive modern video games.\n\nCourse Overview\n\nThis is a Text-Based Game Engineering course. We use the Pygame library to build games from the ground up—line by line.\n\nReal Code, No Engines: Unlike Unity or Roblox where much of the work is done for you, here students write the actual code for gravity, collision, and rendering. This provides a far deeper understanding of computer science.\n\nHardware-Software Fusion: Unique to this camp, we bridge the gap between electronics and code. Students will program their Raspberry Pi Pico to act as a custom physical controller for the games running on their laptop.\n\nPortfolio Ready: Students leave with executable games they can send to friends or put on a college resume.\n\n🛠️ The Gear: Theirs to Keep\n\nWe are the ONLY camp that provides every student with a professional-grade Python Robotics & Controller Kit ($100+ value) to use during camp and take home forever.\n\nNo Sharing: Your teen builds their own development rig.\n\nCustom Controllers: Includes the microcontroller, joystick modules, and sensors needed to build physical gamepads.\n\nContinued Dev: The hardware is theirs to keep, allowing them to invent new interaction methods at home.\n\n🚀 The Projects: Physics & Algorithms\n\nWe move beyond \"making it move\" to \"making it feel real.\" Please note: These are just sample projects. The actual curriculum will vary and include a greater number of projects tailored to the students' pace.\n\nPhase 1: The Physics Engine (Kinematics)\n\nBreaking Bricks (Breakout): Build a physics-based arcade game. Students learn Vector Math to calculate the \"bounce angle\" of the ball based on where it hits the paddle.\n\nRetro Pong: The \"Hello World\" of game dev. Master the Game Loop (Input -> Update -> Render) and basic collision detection algorithms.\n\nPhase 2: Advanced Mechanics (Object-Oriented Design)\n\nTwist & Blast (Space Shooter): A fast-paced shooter that introduces Classes and Objects. Students learn to manage \"Lists\" of enemies, lasers, and particle effects efficiently.\n\nPython Flappy Bird: Recreate the viral hit to master Gravity Simulation (Acceleration vs. Velocity) and \"Asset Management\" (loading sprites and sounds).\n\nPhase 3: The Hardware Interface (Physical Computing)\n\nThe Gyro Pilot: Students wire a Gyroscopic Sensor to their microcontroller and write a Python driver to read the tilt data. They then use this real-world tilt to steer a spaceship in their Pygame project.\n\nCustom Joystick Integration: Build a physical analog joystick circuit and program it to control the \"Twist & Blast\" ship, learning how to handle Serial Communication between hardware and software.\n\n🎓 Learning Outcomes (Hard Skills)\n\nBy the end of the week, your child will possess the skillset of a junior software engineer:\n\nObject-Oriented Programming (OOP): Understanding Classes, Instances, and Inheritance (e.g., creating a generic \"Enemy\" class and creating specific variations).\n\nVector Mathematics: Using X/Y vectors to calculate speed, direction, and friction.\n\nCollision Algorithms: Writing the logic to detect when two rectangular or circular objects overlap in 2D space.\n\nHardware Drivers: The advanced skill of writing code that allows a computer to \"talk\" to an external USB device (the controller).\n\nSyntax Proficiency: Gaining confidence in writing clean, error-free Python syntax without a drag-and-drop interface.\n\nLimited Seats Available. Secure your child's place in the future of innovation.",
+        imgRect: 'https://res.cloudinary.com/drr3ss2j7/image/upload/v1771521802/Advanced_Game_Dev_with_Python_ncgr9f.png',
+        requirement: 'Ages 11+\nMust know basic Python',
+        msg: { minAge: 11, maxAge: 18, exp: 'python', tags: ['games'] }
+      },
+      {
+        title: 'Intro to AI & Computer Vision with Scratch',
+        matchNames: ['Intro to AI & Computer Vision with Scratch', 'Intro to AI (Scratch)', 'Intro to AI Dev'],
+        description: "Intro to AI & Computer Vision with Scratch (Ages 9–12)\n\nDon’t just ask Siri—build your own. This course demystifies Artificial Intelligence, taking students behind the curtain of the technology shaping their future.\n\nAges 9–12 are the \"Discovery Years.\" This is the perfect time to introduce the concept that computers can \"learn,\" \"see,\" and \"hear\"—transforming your child from a passive user of AI to an active creator.\n\nCourse Overview\n\nThis is an Applied Artificial Intelligence & Robotics course. We use Pictoblox, a powerful block-based coding platform that brings professional AI tools (like Computer Vision and Face Detection) to a kid-friendly interface.\n\nBeyond Code: Standard coding follows rules. AI follows patterns. Your child will learn the difference between \"If Button Pressed\" (Code) and \"If Happy Face Detected\" (AI).\n\nComputer Vision: Students will train computers to recognize images, gestures, and colors using a camera, then use that data to control physical robots.\n\nExpert Mentorship: Curriculum made by engineers. We explain complex topics like \"Image Classification\" and \"Data Training\" in simple, hands-on ways.\n\n🛠️ The Gear: Theirs to Keep\n\nWe are the ONLY camp that provides every student with a professional-grade AI & Robotics Kit ($100+ value) to use during camp and take home forever.\n\nNo Sharing: Your student manages their own AI training station.\n\nHardware Integration: Includes the microcontrollers, servos, and sensors needed to make AI affect the real world.\n\nContinued Innovation: The kit allows them to continue building smart devices at home.\n\n🚀 The Projects: Training the Machine\n\nWe move from simple logic to complex \"Machine Learning\" models. Please note: These are just sample projects. The actual curriculum will vary and include a greater number of projects tailored to the students' pace.\n\nPhase 1: The \"Senses\" (Computer Vision & Input)\n\nThe Smart Trash Can: Train an Image Classifier to recognize \"Plastic,\" \"Paper,\" and \"Metal.\" When the camera sees plastic, the physical lid opens automatically using a servo motor.\n\nJedi Light Control: Master Hand Landmark Detection. Control the brightness of an LED by simply moving your thumb and index finger apart in the air—no touching required.\n\nVoice-Activated Rover: Train a custom Audio Classifier to recognize your specific voice commands (\"Go,\" \"Stop,\" \"Left\") to drive a robot via Bluetooth.\n\nPhase 2: The \"Brain\" (Logic & Decisions)\n\nSafety Face Mask Scanner: Build a robotic security guard using Object Detection. If it sees a face without a mask, the buzzer sounds and the light turns red. If a mask is worn, the gate opens.\n\nThe AI Pet: Construct a robot that reacts to emotions. Using Facial Expression Recognition, the robot wags its tail when you smile and plays a soothing melody if you look sad.\n\nPhase 3: Interactive Physical Games\n\nFull-Body Flappy Bird: Ditch the mouse. Use Pose Tracking to play the game by physically flapping your arms. The AI tracks shoulder movement to control the bird in real-time.\n\nThe Color Sorting Arm: A lesson in industrial automation. A camera identifies the color of a block, and a Robotic Arm autonomously moves to pick it up and sort it into the correct bin.\n\nAI \"Operation\" Game: A precision challenge where the AI tracks your hand stability. If your hand shakes too much while guiding a wire loop, the AI detects the jitter and penalizes your score.\n\n🎓 Learning Outcomes (Hard Skills)\n\nBy the end of the week, your child will understand the building blocks of modern technology:\n\nMachine Learning: How to \"feed\" data to a computer to train a model (e.g., showing it 50 photos of a cat vs. a dog).\n\nComputer Vision: Understanding how cameras map images into data (Pixels, Bounding Boxes, and Landmarks).\n\nHuman-Computer Interaction (HCI): Designing systems that respond to natural human behavior (voice, gestures, emotions).\n\nHardware actuation: Bridging the gap between a digital decision (AI sees red) and a physical action (Motor moves 90 degrees).\n\nAlgorithmic Bias: (Bonus) Learning that an AI is only as smart as the data you teach it.\n\nLimited Seats Available. Secure your child's place in the future of innovation.",
+        imgRect: 'https://res.cloudinary.com/drr3ss2j7/image/upload/v1771521797/Intro_to_AI_Computer_Vision_with_Scratch_lxmr2n.png',
+        requirement: 'Ages 9+\nMust know basic Scratch',
+        msg: { minAge: 9, maxAge: 12, exp: 'scratch', tags: ['robotics'] }
+      },
+      {
+        title: 'Advanced AI & Computer Vision with Python',
+        matchNames: ['Advanced AI & Computer Vision with Python',],
+        description: "Applied Generative AI & Robotics with Python (Ages 11+)\n\nDon't just chat with AI—engineer it. This is our most advanced course, designed for students ready to step behind the curtain of tools like ChatGPT and Tesla Autopilot. We move beyond simple \"rules\" to teach Machine Learning, Computer Vision, and Generative AI.\n\nAges 11+ are the \"Innovation Years.\" Students are ready to understand abstract concepts like Neural Networks and API integration, using the same tools as Silicon Valley engineers.\n\nCourse Overview\n\nThis is an Industry-Standard AI Development course. We use Python to connect code to the \"Brains\" (LLMs) and \"Eyes\" (Cameras) of modern technology.\n\nGenerative AI & APIs: Students learn to use APIs (Application Programming Interfaces) to connect their code to powerful Large Language Models, creating custom chatbots and assistants.\n\nComputer Vision: We replace the mouse and keyboard with Dynamic Live Video. Students write code that \"sees\" the world, tracking hands, faces, and objects in real-time.\n\nHardware Integration: The code doesn't stay on the screen. We bridge the gap to the physical world, using AI decisions to drive Robot Cars and actuate motors.\n\n🛠️ The Gear: Theirs to Keep\n\nWe are the ONLY camp that provides every student with a professional-grade AI Robotics Kit ($100+ value) to use during camp and take home forever.\n\nNo Sharing: Your teen manages their own development station.\n\nAI-Ready Microcontroller: Includes a WiFi-enabled chip (like Raspberry Pi Pico W or ESP32) capable of talking to the internet and APIs.\n\nCamera Module: A webcam or camera sensor for computer vision projects.\n\nRobotic Chassis: A motorized car kit to build the self-driving projects.\n\n🚀 The Projects: Vision, Language, & Action\n\nWe treat AI as a toolset: Text (Chatbots), Vision (Cameras), and Action (Robots). Please note: These are just sample projects. The actual curriculum will vary and include a greater number of projects tailored to the students' pace.\n\nPhase 1: Generative AI (The \"Brain\")\n\nThe Custom Chatbot: Learn to interact with LLMs (Large Language Models) via API. Students code a personality-driven bot (e.g., a \"Sarcastic Robot\" or \"History Tutor\") that remembers conversation context.\n\nAI Storyteller: Build a text-based adventure game where the AI generates the story, enemies, and outcomes dynamically based on the player's choices—no two games are ever the same.\n\nPhase 2: Computer Vision (The \"Eyes\")\n\nGesture-Controlled Flappy Bird: Reinvent the classic game using Pose Estimation. The student's physical hand becomes the controller—flap your hand in the air to fly the bird on screen.\n\nFace-Tracking Security System: Program the camera to detect faces. If an unrecognized face appears in the video feed, the system triggers a digital alarm and logs the timestamp.\n\nPhase 3: Physical Robotics (The \"Body\")\n\nThe \"Jedi\" Robot Car: The ultimate integration project. Students write a Computer Vision script to track their hand coordinates. Move your hand forward, and the Physical Robot Car drives forward. Tilt your hand left, and it steers left.\n\nSign Language Interpreter: Train a model to recognize specific hand signs (like \"Peace\" or \"Stop\") and have the robot perform different stunts based on the sign it sees.\n\n🎓 Learning Outcomes (Hard Skills)\n\nBy the end of the week, your child will possess the skills of a junior AI developer:\n\nAPI Literacy: Understanding how to use API Keys and JSON data to talk to powerful cloud servers (like OpenAI or Google Gemini).\n\nComputer Vision Logic: Understanding how computers break video down into frames, pixels, and landmarks (XYZ coordinates of a hand).\n\nPrompt Engineering: Learning how to structure inputs to LLMs to get precise, predictable code or text outputs.\n\nLatency Management: Handling the \"lag\" between a camera seeing a gesture and a robot moving—a critical skill in robotics.\n\nEthics in AI: Understanding that AI models are trained on data, and that data can have biases or errors.\n\nLimited Seats Available. Secure your child's place in the future of innovation.",
+        imgRect: 'https://res.cloudinary.com/drr3ss2j7/image/upload/v1771521797/Advanced_AI_Computer_Vision_with_Python_cgkvdr.png',
+        requirement: 'Ages 14+\nMust know basic Python',
+        msg: { minAge: 14, maxAge: 20, exp: 'python', tags: ['ai'] }
+      }
+    ];
+
+    // ======= STATE & DOM =======
+    let selectedLocation = null;
+    let selectedCampType = null;
+    let selectedWeek = null;
+    let allServices = [];
+    let LOCATIONS = [];
+    let LOCATION_ADDRESSES = {}; // Maps location picker value to full address
+    let LOCATION_MAP_LINKS = {}; // Maps location picker value to map link URL
+
+    const campGrid = document.getElementById('campGrid');
+    const loadingCamps = document.getElementById('loadingCamps');
+
+    // Filters
+    const filterLoc = document.getElementById('filterLoc');
+    const filterWeek = document.getElementById('filterWeek');
+    const filterAge = document.getElementById('filterAge');
+    const filterExp = document.getElementById('filterExp');
+    const filterInterest = document.getElementById('filterInterest');
+    const clearFilters = document.getElementById('clearFilters');
+    const locationAddressBox = document.getElementById('locationAddressBox');
+    const locationAddressText = document.getElementById('locationAddressText');
+
+    // ======= TOAST NOTIFICATION =======
+    function showToast(message, type = 'warning') {
+      // Remove any existing toast
+      const existing = document.getElementById('toast');
+      if (existing) existing.remove();
+
+      const toast = document.createElement('div');
+      toast.id = 'toast';
+      toast.className = `fixed top-4 left-1/2 -translate-x-1/2 z-50 px-6 py-3 rounded-xl shadow-2xl flex items-center gap-3 animate-bounce-in ${type === 'warning' ? 'bg-brand-navy text-white' : 'bg-green-500 text-white'
+        }`;
+      toast.innerHTML = `
+        <i class="fa-solid ${type === 'warning' ? 'fa-circle-exclamation' : 'fa-check-circle'} text-brand-orange"></i>
+        <span class="font-bold text-sm">${message}</span>
+      `;
+      document.body.appendChild(toast);
+
+      // Auto remove after 3 seconds
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translate(-50%, -20px)';
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+
+    // ======= LOCATION ADDRESS DISPLAY =======
+    function updateLocationAddress() {
+      const loc = filterLoc.value;
+      if (loc && LOCATION_ADDRESSES[loc]) {
+        const address = LOCATION_ADDRESSES[loc];
+        const mapLink = LOCATION_MAP_LINKS[loc];
+
+        const html = `
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center flex-shrink-0">
+                <i class="fa-solid fa-location-dot text-brand-orange text-lg"></i>
+            </div>
+            <div class="flex-1 min-w-0">
+                <p class="text-xs text-white/60 font-medium uppercase tracking-wide">Camp Location</p>
+                <p class="text-white font-bold text-sm md:text-base leading-tight">${address}</p>
+            </div>
+            ${mapLink ? `
+            <div class="flex-shrink-0">
+                <a href="${mapLink}" target="_blank" class="flex items-center justify-center bg-white/10 hover:bg-white/20 text-white rounded-lg transition-colors border border-white/10 shadow-sm w-10 h-10 md:w-auto md:h-auto md:px-4 md:py-2" title="Get Directions">
+                    <i class="fa-solid fa-map-location-dot text-brand-orange text-sm md:text-base"></i>
+                    <span class="hidden md:inline ml-2 text-sm font-bold">Directions</span>
+                </a>
+            </div>
+            ` : ''}
+          </div>
+        `;
+        locationAddressBox.innerHTML = html;
+        locationAddressBox.classList.remove('hidden');
+      } else {
+        locationAddressBox.classList.add('hidden');
+        locationAddressBox.innerHTML = ''; // Clear content
+      }
+    }
+
+    // ======= YEAR =======
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // ======= INITIALIZATION =======
+    async function init() {
+      // 1. Render static immediately
+      renderReviews('all');
+
+      // Start carousel auto-slide
+      setInterval(() => {
+        setSlide(slideIndex + 1);
+      }, 2000); // 2 second interval
+
+      // 2. Then fetch heavy data
+      if (loadingCamps) loadingCamps.classList.remove('hidden');
+      await fetchServices(); // Just fetch services
+      if (loadingCamps) loadingCamps.classList.add('hidden');
+    }
+
+    // ======= REVIEWS RENDER LOGIC =======
+    const reviewsGrid = document.getElementById('reviewsGrid');
+    const reviewTabs = document.querySelectorAll('.review-tab');
+
+    function renderReviews(filter) {
+      if (!reviewsGrid) return; // Prevent crash if element is missing
+      reviewsGrid.innerHTML = '';
+      let filteredReviews = REVIEWS;
+
+      if (filter !== 'all') {
+        filteredReviews = REVIEWS.filter(r => r.category === filter);
+      }
+
+      // Limit to 6 for display
+      const toShow = filteredReviews.slice(0, 6);
+
+      toShow.forEach(r => {
+        const div = document.createElement('div');
+        div.className = 'review-card flex flex-col justify-between';
+        div.innerHTML = `
+                    <div>
+                        <div class="flex text-yellow-400 text-xs mb-2"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                        <p class="text-gray-700 text-sm mb-3 italic">"${r.text}"</p>
+                    </div>
+                    <div class="font-bold text-xs text-brand-navy border-t border-gray-100 pt-2">
+                        - ${r.name}
+                    </div>
+                `;
+        reviewsGrid.appendChild(div);
+      });
+    }
+
+    reviewTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        reviewTabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        renderReviews(tab.dataset.filter);
+      });
+    });
+
+
+    async function fetchServices() {
+      try {
+        const response = await fetch(SHEET_URL);
+        const data = await response.json();
+
+        // Filter out hidden camps (Column AF: "Show on Site?")
+        // If "No", exclude. Ideally case-insensitive.
+        const visibleData = data.filter(service => {
+          const showVal = service['Show on Site?'];
+          // robust check: if undefined or empty, it shows. Only "no" hides it.
+          if (showVal && String(showVal).trim().toLowerCase() === 'no') {
+            return false;
+          }
+          return true;
+        });
+
+        // Filter by Timeframe
+        allServices = visibleData.filter(service => TIMEFRAMES.includes(service['Time frame']));
+
+        // Get unique locations
+        LOCATIONS = [...new Set(allServices.map(s => s['Location Picker']).filter(Boolean))].sort();
+
+        // Build location addresses map (Location Picker -> full Location address)
+        LOCATION_ADDRESSES = {};
+        LOCATION_MAP_LINKS = {};
+        allServices.forEach(s => {
+          const locPicker = s['Location Picker'];
+          const fullAddress = s['Location']; // Column O - full address
+          const mapLink = s['Map Link']; // Column AE
+
+          if (locPicker) {
+            if (fullAddress && !LOCATION_ADDRESSES[locPicker]) {
+              LOCATION_ADDRESSES[locPicker] = fullAddress;
+            }
+            if (mapLink && !LOCATION_MAP_LINKS[locPicker]) {
+              LOCATION_MAP_LINKS[locPicker] = mapLink;
+            }
+          }
+        });
+
+        // Populate Filter
+        filterLoc.innerHTML = '<option value="">Select Location</option>';
+        LOCATIONS.forEach(loc => {
+          const opt = document.createElement('option');
+          opt.value = loc;
+          opt.textContent = loc.toUpperCase();
+          filterLoc.appendChild(opt);
+        });
+
+        // Auto-select if only one location available, otherwise leave unselected
+        if (LOCATIONS.length === 1) {
+          filterLoc.value = LOCATIONS[0];
+          selectedLocation = LOCATIONS[0];
+          updateLocationAddress(); // Show address for auto-selected location
+        }
+
+        // Initial Render
+        updateWeekOptions(); // Populate week dropdown based on available data
+        filterGrid();
+
+      } catch (error) {
+        console.error('Error fetching services:', error);
+        loadingCamps.innerHTML = '<p class="text-red-500 font-bold">Failed to load schedule. Please try refreshing.</p>';
+      }
+    }
+
+    // ======= FILTER LOGIC =======
+    function filterGrid() {
+      const loc = filterLoc.value;
+      const week = filterWeek.value;
+      const ageGroup = filterAge.value; // Now grouped: '7-9', '10-12', '13+'
+      const exp = filterExp.value;
+      const interest = filterInterest.value;
+
+      selectedLocation = loc || null; // Update global state
+      selectedWeek = week || null; // Update global state
+
+      // 1. Determine available Camp Titles at this location and week (if set)
+      let locationAvailableTitles = [];
+      let filteredServices = allServices;
+
+      // Filter by location if set
+      if (selectedLocation) {
+        filteredServices = filteredServices.filter(s => s['Location Picker'] === selectedLocation);
+      }
+
+      // Filter by week if set
+      if (selectedWeek) {
+        filteredServices = filteredServices.filter(s => s['Week #'] === selectedWeek);
+      }
+
+      // Get available camp titles from filtered services
+      locationAvailableTitles = [...new Set(
+        filteredServices.map(s => s['Type of Camp Name']).filter(Boolean)
+      )];
+
+      // 2. Filter the CAMPS array
+      const filteredCamps = CAMPS.filter(c => {
+        // Location/Week Check - only filter if we have filters set
+        if (selectedLocation || selectedWeek) {
+          const matchesLocation = c.matchNames.some(name => locationAvailableTitles.includes(name));
+          if (!matchesLocation) return false;
+        }
+
+        // Age Group Check
+        if (ageGroup) {
+          const selectedAge = parseInt(ageGroup);
+          if (!isNaN(selectedAge)) {
+            // Check if selected age is within the camp's range
+            if (selectedAge < c.msg.minAge || selectedAge > c.msg.maxAge) return false;
+          }
+        }
+
+        // Experience Check
+        if (exp) {
+          if (exp === 'none' && c.msg.exp !== 'none') return false;
+          if (exp === 'scratch' && c.msg.exp === 'python') return false; // Scratch can't do Python
+          if (exp === 'python' && c.msg.exp === 'none') return true; // Python includes beginner? No, usually advanced.
+          // Strict match for now or logic from old wizard
+          // Logic:
+          // If user has 'none', only show 'none' exp camps.
+          // If user has 'scratch', show 'none' and 'scratch' and maybe 'python_intro' (if age fits).
+          // Let's stick to the 'exp' tag in msg.
+          if (exp === 'none' && c.msg.exp !== 'none') return false;
+          if (exp === 'scratch' && (c.msg.exp === 'python' || c.msg.exp === 'python_adv')) return false;
+          // If user has python, they can see mostly anything, but maybe they want advanced.
+          // Let's assume filter is "Maximize level".
+        }
+
+        // Interest Check
+        if (interest && !c.msg.tags.includes(interest)) return false;
+
+        return true;
+      });
+
+      // Show/Hide Clear Button
+      if (loc || week || ageGroup || exp || interest) {
+        clearFilters.classList.remove('hidden');
+      } else {
+        clearFilters.classList.add('hidden');
+      }
+
+      renderCampTypesFiltered(filteredCamps);
+    }
+
+    // ======= UPDATE WEEK OPTIONS BASED ON LOCATION =======
+    function updateWeekOptions() {
+      const loc = filterLoc.value;
+      const currentWeek = filterWeek.value;
+
+      // Get unique weeks available at this location with their labels
+      let filteredServices = allServices;
+      if (loc) {
+        filteredServices = allServices.filter(s => s['Location Picker'] === loc);
+      }
+
+      // Build week labels from Tagline (100) field - extract just the date part
+      // Tagline format: "Jun 1-3, Timings: 9:30 am to 12:30 pm"
+      const weekData = {};
+      // Helper: Parse end day from "Mar 9-11" -> 11
+      const getEndDay = (str) => {
+        const matches = str.match(/\d+/g);
+        return matches ? parseInt(matches[matches.length - 1], 10) : 0;
+      };
+
+      filteredServices.forEach(s => {
+        const weekId = s['Week #'];
+        if (!weekId) return;
+
+        // Extract date part from Tagline (before the comma)
+        const tagline = s['Tagline (100)'] || s['Tagline'] || '';
+        const datePart = tagline.split(',')[0].trim() || weekId;
+
+        if (!weekData[weekId]) {
+          weekData[weekId] = datePart;
+        } else {
+          // If new date range ends later (bigger number), use it
+          // e.g. "Mar 9-13" (13) beats "Mar 9-11" (11)
+          const currentEnd = getEndDay(weekData[weekId]);
+          const newEnd = getEndDay(datePart);
+
+          // Simple heuristic: if same start, bigger end number = longer duration
+          // Handles "Mar 9-13" > "Mar 9-11"
+          // Also handles wrap around "Feb 28 - Mar 3" (3) vs "Feb 28 - Mar 1" (1)
+          if (newEnd > currentEnd) {
+            weekData[weekId] = datePart;
+          }
+        }
+      });
+
+      // Get unique week IDs
+      const availableWeeks = Object.keys(weekData);
+      const isWeekRequired = availableWeeks.length > 1;
+
+      // Rebuild Week dropdown
+      if (isWeekRequired) {
+        filterWeek.innerHTML = '<option value="">📅 Week *</option>';
+        // Add required styling (orange border)
+        filterWeek.classList.add('border-brand-orange', 'border-2');
+        filterWeek.classList.remove('border-gray-200', 'border');
+      } else {
+        filterWeek.innerHTML = '<option value="">📅 Week</option>';
+        // Remove required styling
+        filterWeek.classList.remove('border-brand-orange', 'border-2');
+        filterWeek.classList.add('border-gray-200', 'border');
+      }
+
+      availableWeeks.forEach(w => {
+        const opt = document.createElement('option');
+        opt.value = w;
+        opt.textContent = weekData[w] || w;
+        filterWeek.appendChild(opt);
+      });
+
+      // Auto-select if only 1 week available, otherwise restore selection if valid
+      if (availableWeeks.length === 1) {
+        filterWeek.value = availableWeeks[0];
+        selectedWeek = availableWeeks[0];
+      } else if (availableWeeks.includes(currentWeek)) {
+        filterWeek.value = currentWeek;
+      } else {
+        filterWeek.value = '';
+      }
+    }
+
+    // Bind Events
+    filterLoc.addEventListener('change', () => {
+      logEvent('filter_change', { filter: 'location', value: filterLoc.value });
+      updateWeekOptions(); // Update week dropdown when location changes
+      updateLocationAddress(); // Show address for selected location
+      filterGrid();
+    });
+
+    [filterWeek, filterAge, filterExp, filterInterest].forEach(el => {
+      el.addEventListener('change', (e) => {
+        logEvent('filter_change', { filter: e.target.id, value: e.target.value });
+        filterGrid();
+      });
+    });
+
+    clearFilters.addEventListener('click', () => {
+      logEvent('click', { button_label: 'Clear Filters' });
+      filterLoc.value = "";
+      filterWeek.value = "";
+      filterAge.value = "";
+      filterExp.value = "";
+      filterInterest.value = "";
+      updateWeekOptions(); // Reset week options
+      updateLocationAddress(); // Hide address display
+      filterGrid();
+    });
+
+    // Review Tabs Logging
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        logEvent('click', { button_label: 'Review Tab: ' + btn.textContent.trim() });
+      });
+    });
+
+    // FAQ Logging (Delegation)
+    const faqContainer = document.getElementById('faq'); // Assuming ID is faq or similar
+    if (faqContainer) {
+      faqContainer.addEventListener('click', (e) => {
+        const summary = e.target.closest('summary');
+        if (summary) {
+          const isOpen = summary.parentElement.hasAttribute('open');
+          logEvent('faq_toggle', { question: summary.textContent.trim(), action: isOpen ? 'close' : 'open' });
+        }
+      });
+    }
+
+    // ======= GRID RENDER (Compact Table Layout with Accordion) =======
+    let expandedCampTitle = null; // Track which camp is expanded
+
+    function renderCampTypesFiltered(camps) {
+      campGrid.innerHTML = '';
+
+      if (camps.length === 0) {
+        campGrid.innerHTML = `
+          <div class="text-center py-8 px-4">
+            <p class="text-lg font-bold text-gray-500">No camps match your filters.</p>
+            <p class="text-sm text-gray-400 mt-1">Try adjusting your filters above.</p>
+          </div>`;
+        return;
+      }
+
+      camps.forEach(c => {
+        // Extract age range from requirement
+        const req = c.requirement || '';
+        let ageText = 'All Ages';
+
+        const matchRange = req.match(/Ages?\s*(\d+)[–-](\d+)/i);
+        const matchPlus = req.match(/Ages?\s*(\d+)\+/i);
+
+        if (matchRange) {
+          ageText = `${matchRange[1]}-${matchRange[2]}`;
+        } else if (matchPlus) {
+          ageText = `${matchPlus[1]}+`;
+        }
+        const isExpanded = expandedCampTitle === c.title;
+
+        // Create wrapper for row + expansion panel
+        const wrapper = document.createElement('div');
+        wrapper.className = 'camp-row-wrapper';
+        wrapper.dataset.campTitle = c.title;
+
+        // Main row
+        const row = document.createElement('div');
+        row.className = `group flex flex-col md:flex-row items-center gap-4 px-4 py-3 hover:bg-gray-50 transition-colors cursor-pointer border-b border-gray-100 last:border-0 ${isExpanded ? 'bg-brand-orange/10 border-l-4 border-l-brand-orange' : ''}`;
+        row.innerHTML = `
+            <!-- Top Section: Image + Content -->
+            <div class="flex items-start md:items-center gap-4 w-full md:flex-1">
+                <!-- Thumbnail -->
+                <div class="w-20 h-20 md:w-24 md:h-20 flex-shrink-0 rounded-xl overflow-hidden bg-gray-100 shadow-sm relative">
+                   <img src="${c.imgRect}" alt="${c.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" onerror="this.src='https://placehold.co/100x80/071f4e/white?text=Camp'">
+                </div>
+
+                <!-- Info -->
+                <div class="flex-1 min-w-0">
+                    <h3 class="font-bold text-brand-navy text-base md:text-lg leading-tight mb-1">${c.title}</h3>
+                    <div class="flex flex-wrap gap-2 items-center text-xs text-gray-500 font-bold mb-1">
+                        <span class="bg-gray-100 px-2 py-0.5 rounded text-gray-600 uppercase tracking-wide">${ageText}</span>
+                    </div>
+                    <p class="text-xs md:text-sm text-gray-500 line-clamp-2 md:line-clamp-1 leading-relaxed">
+                        ${(c.requirement || '').replace(/\n/g, ' ')}
+                    </p>
+                </div>
+            </div>
+
+            <!-- Bottom/Right Section: Action -->
+            <div class="w-full md:w-auto flex-shrink-0 mt-2 md:mt-0 flex flex-row gap-2">
+                 <!-- Info Button -->
+                 <button class="info-btn w-[25%] md:w-auto bg-brand-navy hover:bg-brand-blue text-white font-bold text-sm py-2 px-3 md:px-6 rounded-lg shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2" onclick="openDescription(event, '${c.title.replace(/'/g, "\\'")}')">
+                    <i class="fa-solid fa-info-circle"></i> <span class="hidden md:inline">Details</span>
+                 </button>
+                 
+                 <!-- Select Button -->
+                 <button class="select-btn flex-1 md:w-36 ${isExpanded ? 'bg-gray-800 hover:bg-gray-900' : 'bg-brand-orange hover:bg-brand-orangeHover'} text-white font-bold text-sm py-2 px-6 rounded-lg shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2">
+                    ${isExpanded ? '<i class="fa-solid fa-chevron-up"></i> Close' : '<span class="md:hidden">Select Camp</span><span class="hidden md:inline">Select</span> <i class="fa-solid fa-chevron-down"></i>'}
+                 </button>
+            </div>
+        `;
+
+        // Click handler for expansion
+        const toggleExpand = () => {
+          // Check if required filters are selected
+          if (!filterLoc.value || !filterWeek.value) {
+            logEvent('error', { type: 'missing_filters', details: 'User tried to expand without selecting filters' });
+            showToast('Please select Location and Week first');
+
+            // Highlight missing filters
+            if (!filterLoc.value) {
+              filterLoc.classList.add('ring-2', 'ring-red-400');
+              setTimeout(() => filterLoc.classList.remove('ring-2', 'ring-red-400'), 2000);
+            }
+            if (!filterWeek.value) {
+              filterWeek.classList.add('ring-2', 'ring-red-400');
+              setTimeout(() => filterWeek.classList.remove('ring-2', 'ring-red-400'), 2000);
+            }
+            return;
+          }
+
+          if (expandedCampTitle === c.title) {
+            logEvent('camp_collapse', { camp: c.title });
+            expandedCampTitle = null; // Collapse
+          } else {
+            logEvent('camp_expand', { camp: c.title }); // Track expansion
+            expandedCampTitle = c.title; // Expand this one
+            selectedCampType = c;
+          }
+          renderCampTypesFiltered(camps); // Re-render
+        };
+
+        row.querySelector('.select-btn').addEventListener('click', (e) => {
+          e.stopPropagation();
+          toggleExpand();
+        });
+        row.addEventListener('click', toggleExpand);
+
+        wrapper.appendChild(row);
+
+        // Expansion panel (only if expanded) - Modern Glass Style
+        if (isExpanded) {
+          const panel = document.createElement('div');
+          panel.className = 'bg-gradient-to-br from-slate-800 to-slate-900 backdrop-blur-xl rounded-2xl mx-2 mb-3 p-5 border border-white/10 shadow-2xl';
+          panel.innerHTML = `
+            <div class="services-list space-y-3">
+              <div class="text-center py-4">
+                <i class="fa-solid fa-circle-notch fa-spin text-brand-orange text-xl"></i>
+                <p class="text-white/60 text-sm mt-2">Loading sessions...</p>
+              </div>
+            </div>
+          `;
+          wrapper.appendChild(panel);
+
+          // Load services for this camp
+          setTimeout(() => renderInlineServices(panel.querySelector('.services-list'), c), 100);
+        }
+
+        campGrid.appendChild(wrapper);
+      });
+    }
+
+    // Render services inline under expanded camp
+    function renderInlineServices(container, camp) {
+      // Get selected week from filter (or use all if not set)
+      const weekFilter = filterWeek.value;
+
+      const filtered = allServices.filter(s => {
+        const matchesLocation = !selectedLocation || s['Location Picker'] === selectedLocation;
+        const matchesWeek = !weekFilter || s['Week #'] === weekFilter;
+        // Check if service name matches any alias for this camp
+        const matchesCamp = camp.matchNames.includes(s['Type of Camp Name']);
+        return matchesLocation && matchesWeek && matchesCamp;
+      });
+
+      container.innerHTML = '';
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-4 text-white">
+            <i class="fa-solid fa-calendar-xmark text-2xl mb-2"></i>
+            <p class="font-bold">No sessions available</p>
+            <p class="text-sm text-white/70">Try selecting a different week or location</p>
+          </div>`;
+        return;
+      }
+
+      filtered.forEach(s => {
+        const rawSchedule = s.Schedule || s['Tagline (100)'] || '';
+        const rawServiceName = s['Web Display Service name'] || s['Name (40)'] || s.Name || '';
+        const scheduleTxt = formatSchedule(rawSchedule);
+        const serviceName = formatServiceName(rawServiceName);
+
+        const card = document.createElement('div');
+        card.className = 'bg-white/10 backdrop-blur text-white rounded-xl p-3 md:p-4 border border-white/20 hover:bg-white/20 transition-all';
+
+        // Escape strings for attributes
+        const cleanCamp = camp.title.replace(/"/g, '&quot;');
+        const cleanOption = serviceName.replace(/"/g, '&quot;');
+        const cleanSchedule = scheduleTxt.replace(/"/g, '&quot;');
+
+        card.innerHTML = `
+          <!-- Desktop Layout -->
+          <div class="hidden md:flex md:items-center gap-6">
+            <div class="flex-1 min-w-0">
+              <h4 class="font-bold text-sm leading-tight text-white">${serviceName}</h4>
+              <p class="text-white/50 text-xs mt-1">${scheduleTxt}</p>
+            </div>
+            <div class="text-right">
+              <div class="font-black text-xl text-brand-orange">\$${s.Amount || s.amount || '0'}</div>
+              <div class="text-xs text-white/50">${s['Max participants'] || 8} spots left</div>
+            </div>
+            <a href="${s['Direct Web Link'] || '#'}" target="_blank"
+               data-role="book-btn"
+               data-camp-title="${cleanCamp}"
+               data-option-name="${cleanOption}"
+               data-schedule="${cleanSchedule}"
+               data-price="${s.Amount || '0'}"
+               class="bg-brand-orange hover:bg-brand-orangeHover text-white font-bold text-sm py-2.5 px-8 rounded-full transition-all shadow-lg shadow-orange-500/20 whitespace-nowrap ml-2">
+              Book Now
+            </a>
+          </div>
+
+          <!-- Mobile Layout: Compact 2-Row -->
+          <div class="md:hidden">
+            <!-- Row 1: Name -->
+            <h4 class="font-bold text-sm leading-tight text-white mb-1">${serviceName}</h4>
+            <p class="text-white/50 text-xs mb-2">${scheduleTxt}</p>
+
+            <!-- Row 2: Price + Button aligned right -->
+            <div class="flex items-center justify-between">
+              <div>
+                <span class="font-black text-lg text-brand-orange">\$${s.Amount || s.amount || '0'}</span>
+                <span class="text-xs text-white/50 ml-2">${s['Max participants'] || 8} spots</span>
+              </div>
+              <a href="${s['Direct Web Link'] || '#'}" target="_blank"
+                  data-role="book-btn"
+                  data-camp-title="${cleanCamp}"
+                  data-option-name="${cleanOption}"
+                  data-schedule="${cleanSchedule}"
+                  data-price="${s.Amount || '0'}"
+                  class="bg-brand-orange text-white font-bold text-xs py-2 px-5 rounded-full shadow-lg">
+                Book Now
+              </a>
+            </div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    // Keep renderCampTypes for backward compat
+    function renderCampTypes() {
+      filterGrid();
+    }
+
+    // Video Modal Logic (Same as before)
+    const modal = document.getElementById('modal');
+    const modalFrame = document.getElementById('modalFrame');
+    const modalCard = document.getElementById('modalCard');
+    const modalClose = document.getElementById('modalClose');
+
+    function openModal(embedUrl) {
+      const url = embedUrl.includes('?') ? embedUrl + '&autoplay=1' : embedUrl + '?autoplay=1';
+      modalFrame.src = url;
+      modal.classList.remove('hidden');
+      setTimeout(() => {
+        modal.classList.remove('opacity-0');
+        modalCard.classList.remove('scale-95');
+        modalCard.classList.add('scale-100');
+      }, 10);
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      modal.classList.add('opacity-0');
+      modalCard.classList.add('scale-95');
+      modalCard.classList.remove('scale-100');
+      setTimeout(() => {
+        modal.classList.add('hidden');
+        modalFrame.src = '';
+        document.body.style.overflow = '';
+      }, 300);
+    }
+    document.querySelectorAll('.thumbBtn').forEach(btn => {
+      btn.addEventListener('click', () => openModal(btn.dataset.video));
+    });
+    modalClose.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+
+    // Carousel Logic (Same as before)
+    const slides = [
+      { src: "https://static.wixstatic.com/media/cf38b9_11e46b6479ac4edfa708822e8e06ed84~mv2.jpg/v1/fill/w_800,h_600,al_c,q_85/cf38b9_11e46b6479ac4edfa708822e8e06ed84~mv2.jpg", alt: "Kid building robot" },
+      { src: "https://static.wixstatic.com/media/cf38b9_f1d9265b1e504853a557642d26222929~mv2.jpg/v1/fill/w_800,h_600,al_c,q_85/cf38b9_f1d9265b1e504853a557642d26222929~mv2.jpg", alt: "Group working together" },
+      { src: "https://static.wixstatic.com/media/cf38b9_33eec5107860481c9a24a3ae95cb7a77~mv2.jpg/v1/fill/w_800,h_600,al_c,q_85/cf38b9_33eec5107860481c9a24a3ae95cb7a77~mv2.jpg", alt: "Presentation day" }
+    ];
+
+    let slideIndex = 0;
+    const carouselImg = document.getElementById('carouselImg');
+    const dotWrap = document.getElementById('dotWrap');
+
+    function setSlide(i) {
+      slideIndex = (i + slides.length) % slides.length;
+      const s = slides[slideIndex];
+
+      // Fade out and scale down
+      carouselImg.style.opacity = '0';
+      carouselImg.style.transform = 'scale(1.02)';
+
+      setTimeout(() => {
+        carouselImg.src = s.src;
+        carouselImg.alt = s.alt;
+        carouselImg.onload = () => {
+          // Fade in and scale to normal
+          carouselImg.style.opacity = '1';
+          carouselImg.style.transform = 'scale(1)';
+        }
+        carouselImg.onerror = () => {
+          carouselImg.src = `https://placehold.co/800x600/071f4e/white?text=Camp+Photo+${slideIndex + 1}`;
+          carouselImg.style.opacity = '1';
+          carouselImg.style.transform = 'scale(1)';
+        }
+      }, 300);
+
+      const dots = dotWrap.querySelectorAll('.dotBtn');
+      dots.forEach((btn, idx) => {
+        if (idx === slideIndex) { btn.classList.remove('bg-white/50'); btn.classList.add('bg-white', 'scale-125'); }
+        else { btn.classList.add('bg-white/50'); btn.classList.remove('bg-white', 'scale-125'); }
+      });
+    }
+    document.getElementById('prevBtn').addEventListener('click', () => setSlide(slideIndex - 1));
+    document.getElementById('nextBtn').addEventListener('click', () => setSlide(slideIndex + 1));
+
+    // --- Parent Testimonials Logic ---
+    const videos = [
+      { id: '5Atfq5oZVuA', title: 'Testimonial 1', quote: '"He didn\'t want to leave!"' },
+      { id: 'gjyfHnvw-mI', title: 'Testimonial 2', quote: '"Real engineering skills."' },
+      { id: 'aZ2Asu17AgQ', title: 'Testimonial 3', quote: '"Best investment we made."' },
+      { id: 'z2skzOIRHwg', title: 'Testimonial 4', quote: '"Instructors are fantastic."' },
+      { id: 'dQ98v1s54wg', title: 'Testimonial 5', quote: '"My son loved it."' }
+    ];
+
+    const ptRow1 = document.getElementById('ptRow1'), ptRow2 = document.getElementById('ptRow2');
+
+    const makePtItem = v => {
+      // Container
+      const card = document.createElement('div');
+      card.className = 'pt-card';
+
+      // Quote on TOP
+      const quote = document.createElement('div');
+      quote.className = 'pt-quote';
+      quote.textContent = v.quote;
+      card.appendChild(quote);
+
+      // Button (Video)
+      const b = document.createElement('button');
+      b.className = 'pt-item';
+      b.setAttribute('data-id', v.id);
+      b.setAttribute('aria-label', `Play ${v.title}`);
+      b.innerHTML = `<img loading="lazy" src="https://img.youtube.com/vi/${v.id}/mqdefault.jpg" alt="${v.title}">
+                        <span class="pt-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg></span>`;
+
+      card.appendChild(b);
+      return card;
+    };
+
+    if (ptRow1 && ptRow2) {
+      videos.forEach(v => ptRow1.appendChild(makePtItem(v)));
+      videos.forEach(v => ptRow2.appendChild(makePtItem(v))); // duplicate for seamless loop
+    }
+
+    const ptLb = document.getElementById('ptLightbox'), ptPlayer = document.getElementById('ptPlayer'), ptLbClose = document.getElementById('ptLbClose');
+
+    if (ptLb && ptPlayer && ptLbClose) {
+      document.addEventListener('click', e => {
+        const btn = e.target.closest('.pt-item'); if (!btn) return;
+        const id = btn.dataset.id;
+        ptPlayer.src = `https://www.youtube.com/embed/${id}?autoplay=1&rel=0&modestbranding=1`;
+        ptLb.classList.add('open');
+        document.documentElement.style.overflow = 'hidden';
+      });
+
+      function closePtLB() {
+        ptPlayer.src = '';
+        ptLb.classList.remove('open');
+        document.documentElement.style.overflow = '';
+      }
+
+      ptLbClose.addEventListener('click', closePtLB);
+      ptLb.addEventListener('click', e => { if (e.target === ptLb) closePtLB(); });
+      document.addEventListener('keydown', e => { if (e.key === 'Escape') closePtLB(); });
+    }
+
+    // ======= SCROLL REVEAL OBSERVER =======
+    function initScrollReveal() {
+      const revealElements = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-stagger');
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('revealed');
+            observer.unobserve(entry.target); // Only animate once
+          }
+        });
+      }, {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+      });
+
+      revealElements.forEach(el => observer.observe(el));
+    }
+
+    // Apply reveal classes to key sections on DOM ready
+    document.addEventListener('DOMContentLoaded', () => {
+      // Add reveal classes to sections
+      document.querySelectorAll('section').forEach((section, i) => {
+        section.classList.add('reveal');
+      });
+
+      // Add hover effects to cards
+      document.querySelectorAll('.review-card, .deep-feature').forEach(el => {
+        el.classList.add('hover-lift');
+      });
+
+      // Add shine effect to main CTA buttons
+      document.querySelectorAll('[href="#camps"]').forEach(btn => {
+        btn.classList.add('btn-shine');
+      });
+
+      // Initialize observer
+      initScrollReveal();
+
+      // ======= SCROLL PROGRESS & STICKY CTA =======
+      const scrollProgress = document.getElementById('scrollProgress');
+      const stickyCta = document.getElementById('stickyCta');
+      const heroHeight = window.innerHeight;
+
+      window.addEventListener('scroll', () => {
+        const scrollTop = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const scrollPercent = (scrollTop / docHeight) * 100;
+
+        // Update progress bar
+        scrollProgress.style.width = scrollPercent + '%';
+
+        // Sticky CTA Logic
+        // Hide on First Screen (Hero) AND Available Camps section
+        const campsSection = document.getElementById('camps'); // "Available Camps" section
+        let shouldHide = false;
+
+        // 1. Check Hero (First Screen)
+        if (scrollTop < window.innerHeight * 0.8) {
+          shouldHide = true;
+        }
+
+        // 2. Check Available Camps Section
+        if (campsSection) {
+          const rect = campsSection.getBoundingClientRect();
+          // If camps section is visible in viewport
+          if (rect.top < window.innerHeight && rect.bottom > 0) {
+            shouldHide = true;
+          }
+        }
+
+        if (shouldHide) {
+          stickyCta.classList.add('translate-y-24', 'opacity-0', 'pointer-events-none');
+        } else {
+          stickyCta.classList.remove('translate-y-24', 'opacity-0', 'pointer-events-none');
+        }
+      });
+    });
+
+    // Start App
+    init();
+
+
+    // ======= CAMP DESCRIPTION MODAL =======
+
+    window.openDescription = function (e, title) {
+      e.stopPropagation(); // Prevent row toggle
+      if (window.logEvent) window.logEvent('view_details', { camp: title });
+
+      const descModal = document.getElementById('descModal');
+      const descTitle = document.getElementById('descTitle');
+      const descContent = document.getElementById('descContent');
+
+      // Find camp object directly
+      const camp = CAMPS.find(c => c.title === title);
+      const desc = camp ? camp.description : null;
+
+      descTitle.textContent = title;
+      descContent.innerHTML = desc ? desc.replace(/\n/g, '<br>') : '<p class="text-gray-500 italic">Description details coming soon.</p>';
+
+      descModal.classList.remove('hidden');
+      setTimeout(() => {
+        descModal.querySelector('.transform').classList.remove('scale-95', 'opacity-0');
+        descModal.querySelector('.transform').classList.add('scale-100', 'opacity-100');
+      }, 10);
+      document.body.style.overflow = 'hidden';
+    };
+
+    function closeDescModal() {
+      const descModal = document.getElementById('descModal');
+      const card = descModal.querySelector('.transform');
+      card.classList.add('scale-95', 'opacity-0');
+      card.classList.remove('scale-100', 'opacity-100');
+      setTimeout(() => {
+        descModal.classList.add('hidden');
+        document.body.style.overflow = '';
+      }, 200);
+    }
+
+  </script>
+
+  <!-- Description Modal Markup -->
+  <div id="descModal"
+    class="hidden fixed inset-0 z-[60] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div
+      class="bg-white rounded-2xl shadow-2xl w-full max-w-lg transform transition-all duration-300 scale-95 opacity-0 flex flex-col max-h-[90vh]">
+      <!-- Header -->
+      <div class="p-6 border-b border-gray-100 flex justify-between items-start bg-gray-50 rounded-t-2xl">
+        <h3 id="descTitle" class="text-xl font-black text-brand-navy pr-4 leading-tight">Camp Title</h3>
+        <button onclick="closeDescModal()" class="text-gray-400 hover:text-brand-navy transition-colors">
+          <i class="fa-solid fa-times text-xl"></i>
+        </button>
+      </div>
+
+      <!-- Content -->
+      <div class="p-6 overflow-y-auto">
+        <div id="descContent" class="text-gray-600 leading-relaxed space-y-4">
+          <!-- Content injected here -->
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="p-4 border-t border-gray-100 bg-gray-50 rounded-b-2xl flex justify-end">
+        <button onclick="closeDescModal()"
+          class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-6 rounded-full transition-colors">
+        </button>
+      </div>
+    </div>
+  </div>
+  <!-- ============================================ -->
+  <!-- ANALYTICS MODULE (Supabase)                  -->
+  <!-- ============================================ -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    (function () {
+      // 1. Configuration
+      const PAGE_ID = 'spring_camp_2026'; // Unique ID for this specific landing page
+      const SUPABASE_URL = 'https://fwvdgtluwoulswhsylxg.supabase.co';
+      const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ3dmRndGx1d291bHN3aHN5bHhnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcyMDY5NTAsImV4cCI6MjA4Mjc4Mjk1MH0.ecQ-6Pgf07Wq6EN6ARwIbU0INr02A5KhuBWzQgIkdOQ';
+
+      // 2. Initialize Client
+      const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+      // 3. Session Management
+      let sessionId = sessionStorage.getItem('ltb_session_id');
+      if (!sessionId) {
+        sessionId = crypto.randomUUID();
+        sessionStorage.setItem('ltb_session_id', sessionId);
+      }
+
+      // 4. Helper: Log Event
+      async function logEvent(eventType, eventDetails = {}) {
+        try {
+          // Add timestamp for local debugging, but DB handles true time
+          await supabaseClient.from('landing_page_analytics').insert([{
+            session_id: sessionId,
+            page_id: PAGE_ID,
+            event_type: eventType,
+            event_details: eventDetails
+          }]);
+        } catch (err) {
+          console.warn('Analytics Error:', err);
+        }
+      }
+
+      // Expose to window for global access
+      window.logEvent = logEvent;
+
+      // 5. Track: Page View (Immediate)
+      logEvent('page_view', {
+        referrer: document.referrer,
+        screen_width: window.innerWidth
+      });
+
+      // 6. Track: Clicks (Global Delegation)
+      // Tracks ANY button, link, or element with role="button"
+      document.body.addEventListener('click', (e) => {
+        const target = e.target.closest('button, a, input[type="submit"], [role="button"], .btn');
+
+        if (target) {
+          // Get useful label: aria-label OR textContent OR title OR id
+          const label = (
+            target.getAttribute('aria-label') ||
+            target.innerText ||
+            target.title ||
+            target.id ||
+            'unknown_element'
+          ).trim().substring(0, 100); // Truncate for safety
+
+          // Get link destination if it's an anchor
+          const href = target.getAttribute('href');
+
+          logEvent('click', {
+            element_tag: target.tagName,
+            button_label: label,
+            link_url: href,
+            // Track which section user is in (if possible)
+            section_id: target.closest('section')?.id || 'unknown_section'
+          });
+        }
+      });
+
+      // 7. Track: Time on Page (Heartbeat)
+      // Pings every 30 seconds to indicate user is still active/open
+      setInterval(() => {
+        if (!document.hidden) { // Only log if tab is visible
+          logEvent('time_ping', {
+            duration_s: 30
+          });
+        }
+      }, 30000); // 30 seconds
+
+
+      // 8. Advanced Instrumentation (Gap Analysis Implementation)
+      function initAdvancedTracking() {
+        // A. Filter Tracking
+        const filters = ['filterLoc', 'filterWeek', 'filterAge', 'filterExp', 'filterInterest'];
+        filters.forEach(id => {
+          const el = document.getElementById(id);
+          if (el) {
+            el.addEventListener('change', (e) => {
+              logEvent('filter_change', {
+                filter_name: id.replace('filter', '').toLowerCase(),
+                selected_value: e.target.value
+              });
+            });
+          }
+        });
+
+        // B. FAQ Toggle Tracking
+        document.querySelectorAll('details').forEach((detail, index) => {
+          detail.addEventListener('toggle', (e) => {
+            if (detail.open) {
+              const question = detail.querySelector('summary')?.innerText?.trim();
+              logEvent('faq_expand', {
+                question_text: question,
+                index: index
+              });
+            }
+          });
+        });
+
+        // C. Camp Interaction (Delegated)
+        const campGrid = document.getElementById('campGrid');
+        if (campGrid) {
+          campGrid.addEventListener('click', (e) => {
+            // Check for specific buttons within the camp card reference
+            const btn = e.target.closest('button, a');
+            if (!btn) return;
+
+            // Find the closest camp card to get context
+            const card = btn.closest('.camp-row-wrapper');
+
+            // Let's rely on text content for "Book Now" vs "View Details"
+            const btnText = btn.innerText.toLowerCase();
+            const campTitle = card ? card.dataset.campTitle : 'unknown_camp';
+
+            if (btnText.includes('book') || btnText.includes('select')) {
+              // Check for explicit data attributes (Book Now buttons)
+              const explicitCamp = btn.dataset.campTitle;
+
+              logEvent('conversion_intent', {
+                camp: explicitCamp || campTitle,
+                option: btn.dataset.optionName || 'general',
+                action: explicitCamp ? 'book_now' : 'select_camp_start',
+                btn_text: btn.innerText,
+                price: btn.dataset.price,
+                schedule: btn.dataset.schedule
+              });
+            } else if (btnText.includes('details') || btnText.includes('info')) {
+              logEvent('interest_view', {
+                camp: campTitle,
+                action: 'view_details'
+              });
+            }
+          });
+        }
+      }
+
+      // Initialize Advanced Tracking
+      initAdvancedTracking();
+
+    })();
+  </script>
+</body>
+
+</html>
