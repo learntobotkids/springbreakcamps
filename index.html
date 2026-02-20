@@ -7,6 +7,8 @@
   <meta name="description"
     content="LearnToBot Spring Camp 2026 — kids build real robotics & coding projects and take home their kit." />
   <title>LearnToBot — Spring Camp 2026</title>
+  <link rel="icon" type="image/png"
+    href="https://res.cloudinary.com/drr3ss2j7/image/upload/q_auto,f_auto/v1771530035/logo_x5vjnd.png">
 
   <!-- Resource hints: warm up external origins early -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -2494,18 +2496,17 @@
 
     // ======= INITIALIZATION =======
     async function init() {
-      // 1. Render static immediately
+      // 1. Render static content immediately — page is visible right away
       renderReviews('all');
 
       // Start carousel auto-slide
       setInterval(() => {
         setSlide(slideIndex + 1);
-      }, 2000); // 2 second interval
+      }, 2000);
 
-      // 2. Then fetch heavy data
-      if (loadingCamps) loadingCamps.classList.remove('hidden');
-      await fetchServices(); // Just fetch services
-      if (loadingCamps) loadingCamps.classList.add('hidden');
+      // 2. Fetch data in the background — don't block the page
+      // The in-section spinner (#loadingCamps) handles the wait inside the camps area
+      fetchServices();
     }
 
     // ======= REVIEWS RENDER LOGIC =======
@@ -2551,6 +2552,9 @@
 
     async function fetchServices() {
       try {
+        // Show the in-section spinner while waiting for data
+        if (loadingCamps) loadingCamps.classList.remove('hidden');
+
         const response = await fetch(SHEET_URL);
         const data = await response.json();
 
@@ -2609,9 +2613,12 @@
         updateWeekOptions(); // Populate week dropdown based on available data
         filterGrid();
 
+        // Hide the in-section spinner once data is rendered
+        if (loadingCamps) loadingCamps.classList.add('hidden');
+
       } catch (error) {
         console.error('Error fetching services:', error);
-        loadingCamps.innerHTML = '<p class="text-red-500 font-bold">Failed to load schedule. Please try refreshing.</p>';
+        if (loadingCamps) loadingCamps.innerHTML = '<p class="text-red-500 font-bold">Failed to load schedule. Please try refreshing.</p>';
       }
     }
 
