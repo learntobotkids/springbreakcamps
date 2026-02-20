@@ -810,8 +810,8 @@
 
         <!-- Logo -->
         <a href="https://www.learntobot.com/" class="flex items-center gap-3 group">
-          <img src="https://res.cloudinary.com/drr3ss2j7/image/upload/q_auto,f_auto/v1771530035/logo_x5vjnd.png" alt="LearnToBot"
-            class="h-10 w-auto transition-transform group-hover:scale-110">
+          <img src="https://res.cloudinary.com/drr3ss2j7/image/upload/q_auto,f_auto/v1771530035/logo_x5vjnd.png"
+            alt="LearnToBot" class="h-10 w-auto transition-transform group-hover:scale-110">
           <span class="text-2xl font-black tracking-tighter uppercase"
             style="font-family: 'Montserrat', sans-serif;">LearnToBot</span>
         </a>
@@ -2425,20 +2425,27 @@
     const locationAddressText = document.getElementById('locationAddressText');
 
     // ======= TOAST NOTIFICATION =======
-    function showToast(message, type = 'warning') {
+    function showToast(message, type = 'warning', scrollTarget = null) {
       // Remove any existing toast
       const existing = document.getElementById('toast');
       if (existing) existing.remove();
 
       const toast = document.createElement('div');
       toast.id = 'toast';
-      toast.className = `fixed top-4 left-1/2 -translate-x-1/2 z-50 px-6 py-3 rounded-xl shadow-2xl flex items-center gap-3 animate-bounce-in ${type === 'warning' ? 'bg-brand-navy text-white' : 'bg-green-500 text-white'
-        }`;
+      toast.className = `fixed left-1/2 -translate-x-1/2 z-50 px-6 py-3 rounded-xl shadow-2xl flex items-center gap-3 animate-bounce-in ${type === 'warning' ? 'bg-red-600 text-white' : 'bg-green-500 text-white'}`;
+      toast.style.top = '80px';
       toast.innerHTML = `
-        <i class="fa-solid ${type === 'warning' ? 'fa-circle-exclamation' : 'fa-check-circle'} text-brand-orange"></i>
+        <i class="fa-solid ${type === 'warning' ? 'fa-circle-exclamation' : 'fa-check-circle'} text-white"></i>
         <span class="font-bold text-sm">${message}</span>
       `;
       document.body.appendChild(toast);
+
+      // Auto-scroll to the relevant filter element
+      if (scrollTarget) {
+        setTimeout(() => {
+          scrollTarget.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 100);
+      }
 
       // Auto remove after 3 seconds
       setTimeout(() => {
@@ -2888,19 +2895,18 @@
         // Click handler for expansion
         const toggleExpand = () => {
           // Check if required filters are selected
-          if (!filterLoc.value || !filterWeek.value) {
-            logEvent('error', { type: 'missing_filters', details: 'User tried to expand without selecting filters' });
-            showToast('Please select Location and Week first');
-
-            // Highlight missing filters
-            if (!filterLoc.value) {
-              filterLoc.classList.add('ring-2', 'ring-red-400');
-              setTimeout(() => filterLoc.classList.remove('ring-2', 'ring-red-400'), 2000);
-            }
-            if (!filterWeek.value) {
-              filterWeek.classList.add('ring-2', 'ring-red-400');
-              setTimeout(() => filterWeek.classList.remove('ring-2', 'ring-red-400'), 2000);
-            }
+          if (!filterLoc.value) {
+            logEvent('error', { type: 'missing_filters', details: 'User tried to expand without selecting location' });
+            filterLoc.classList.add('ring-2', 'ring-red-400');
+            setTimeout(() => filterLoc.classList.remove('ring-2', 'ring-red-400'), 2000);
+            showToast('Please select a Location first', 'warning', filterLoc);
+            return;
+          }
+          if (!filterWeek.value) {
+            logEvent('error', { type: 'missing_filters', details: 'User tried to expand without selecting week' });
+            filterWeek.classList.add('ring-2', 'ring-red-400');
+            setTimeout(() => filterWeek.classList.remove('ring-2', 'ring-red-400'), 2000);
+            showToast('Please select a Week', 'warning', filterWeek);
             return;
           }
 
@@ -2956,6 +2962,22 @@
         // Check if service name matches any alias for this camp
         const matchesCamp = camp.matchNames.includes(s['Type of Camp Name']);
         return matchesLocation && matchesWeek && matchesCamp;
+      });
+
+      // Sort sessions into preferred sequence
+      const SESSION_ORDER = [
+        'Morning - 3 Day', 'Afternoon - 3 Day', 'Full Day - 3 Day',
+        'Morning - 5 Day', 'Afternoon - 5 Day', 'Full Day - 5 Day'
+      ];
+      filtered.sort((a, b) => {
+        const nameA = formatServiceName(a['Web Display Service name'] || a['Name (40)'] || a.Name || '');
+        const nameB = formatServiceName(b['Web Display Service name'] || b['Name (40)'] || b.Name || '');
+        const idxA = SESSION_ORDER.indexOf(nameA);
+        const idxB = SESSION_ORDER.indexOf(nameB);
+        if (idxA === -1 && idxB === -1) return nameA.localeCompare(nameB);
+        if (idxA === -1) return 1;
+        if (idxB === -1) return -1;
+        return idxA - idxB;
       });
 
       container.innerHTML = '';
