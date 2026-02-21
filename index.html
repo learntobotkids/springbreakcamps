@@ -2687,6 +2687,12 @@
   </style>
   <!-- Tailwind config was inlined into the compiled CSS above -->
 
+  <!-- Leaflet (loaded ONCE) -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="" defer></script>
+
   <!-- Outfit font: loaded via link for non-blocking delivery -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap"
     media="print" onload="this.media='all'">
@@ -2978,6 +2984,100 @@
 
     .btn-shine:hover::before {
       left: 100%;
+    }
+
+    /* Map & Location Hub Styles */
+    #mapContainer {
+      height: 300px;
+      width: 100%;
+      border-radius: 0 0 1rem 1rem;
+      z-index: 1;
+    }
+
+    @media (min-width: 768px) {
+      #mapContainer {
+        height: 100%;
+        min-height: 400px;
+        border-radius: 0 1rem 1rem 0;
+      }
+
+      .md\:flex-row {
+        flex-direction: row;
+      }
+
+      .md\:h-\[450px\] {
+        height: 450px;
+      }
+
+      .md\:w-1\/3 {
+        width: 33.333333%;
+      }
+
+      .md\:w-2\/3 {
+        width: 66.666667%;
+      }
+
+      .md\:border-b-0 {
+        border-bottom-width: 0px;
+      }
+
+      .md\:border-r {
+        border-right-width: 1px;
+        border-color: rgba(255, 255, 255, 0.1);
+      }
+
+      .md\:block {
+        display: block;
+      }
+    }
+
+    .location-card {
+      transition: all 0.3s ease;
+      cursor: pointer;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .location-card:hover,
+    .location-card.active {
+      background: rgba(255, 255, 255, 0.2);
+      border-color: #ff6b00;
+      transform: translateY(-2px);
+    }
+
+    .location-card.active {
+      box-shadow: 0 4px 12px rgba(255, 107, 0, 0.2);
+    }
+
+    .location-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      font-size: 0.7rem;
+      padding: 0.1rem 0.4rem;
+      background: rgba(255, 107, 0, 0.1);
+      color: #ff6b00;
+      border-radius: 9999px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 2px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: rgba(255, 107, 0, 0.5);
+      border-radius: 2px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 107, 0, 0.8);
     }
 
     /* --- Parent Testimonials (Custom Styles) --- */
@@ -4499,7 +4599,7 @@
               <div class="relative group col-span-6 md:w-auto">
                 <select id="filterLoc"
                   class="w-full appearance-none bg-white border border-brand-orange text-brand-navy font-bold text-xs rounded-full py-2 pl-3 pr-8 shadow-sm focus:outline-none focus:ring-1 focus:ring-brand-orange cursor-pointer">
-                  <option value="">📍 Location</option>
+                  <option value="">📍 Area</option>
                 </select>
                 <i
                   class="fa-solid fa-location-dot absolute right-3 top-1/2 -translate-y-1/2 text-brand-orange text-[10px] pointer-events-none"></i>
@@ -4573,7 +4673,7 @@
           </div>
         </div>
 
-        <!-- Location Address Display -->
+        <!-- Location Address Display (Fallback - hidden when Hub is shown) -->
         <div id="locationAddressBox"
           class="hidden mb-6 px-4 py-3 bg-gradient-to-r from-brand-navy to-brand-blue rounded-xl shadow-md border border-white/10">
           <div class="flex items-center gap-3">
@@ -4583,6 +4683,40 @@
             <div>
               <p class="text-xs text-white/60 font-medium uppercase tracking-wide">Camp Location</p>
               <p id="locationAddressText" class="text-white font-bold text-sm md:text-base"></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- LOCATION HUB (Interactive Map) - Hidden until Area Selected -->
+        <div id="areaInfoContainer" class="hidden mb-8 animate-fade-in-up">
+          <div
+            class="bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 shadow-2xl overflow-hidden flex flex-col md:flex-row h-auto md:h-[450px]">
+
+            <!-- Location List (Left/Top) -->
+            <div
+              class="w-full md:w-1/3 bg-brand-navy p-4 md:p-6 flex flex-col border-b md:border-b-0 md:border-r border-white/10">
+              <div class="mb-4">
+                <h3 class="text-xl font-bold text-white mb-1"><i
+                    class="fa-solid fa-map-pin text-brand-orange mr-2"></i>Select Location</h3>
+                <p class="text-sm text-gray-400">Choose a specific location to filter camps.</p>
+              </div>
+
+              <!-- Dynamic Location Tabs/Cards injected here -->
+              <div id="locationList" class="flex-1 overflow-y-auto space-y-3 custom-scrollbar pr-2">
+                <!-- Populated by JS -->
+              </div>
+
+              <div class="mt-4 pt-4 border-t border-white/10">
+                <button id="viewAllLocsBtn"
+                  class="w-full py-2 bg-white/10 hover:bg-white/20 text-white text-sm font-bold rounded-lg transition-colors flex items-center justify-center gap-2">
+                  <i class="fa-solid fa-map"></i> Show Map
+                </button>
+              </div>
+            </div>
+
+            <!-- Map (Right/Bottom) -->
+            <div id="mapColumn" class="w-full md:w-2/3 relative bg-slate-800 hidden md:block">
+              <div id="mapContainer"></div>
             </div>
           </div>
         </div>
@@ -5048,8 +5182,28 @@
     let selectedWeek = null;
     let allServices = [];
     let LOCATIONS = [];
-    let LOCATION_ADDRESSES = {}; // Maps location picker value to full address
-    let LOCATION_MAP_LINKS = {}; // Maps location picker value to map link URL
+
+    // Leaflet Map Globals
+    let map = null;
+    let mapMarkers = [];
+    let selectedArea = null;
+    let selectedSubLocation = null; // Specific building filter
+    let AREAS = {}; // Structured Data: { 'Katy': { subLocations: {...} } }
+
+    // Default centers for known areas (fallback if no specific coords)
+    const AREA_CENTERS = {
+      'Katy': [29.7858, -95.8245],
+      'Sugar Land': [29.5984, -95.6226],
+      'The Woodlands': [30.1658, -95.4613],
+      'Woodlands': [30.1658, -95.4613],
+      'Cypress': [29.9717, -95.6938],
+      'Bellaire': [29.7058, -95.4588],
+      'Pearland': [29.5640, -95.2860],
+      'Rice Village': [29.7174, -95.4146],
+      'Heights': [29.7993, -95.4018],
+      'Memorial': [29.7763, -95.5435],
+      'Spring': [30.0799, -95.4172]
+    };
 
     const campGrid = document.getElementById('campGrid');
     const loadingCamps = document.getElementById('loadingCamps');
@@ -5095,39 +5249,7 @@
       }, 3000);
     }
 
-    // ======= LOCATION ADDRESS DISPLAY =======
-    function updateLocationAddress() {
-      const loc = filterLoc.value;
-      if (loc && LOCATION_ADDRESSES[loc]) {
-        const address = LOCATION_ADDRESSES[loc];
-        const mapLink = LOCATION_MAP_LINKS[loc];
 
-        const html = `
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center flex-shrink-0">
-                <i class="fa-solid fa-location-dot text-brand-orange text-lg"></i>
-            </div>
-            <div class="flex-1 min-w-0">
-                <p class="text-xs text-white/60 font-medium uppercase tracking-wide">Camp Location</p>
-                <p class="text-white font-bold text-sm md:text-base leading-tight">${address}</p>
-            </div>
-            ${mapLink ? `
-            <div class="flex-shrink-0">
-                <a href="${mapLink}" target="_blank" class="flex items-center justify-center bg-white/10 hover:bg-white/20 text-white rounded-lg transition-colors border border-white/10 shadow-sm w-10 h-10 md:w-auto md:h-auto md:px-4 md:py-2" title="Get Directions">
-                    <i class="fa-solid fa-map-location-dot text-brand-orange text-sm md:text-base"></i>
-                    <span class="hidden md:inline ml-2 text-sm font-bold">Directions</span>
-                </a>
-            </div>
-            ` : ''}
-          </div>
-        `;
-        locationAddressBox.innerHTML = html;
-        locationAddressBox.classList.remove('hidden');
-      } else {
-        locationAddressBox.classList.add('hidden');
-        locationAddressBox.innerHTML = ''; // Clear content
-      }
-    }
 
     // ======= YEAR =======
     document.getElementById('year').textContent = new Date().getFullYear();
@@ -5196,43 +5318,72 @@
         const response = await fetch(SHEET_URL);
         const data = await response.json();
 
-        // Filter out hidden camps (Column AF: "Show on Site?")
-        // If "No", exclude. Ideally case-insensitive.
+        // 1. Filter out hidden & valid timeframes
         const visibleData = data.filter(service => {
           const showVal = service['Show on Site?'];
-          // robust check: if undefined or empty, it shows. Only "no" hides it.
-          if (showVal && String(showVal).trim().toLowerCase() === 'no') {
-            return false;
-          }
-          return true;
+          if (showVal && String(showVal).trim().toLowerCase() === 'no') return false;
+          return TIMEFRAMES.includes(service['Time frame']);
         });
 
-        // Filter by Timeframe
-        allServices = visibleData.filter(service => TIMEFRAMES.includes(service['Time frame']));
+        allServices = visibleData;
 
-        // Get unique locations
-        LOCATIONS = [...new Set(allServices.map(s => s['Location Picker']).filter(Boolean))].sort();
+        // 2. Parse AREA and SUB-LOCATION Data
+        const AREA_CODE_MAP = {
+          'KT': 'Katy',
+          'WL': 'Woodlands',
+          'SL': 'Sugar Land',
+          'CP': 'Cypress',
+          'BL': 'Bellaire',
+          'PL': 'Pearland',
+          'HT': 'Heights',
+          'MM': 'Memorial',
+          'SP': 'Spring'
+        };
 
-        // Build location addresses map (Location Picker -> full Location address)
-        LOCATION_ADDRESSES = {};
-        LOCATION_MAP_LINKS = {};
+        AREAS = {};
         allServices.forEach(s => {
-          const locPicker = s['Location Picker'];
-          const fullAddress = s['Location']; // Column O - full address
-          const mapLink = s['Map Link']; // Column AE
+          // Normalize Location Data:
+          // If "Location Picker" (Column V) is empty, build it from Column C (Area) and Column O (Location)
+          if (!s['Location Picker'] && s['Area'] && s['Location']) {
+            const fullArea = AREA_CODE_MAP[String(s['Area']).trim().toUpperCase()] || s['Area'];
+            s['Location Picker'] = `${fullArea} - ${s['Location']}`;
+          }
 
-          if (locPicker) {
-            if (fullAddress && !LOCATION_ADDRESSES[locPicker]) {
-              LOCATION_ADDRESSES[locPicker] = fullAddress;
-            }
-            if (mapLink && !LOCATION_MAP_LINKS[locPicker]) {
-              LOCATION_MAP_LINKS[locPicker] = mapLink;
-            }
+          const locPickerValue = s['Location Picker'];
+          if (!locPickerValue) return;
+
+          // Split "Area - SubLocation"
+          const parts = locPickerValue.split(' - ');
+          const areaName = parts[0].trim();
+          // If no hyphen, use the area name itself as the sub-location name
+          const subLocName = parts.length > 1 ? parts.slice(1).join(' - ').trim() : areaName;
+
+          const fullAddress = s['Location'] || '';
+          const mapLink = s['Map Link'] || '';
+
+          if (!AREAS[areaName]) {
+            AREAS[areaName] = {
+              name: areaName,
+              subLocations: {} // Keyed by subLocName to avoid dupes
+            };
+          }
+
+          // Specific sub-location data
+          if (!AREAS[areaName].subLocations[subLocName]) {
+            AREAS[areaName].subLocations[subLocName] = {
+              name: subLocName,
+              address: fullAddress,
+              mapLink: mapLink,
+              // Try to extract coords from link
+              coords: extractCoordsFromLink(mapLink)
+            };
           }
         });
 
-        // Populate Filter
-        filterLoc.innerHTML = '<option value="">Select Location</option>';
+        LOCATIONS = Object.keys(AREAS).sort(); // Area Names
+
+        // 3. Populate Area Filter
+        filterLoc.innerHTML = '<option value="">📍 Area</option>';
         LOCATIONS.forEach(loc => {
           const opt = document.createElement('option');
           opt.value = loc;
@@ -5240,15 +5391,14 @@
           filterLoc.appendChild(opt);
         });
 
-        // Auto-select if only one location available, otherwise leave unselected
+        // Auto-select if only 1 area
         if (LOCATIONS.length === 1) {
           filterLoc.value = LOCATIONS[0];
-          selectedLocation = LOCATIONS[0];
-          updateLocationAddress(); // Show address for auto-selected location
+          updateWeekOptions();
         }
 
         // Initial Render
-        updateWeekOptions(); // Populate week dropdown based on available data
+        updateWeekOptions();
         filterGrid();
 
         // Hide the in-section spinner once data is rendered
@@ -5260,41 +5410,76 @@
       }
     }
 
+    // Helper: Extract Lat/Long from Google Maps Link
+    function extractCoordsFromLink(url) {
+      if (!url) return null;
+      const match = url.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
+      if (match) {
+        return [parseFloat(match[1]), parseFloat(match[2])];
+      }
+      return null;
+    }
+
     // ======= FILTER LOGIC =======
     function filterGrid() {
-      const loc = filterLoc.value;
+      const area = filterLoc.value;
       const week = filterWeek.value;
-      const ageGroup = filterAge.value; // Now grouped: '7-9', '10-12', '13+'
+      const ageGroup = filterAge.value;
       const exp = filterExp.value;
       const interest = filterInterest.value;
 
-      selectedLocation = loc || null; // Update global state
-      selectedWeek = week || null; // Update global state
+      selectedArea = area || null;
+      selectedLocation = area || null; // Keep legacy compat
+      selectedWeek = week || null;
 
-      // 1. Determine available Camp Titles at this location and week (if set)
-      let locationAvailableTitles = [];
-      let filteredServices = allServices;
-
-      // Filter by location if set
-      if (selectedLocation) {
-        filteredServices = filteredServices.filter(s => s['Location Picker'] === selectedLocation);
+      // 1. Manage Location Hub Visibility
+      // Show Hub if Area is selected. Week is optional context.
+      if (selectedArea) {
+        document.getElementById('areaInfoContainer').classList.remove('hidden');
+        // Initialize Map only once visibility is un-hidden
+        if (!map) initLeafletMap();
+        // Update Hub with current selection context
+        updateLocationHub(selectedArea, selectedWeek);
+      } else {
+        document.getElementById('areaInfoContainer').classList.add('hidden');
+        selectedSubLocation = null; // Reset sub-loc if area cleared
       }
 
-      // Filter by week if set
+      // 1. Determine available Camp Titles
+      let filteredServices = allServices;
+
+      // Filter by Area (match start of Location Picker)
+      if (selectedArea) {
+        filteredServices = filteredServices.filter(s => {
+          const sArea = s['Location Picker'].split(' - ')[0].trim();
+          return sArea === selectedArea;
+        });
+      }
+
+      // Filter by Week
       if (selectedWeek) {
         filteredServices = filteredServices.filter(s => s['Week #'] === selectedWeek);
       }
 
-      // Get available camp titles from filtered services
-      locationAvailableTitles = [...new Set(
+      // Filter by SubLocation (if clicked on Map/Card)
+      if (selectedSubLocation) {
+        filteredServices = filteredServices.filter(s => {
+          const parts = s['Location Picker'].split(' - ');
+          const sSub = parts.length > 1 ? parts.slice(1).join(' - ').trim() : parts[0].trim();
+          return sSub === selectedSubLocation;
+        });
+      }
+
+      // Get available camp titles
+      const availableTitles = [...new Set(
         filteredServices.map(s => s['Type of Camp Name']).filter(Boolean)
       )];
 
       // 2. Filter the CAMPS array
       const filteredCamps = CAMPS.filter(c => {
-        // Location/Week Check - only filter if we have filters set
-        if (selectedLocation || selectedWeek) {
-          const matchesLocation = c.matchNames.some(name => locationAvailableTitles.includes(name));
+        // Location/Week Check
+        if (selectedArea || selectedWeek) {
+          const matchesLocation = c.matchNames.some(name => availableTitles.includes(name));
           if (!matchesLocation) return false;
         }
 
@@ -5302,7 +5487,6 @@
         if (ageGroup) {
           const selectedAge = parseInt(ageGroup);
           if (!isNaN(selectedAge)) {
-            // Check if selected age is within the camp's range
             if (selectedAge < c.msg.minAge || selectedAge > c.msg.maxAge) return false;
           }
         }
@@ -5310,17 +5494,7 @@
         // Experience Check
         if (exp) {
           if (exp === 'none' && c.msg.exp !== 'none') return false;
-          if (exp === 'scratch' && c.msg.exp === 'python') return false; // Scratch can't do Python
-          if (exp === 'python' && c.msg.exp === 'none') return true; // Python includes beginner? No, usually advanced.
-          // Strict match for now or logic from old wizard
-          // Logic:
-          // If user has 'none', only show 'none' exp camps.
-          // If user has 'scratch', show 'none' and 'scratch' and maybe 'python_intro' (if age fits).
-          // Let's stick to the 'exp' tag in msg.
-          if (exp === 'none' && c.msg.exp !== 'none') return false;
           if (exp === 'scratch' && (c.msg.exp === 'python' || c.msg.exp === 'python_adv')) return false;
-          // If user has python, they can see mostly anything, but maybe they want advanced.
-          // Let's assume filter is "Maximize level".
         }
 
         // Interest Check
@@ -5329,25 +5503,28 @@
         return true;
       });
 
-      // Show/Hide Clear Button
-      if (loc || week || ageGroup || exp || interest) {
+      renderCampTypesFiltered(filteredCamps);
+
+      // Update Clear Filters Btn
+      if (area || week || ageGroup || exp || interest) {
         clearFilters.classList.remove('hidden');
       } else {
         clearFilters.classList.add('hidden');
       }
-
-      renderCampTypesFiltered(filteredCamps);
     }
 
     // ======= UPDATE WEEK OPTIONS BASED ON LOCATION =======
     function updateWeekOptions() {
-      const loc = filterLoc.value;
+      const area = filterLoc.value;
       const currentWeek = filterWeek.value;
 
-      // Get unique weeks available at this location with their labels
       let filteredServices = allServices;
-      if (loc) {
-        filteredServices = allServices.filter(s => s['Location Picker'] === loc);
+      if (area) {
+        // Filter by Area (start of Location Picker)
+        filteredServices = allServices.filter(s => {
+          const sArea = s['Location Picker'].split(' - ')[0].trim();
+          return sArea === area;
+        });
       }
 
       // Build week labels from Tagline (100) field - extract just the date part
@@ -5422,8 +5599,8 @@
     // Bind Events
     filterLoc.addEventListener('change', () => {
       logEvent('filter_change', { filter: 'location', value: filterLoc.value });
-      updateWeekOptions(); // Update week dropdown when location changes
-      updateLocationAddress(); // Show address for selected location
+      selectedSubLocation = null; // Reset sub-location on Area change
+      updateWeekOptions();
       filterGrid();
     });
 
@@ -5441,8 +5618,8 @@
       filterAge.value = "";
       filterExp.value = "";
       filterInterest.value = "";
-      updateWeekOptions(); // Reset week options
-      updateLocationAddress(); // Hide address display
+      selectedSubLocation = null; // Reset sub-location
+      updateWeekOptions();
       filterGrid();
     });
 
@@ -5454,7 +5631,7 @@
     });
 
     // FAQ Logging (Delegation)
-    const faqContainer = document.getElementById('faq'); // Assuming ID is faq or similar
+    const faqContainer = document.getElementById('faq');
     if (faqContainer) {
       faqContainer.addEventListener('click', (e) => {
         const summary = e.target.closest('summary');
@@ -5463,6 +5640,187 @@
           logEvent('faq_toggle', { question: summary.textContent.trim(), action: isOpen ? 'close' : 'open' });
         }
       });
+    }
+
+    // Toggle Map Visibility (Mobile)
+    const viewAllLocsBtn = document.getElementById('viewAllLocsBtn');
+    const mapColumn = document.getElementById('mapColumn');
+
+    if (viewAllLocsBtn && mapColumn) {
+      viewAllLocsBtn.addEventListener('click', () => {
+        mapColumn.classList.toggle('hidden');
+        // Force map resize if showing
+        if (!mapColumn.classList.contains('hidden') && map) {
+          setTimeout(() => map.invalidateSize(), 100);
+        }
+      });
+    }
+
+    // ======= MAP & HUB LOGIC (Leaflet) =======
+    function initLeafletMap() {
+      // Create map
+      map = L.map('mapContainer').setView([29.7604, -95.3698], 10); // Default Houston
+
+      // Add Voyager Tiles (clean, readable)
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        subdomains: 'abcd',
+        maxZoom: 19
+      }).addTo(map);
+
+      // Fix for map resizing when container un-hides
+      setTimeout(() => map.invalidateSize(), 200);
+    }
+
+    function updateLocationHub(areaName, activeWeek) {
+      const areaData = AREAS[areaName];
+      if (!areaData) return;
+
+      const subLocs = Object.values(areaData.subLocations);
+      const locationListEl = document.getElementById('locationList');
+
+      // Identify "Active" locations for this week (or all if no week selected)
+      let activeSubLocNames = new Set(subLocs.map(s => s.name));
+
+      if (activeWeek) {
+        const weekServices = allServices.filter(s => {
+          const sArea = s['Location Picker'].split(' - ')[0].trim();
+          return sArea === areaName && s['Week #'] === activeWeek;
+        });
+
+        activeSubLocNames = new Set(weekServices.map(s => {
+          const parts = s['Location Picker'].split(' - ');
+          return parts.length > 1 ? parts.slice(1).join(' - ').trim() : parts[0].trim();
+        }));
+      }
+
+      // Render List
+      locationListEl.innerHTML = '';
+
+      // "All Locations" Card
+      const isAllActive = !selectedSubLocation;
+      const allCard = document.createElement('div');
+      allCard.className = `
+                relative group cursor-pointer rounded-xl p-4 transition-all duration-300 border-2
+                ${isAllActive
+          ? 'bg-white/10 border-brand-orange shadow-lg'
+          : 'bg-white/5 hover:bg-white/10 border-transparent hover:border-white/10'}
+            `;
+      allCard.innerHTML = `
+                <div class="flex items-center gap-4 relative z-10">
+                    <div class="w-10 h-10 rounded-full ${isAllActive ? 'bg-white/20' : 'bg-white/10'} flex items-center justify-center flex-shrink-0">
+                        <i class="fa-solid fa-layer-group ${isAllActive ? 'text-white' : 'text-white/70'}"></i>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <h4 class="font-bold text-white text-sm">All Locations</h4>
+                        <p class="text-xs text-white/50">${activeSubLocNames.size} Active</p>
+                    </div>
+                    ${isAllActive ? '<i class="fa-solid fa-check text-brand-orange"></i>' : ''}
+                </div>
+      `;
+      allCard.onclick = () => handleSubLocSelect(null);
+      locationListEl.appendChild(allCard);
+
+      // Clear Map Markers
+      mapMarkers.forEach(m => map.removeLayer(m));
+      mapMarkers = [];
+
+      const bounds = [];
+
+      // Render Sub-Location Cards & Pins
+      subLocs.forEach(loc => {
+        const isActive = activeSubLocNames.has(loc.name);
+        const isSelected = selectedSubLocation === loc.name;
+
+        const card = document.createElement('div');
+        card.className = `location-card p-3 rounded-xl mb-2 flex items-center gap-3 relative overflow-hidden ${isSelected ? 'active' : 'bg-white/5'} ${!isActive ? 'opacity-40 grayscale' : ''}`;
+        card.innerHTML = `
+              <div class="w-8 h-8 rounded-full bg-brand-orange flex items-center justify-center flex-shrink-0 font-bold text-white text-xs">
+                 <i class="fa-solid fa-map-pin"></i>
+              </div>
+              <div class="flex-1 min-w-0">
+                 <p class="text-sm font-bold text-white truncate">${loc.name}</p>
+                 <p class="text-xs text-gray-400 truncate">${loc.address}</p>
+              </div>
+          `;
+
+        if (isActive) {
+          card.onclick = () => handleSubLocSelect(loc.name);
+
+          // MAP PIN logic
+          let latLng = loc.coords;
+
+          if (!latLng) {
+            const centerKey = Object.keys(AREA_CENTERS).find(k => k.toLowerCase() === areaName.toLowerCase());
+            const center = centerKey ? AREA_CENTERS[centerKey] : [29.7604, -95.3698];
+            const nameSum = loc.name.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+            const offsetLat = (nameSum % 10 - 5) * 0.003;
+            const offsetLng = (nameSum % 11 - 5) * 0.003;
+            latLng = [center[0] + offsetLat, center[1] + offsetLng];
+          }
+
+          if (Array.isArray(latLng) && !isNaN(latLng[0]) && !isNaN(latLng[1])) {
+            const marker = L.circleMarker(latLng, {
+              radius: 8,
+              fillColor: '#FF6B00',
+              color: '#fff',
+              weight: 2,
+              opacity: 1,
+              fillOpacity: 0.9
+            }).addTo(map);
+
+            marker.bindPopup(`<b>${loc.name}</b><br>${loc.address}`);
+            marker.on('click', () => handleSubLocSelect(loc.name));
+
+            mapMarkers.push(marker);
+            bounds.push(latLng);
+          }
+        }
+
+        locationListEl.appendChild(card);
+      });
+
+      // Fit map bounds
+      if (bounds.length > 0) {
+        map.fitBounds(bounds, { padding: [50, 50], maxZoom: 13 });
+      } else if (AREA_CENTERS[areaName]) {
+        map.setView(AREA_CENTERS[areaName], 11);
+      }
+
+      setTimeout(() => map.invalidateSize(), 200);
+    }
+
+    function handleSubLocSelect(subLocName) {
+      logEvent('filter_sublocation', { area: selectedArea, sub_location: subLocName || 'all' });
+      selectedSubLocation = subLocName;
+      filterGrid();
+    }
+
+    // Helper to generate location tags for a specific camp
+    function getCampLocationTags(camp) {
+      const matchingServices = allServices.filter(s => {
+        if (!camp.matchNames.includes(s['Type of Camp Name'])) return false;
+        if (selectedArea) {
+          const sArea = s['Location Picker'].split(' - ')[0].trim();
+          if (sArea !== selectedArea) return false;
+        }
+        if (selectedWeek && s['Week #'] !== selectedWeek) return false;
+        return true;
+      });
+
+      const subLocs = new Set();
+      matchingServices.forEach(s => {
+        const parts = s['Location Picker'].split(' - ');
+        const area = parts[0].trim();
+        const sub = parts.length > 1 ? parts.slice(1).join(' - ').trim() : area;
+        if (sub !== area || !selectedArea) {
+          subLocs.add(sub);
+        }
+      });
+
+      return Array.from(subLocs).map(loc =>
+        `<span class="location-tag"><i class="fa-solid fa-location-dot text-[9px]"></i> ${loc}</span>`
+      ).join('');
     }
 
     // ======= GRID RENDER (Compact Table Layout with Accordion) =======
@@ -5516,6 +5874,7 @@
                     <h3 class="font-bold text-brand-navy text-base md:text-lg leading-tight mb-1">${c.title}</h3>
                     <div class="flex flex-wrap gap-2 items-center text-xs text-gray-500 font-bold mb-1">
                         <span class="bg-gray-100 px-2 py-0.5 rounded text-gray-600 uppercase tracking-wide">${ageText}</span>
+                        ${getCampLocationTags(c)}
                     </div>
                     <p class="text-xs md:text-sm text-gray-500 line-clamp-2 md:line-clamp-1 leading-relaxed">
                         ${(c.requirement || '').replace(/\n/g, ' ')}
@@ -5598,15 +5957,31 @@
 
     // Render services inline under expanded camp
     function renderInlineServices(container, camp) {
-      // Get selected week from filter (or use all if not set)
+      // Get selected week from filter
       const weekFilter = filterWeek.value;
+      // Get selected Area from filter
+      const areaFilter = filterLoc.value;
 
       const filtered = allServices.filter(s => {
-        const matchesLocation = !selectedLocation || s['Location Picker'] === selectedLocation;
+        // 1. Check Area (if selected)
+        if (areaFilter) {
+          const sArea = s['Location Picker'].split(' - ')[0].trim();
+          if (sArea !== areaFilter) return false;
+        }
+
+        // 2. Check SubLocation (if specifically selected via pin/card)
+        if (selectedSubLocation) {
+          const parts = s['Location Picker'].split(' - ');
+          // Parse sub-location (handle fallback)
+          const sSub = parts.length > 1 ? parts.slice(1).join(' - ').trim() : parts[0].trim();
+          if (sSub !== selectedSubLocation) return false;
+        }
+
         const matchesWeek = !weekFilter || s['Week #'] === weekFilter;
         // Check if service name matches any alias for this camp
         const matchesCamp = camp.matchNames.includes(s['Type of Camp Name']);
-        return matchesLocation && matchesWeek && matchesCamp;
+
+        return matchesWeek && matchesCamp;
       });
 
       // Sort sessions into preferred sequence
