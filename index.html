@@ -6528,8 +6528,117 @@
       // Initialize Advanced Tracking
       initAdvancedTracking();
 
+      // ======= LEAD CAPTURE LOGIC =======
+      const LEAD_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwLfQEuMnQmTWCTycq0257dlHdsqpdfgK3lwgZ1VSTOSMRqXL_trjxaGF3wia-wuOu-/exec';
+      const LEAD_LANDING_PAGE = 'LEAD-Spring-Break-Camp-2026';
+
+      setTimeout(() => {
+        if (!localStorage.getItem('leadCaptured_' + LEAD_LANDING_PAGE)) {
+          const modal = document.getElementById('leadPopupModal');
+          if (modal) {
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+          }
+        }
+      }, 15000);
+
+      window.closeLeadPopup = function () {
+        const modal = document.getElementById('leadPopupModal');
+        if (modal) {
+          modal.classList.add('hidden');
+          modal.classList.remove('flex');
+        }
+      };
+
+      window.submitLead = async function (e) {
+        e.preventDefault();
+        const emailInput = document.getElementById('leadEmailInput');
+        const submitBtn = document.getElementById('leadSubmitBtn');
+        const email = emailInput.value.trim();
+
+        if (!email) return;
+
+        submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Submitting...';
+        submitBtn.disabled = true;
+
+        try {
+          await fetch(LEAD_SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            body: JSON.stringify({ email: email, landingPage: LEAD_LANDING_PAGE })
+          });
+
+          submitBtn.innerHTML = '<i class="fa-solid fa-check"></i> Success!';
+          submitBtn.classList.replace('text-black', 'text-white');
+          submitBtn.classList.replace('hover:border-black', 'border-green-500');
+          submitBtn.classList.add('bg-green-500');
+
+          localStorage.setItem('leadCaptured_' + LEAD_LANDING_PAGE, 'true');
+
+          setTimeout(() => window.closeLeadPopup(), 2000);
+        } catch (err) {
+          console.error("Error submitting lead:", err);
+          submitBtn.innerHTML = 'Error. Try Again';
+          submitBtn.disabled = false;
+          alert("There was an error saving your email. Please try again.");
+        }
+      };
+
     })();
   </script>
+
+  <!-- Lead Capture Popup -->
+  <div id="leadPopupModal" class="lead-modal hidden">
+    <div class="lead-modal-content">
+
+      <!-- Left Side: Form -->
+      <div class="lead-form-side">
+        <h2 class="text-3xl md:text-5xl font-black text-brand-navy mb-8 leading-tight tracking-tight"
+          style="color: #071f4e;">
+          Learn about the different <br class="hidden md:block" /> Spring Break Camps we have
+        </h2>
+
+        <form id="leadCaptureForm" onsubmit="window.submitLead(event)" class="w-full max-w-sm flex flex-col gap-6"
+          style="max-width: 24rem;">
+          <div style="margin-bottom: 1.5rem;">
+            <label class="block text-sm font-medium text-gray-700 mb-1" style="color: #374151;">Enter your email here
+              <span class="text-red-500" style="color: #ef4444;">*</span></label>
+            <input type="email" id="leadEmailInput" placeholder="Email" required class="lead-input">
+          </div>
+
+          <div class="flex flex-col gap-4 mt-2"
+            style="display: flex; flex-direction: column; gap: 1rem; align-items: flex-start;">
+            <button type="submit" id="leadSubmitBtn"
+              class="w-full border border-gray-400 hover:border-black text-black py-3 text-sm transition-colors bg-transparent backdrop-blur-sm"
+              style="width: 100%; border: 1px solid #000; padding: 0.75rem; background: transparent; color: #000; cursor: pointer;">
+              Submit
+            </button>
+            <div class="flex justify-center" style="display: flex; justify-content: center; width: 100%;">
+              <button type="button" onclick="window.closeLeadPopup()"
+                class="bg-black text-white py-2 px-8 text-sm transition-colors"
+                style="background: #000; color: #fff; padding: 0.5rem 2.5rem; border: none; cursor: pointer;">
+                Close
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- Right Side: Image -->
+      <div class="lead-img-side" style="height: 250px; flex-shrink: 0;">
+        <img src="https://res.cloudinary.com/drr3ss2j7/image/upload/v1771697075/IMG_6591.JPEG_cdc0h2.jpg"
+          alt="Spring Break Camp Activity"
+          style="width: 100%; height: 100%; object-fit: cover; object-position: center;">
+      </div>
+
+      <!-- Mobile Close Button (Top Right) -->
+      <button onclick="window.closeLeadPopup()"
+        class="md:hidden absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center transition-colors z-10"
+        style="position: absolute; top: 1rem; right: 1rem; width: 2rem; height: 2rem; background: rgba(0,0,0,0.5); color: #fff; border: none; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 10; cursor: pointer;">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+  </div>
 </body>
 
 </html>
