@@ -3621,6 +3621,28 @@
         transform: translateY(0);
       }
     }
+
+    @keyframes pulse-brand {
+
+      0%,
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: 0.8;
+        transform: scale(1.02);
+      }
+    }
+
+    .loading-pulse {
+      animation: pulse-brand 2s infinite ease-in-out;
+    }
+
+    .loading-spin {
+      animation: fa-spin 2s linear infinite;
+    }
   </style>
 </head>
 
@@ -4706,13 +4728,15 @@
             <div class="grid grid-cols-12 md:flex md:flex-wrap gap-2 items-center justify-center">
 
               <!-- Location (Row 1: 6 cols) -->
-              <div class="relative group col-span-6 md:w-auto">
+              <div class="relative group col-span-6 md:w-auto loading-pulse" id="filterLocContainer">
                 <select id="filterLoc"
                   class="w-full appearance-none bg-white border border-brand-orange text-brand-navy font-bold text-xs rounded-full py-2 pl-3 pr-8 shadow-sm focus:outline-none focus:ring-1 focus:ring-brand-orange cursor-pointer">
-                  <option value="">📍 Area</option>
+                  <option value="">Finding nearest location...</option>
                 </select>
-                <i
-                  class="fa-solid fa-location-dot absolute right-3 top-1/2 -translate-y-1/2 text-brand-orange text-[10px] pointer-events-none"></i>
+                <div id="filterLocIconContainer"
+                  class="absolute right-3 top-1/2 -translate-y-1/2 flex items-center justify-center pointer-events-none">
+                  <i id="filterLocIcon" class="fa-solid fa-location-dot text-brand-orange text-[10px] loading-spin"></i>
+                </div>
               </div>
 
               <!-- Week (Row 1: 6 cols) -->
@@ -5369,6 +5393,9 @@
       // 1. Render static content immediately — page is visible right away
       renderReviews('all');
 
+      // Render initial camp grid from static constants
+      filterGrid();
+
       // Start carousel auto-slide
       setInterval(() => {
         setSlide(slideIndex + 1);
@@ -5422,8 +5449,8 @@
 
     async function fetchServices() {
       try {
-        // Show the in-section spinner while waiting for data
-        if (loadingCamps) loadingCamps.classList.remove('hidden');
+        // Show a subtle background loading indicator instead of a full block if needed
+        // For now, we skip the large spinner since static data is already shown
 
         const response = await fetch(SHEET_URL);
         const data = await response.json();
@@ -5493,7 +5520,12 @@
         LOCATIONS = Object.keys(AREAS).sort(); // Area Names
 
         // 3. Populate Area Filter
-        filterLoc.innerHTML = '<option value="">📍 Area</option>';
+        filterLoc.innerHTML = '<option value="">Area</option>';
+        const filterLocContainer = document.getElementById('filterLocContainer');
+        if (filterLocContainer) filterLocContainer.classList.remove('loading-pulse');
+        const filterLocIcon = document.getElementById('filterLocIcon');
+        if (filterLocIcon) filterLocIcon.classList.remove('loading-spin');
+
         LOCATIONS.forEach(loc => {
           const opt = document.createElement('option');
           opt.value = loc;
@@ -5516,6 +5548,13 @@
 
       } catch (error) {
         console.error('Error fetching services:', error);
+        if (filterLoc) {
+          filterLoc.innerHTML = '<option value="">Area</option>';
+        }
+        const filterLocContainer = document.getElementById('filterLocContainer');
+        if (filterLocContainer) filterLocContainer.classList.remove('loading-pulse');
+        const filterLocIcon = document.getElementById('filterLocIcon');
+        if (filterLocIcon) filterLocIcon.classList.remove('loading-spin');
         if (loadingCamps) loadingCamps.innerHTML = '<p class="text-red-500 font-bold">Failed to load schedule. Please try refreshing.</p>';
       }
     }
@@ -5908,6 +5947,11 @@
 
     // Helper to generate location tags for a specific camp
     function getCampLocationTags(camp) {
+      // If data is still fetching, show a personalized loading message
+      if (allServices.length === 0) {
+        return `<span class="location-tag opacity-70 italic"><i class="fa-solid fa-spinner fa-spin text-[9px]"></i> Finding nearest location for you...</span>`;
+      }
+
       const matchingServices = allServices.filter(s => {
         if (!camp.matchNames.includes(s['Type of Camp Name'])) return false;
         if (selectedArea) {
@@ -6751,4 +6795,4 @@
   </div>
 </body>
 
-</html>
+</html>...
