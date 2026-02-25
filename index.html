@@ -3235,6 +3235,87 @@
       }
     }
 
+    /* --- Custom Video Section Styles (Fallback for removed Tailwind CDN) --- */
+    .custom-video-bg {
+      background-color: #05183d;
+    }
+
+    .custom-video-padding {
+      padding-top: 4rem;
+      padding-bottom: 4rem;
+    }
+
+    @media (min-width: 768px) {
+      .custom-video-padding {
+        padding-top: 6rem;
+        padding-bottom: 6rem;
+      }
+    }
+
+    .custom-video-width {
+      width: 300px;
+    }
+
+    @media (min-width: 640px) {
+      .custom-video-width {
+        width: 350px;
+      }
+    }
+
+    .custom-video-aspect {
+      aspect-ratio: 9 / 16;
+    }
+
+    .custom-circle-bg {
+      width: 800px;
+      height: 800px;
+      background-color: rgba(255, 161, 0, 0.05);
+      /* brand-orange/5 */
+    }
+
+    /* Cloudinary Player Overlay */
+    .video-overlay-play {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.3);
+      cursor: pointer;
+      transition: background 0.3s ease;
+      z-index: 10;
+    }
+
+    .video-overlay-play:hover {
+      background: rgba(0, 0, 0, 0.1);
+    }
+
+    .video-overlay-play.playing {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .play-button-icon {
+      width: 64px;
+      height: 64px;
+      background-color: #ffa100;
+      /* brand-orange */
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 24px;
+      padding-left: 6px;
+      /* visually center the play triangle */
+      box-shadow: 0 10px 25px rgba(255, 161, 0, 0.5);
+      transition: transform 0.3s ease;
+    }
+
+    .video-overlay-play:hover .play-button-icon {
+      transform: scale(1.1);
+    }
+
     /* Review Card Styles */
     .review-card {
       background: white;
@@ -4073,8 +4154,93 @@
           class="btn-shine inline-flex items-center justify-center px-8 py-4 text-base font-bold rounded-full text-white bg-brand-orange hover:bg-brand-orangeHover shadow-xl transition-all transform hover:-translate-y-1">
           Find Your Camp
         </a>
+        <a href="#video-message"
+          class="inline-flex items-center justify-center px-8 py-4 text-base font-bold rounded-full text-white bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 shadow-xl transition-all transform hover:-translate-y-1">
+          <i class="fa-solid fa-play" style="margin-right: 10px;"></i> Watch Message
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Neil's Video Message Section -->
+  <section id="video-message"
+    class="custom-video-padding custom-video-bg text-white overflow-hidden relative border-b border-white/10">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 relative z-10">
+      <div class="flex flex-col md:flex-row items-center gap-10 md:gap-16">
+
+        <!-- Left: Text Content -->
+        <div class="hidden md:block w-full md:w-1/2 text-center md:text-left reveal-left">
+          <h2 class="text-3xl md:text-5xl font-black mb-6 leading-tight drop-shadow-md">
+            ARE YOU READY TO BUILD <span class="text-brand-orange">SOMETHING AMAZING?</span>
+          </h2>
+          <p class="text-lg md:text-xl text-gray-300 mb-8 leading-relaxed">
+            Join our Spring Break Camp - Remove the guesswork and learn real engineering from experts.
+          </p>
+          <div class="space-y-4 text-gray-400 mb-8">
+            <div class="flex items-start gap-3">
+              <i class="fa-solid fa-check text-brand-orange mt-1"></i>
+              <span>Interactive 5-day hands-on experience</span>
+            </div>
+            <div class="flex items-start gap-3">
+              <i class="fa-solid fa-check text-brand-orange mt-1"></i>
+              <span>Keep your professional robotics kit</span>
+            </div>
+            <div class="flex items-start gap-3">
+              <i class="fa-solid fa-check text-brand-orange mt-1"></i>
+              <span>Learn coding, circuitry, and mechanics</span>
+            </div>
+          </div>
+          <a href="#camps"
+            class="inline-block bg-brand-orange hover:bg-brand-orangeHover text-white font-bold text-lg py-4 rounded-full transition-all shadow-lg hover:-translate-y-1"
+            style="padding-left: 2.5rem; padding-right: 2.5rem;">
+            I'M READY TO BUILD
+          </a>
+        </div>
+
+        <!-- Right: Vertical Video Constraint -->
+        <div class="w-full md:w-1/2 flex justify-center md:justify-end reveal-right">
+          <!-- Constraining wrapper to prevent massive vertical takeover on mobile -->
+          <div
+            class="relative custom-video-width custom-video-aspect shadow-2xl rounded-2xl overflow-hidden border border-white/10 bg-black group hover-lift">
+
+            <video id="neil-video" class="w-full h-full object-cover"
+              poster="https://res.cloudinary.com/drr3ss2j7/video/upload/f_auto,q_auto,so_0/v1772049022/Landingpage_e9fxya.jpg"
+              preload="none" playsinline>
+              <!-- Optimized Cloudinary delivery URL -->
+              <source
+                src="https://res.cloudinary.com/drr3ss2j7/video/upload/f_auto,q_auto/v1772049022/Landingpage_e9fxya.mp4"
+                type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+
+            <!-- Custom Play Button Overlay -->
+            <div id="video-overlay" class="video-overlay-play" onclick="playNeilVideo()">
+              <div class="play-button-icon">
+                <i class="fa-solid fa-play"></i>
+              </div>
+            </div>
+
+            <script>
+              function playNeilVideo() {
+                const video = document.getElementById('neil-video');
+                const overlay = document.getElementById('video-overlay');
+
+                if (video.paused) {
+                  video.play();
+                  video.controls = true; // Show native controls once playing
+                  overlay.classList.add('playing');
+                }
+              }
+            </script>
+          </div>
+        </div>
 
       </div>
+    </div>
+
+    <!-- Decorative faint background circle -->
+    <div
+      class="absolute top-1/2 right-0 -translate-y-1/2 translate-x-1/2 custom-circle-bg rounded-full blur-3xl pointer-events-none">
     </div>
   </section>
 
