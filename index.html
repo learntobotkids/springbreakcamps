@@ -3266,6 +3266,21 @@
       aspect-ratio: 9 / 16;
     }
 
+    /* Fix for native fullscreen aggressively cropping the 9:16 video on desktop */
+    .video-fit-cover {
+      object-fit: cover;
+    }
+
+    .video-fit-cover:-webkit-full-screen {
+      object-fit: contain !important;
+      background-color: black;
+    }
+
+    .video-fit-cover:fullscreen {
+      object-fit: contain !important;
+      background-color: black;
+    }
+
     .custom-circle-bg {
       width: 800px;
       height: 800px;
@@ -4236,7 +4251,8 @@
           <div
             class="relative custom-video-width custom-video-aspect shadow-2xl rounded-2xl overflow-hidden border border-white/10 bg-black group hover-lift">
 
-            <video id="neil-video" class="w-full h-full object-cover"
+            <video id="neil-video" class="absolute top-0 left-0 w-full h-full video-fit-cover"
+              style="width: 100%; height: 100%;"
               poster="https://res.cloudinary.com/drr3ss2j7/video/upload/f_auto,q_auto,so_0/v1772051806/2026_02_26_01_53_Img_1659_jx5ela.jpg"
               preload="auto" autoplay loop muted playsinline>
               <!-- Optimized Cloudinary delivery URL -->
@@ -4258,6 +4274,16 @@
             </div>
 
             <script>
+              document.addEventListener('DOMContentLoaded', () => {
+                const video = document.getElementById('neil-video');
+                // Explicitly call play to handle aggressive autoplay blocking policies
+                if (video) {
+                  video.play().catch(error => {
+                    console.log("Autoplay prevented by browser:", error);
+                  });
+                }
+              });
+
               function unmuteNeilVideo() {
                 const video = document.getElementById('neil-video');
                 const overlay = document.getElementById('video-overlay');
