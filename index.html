@@ -3273,47 +3273,80 @@
       /* brand-orange/5 */
     }
 
-    /* Cloudinary Player Overlay */
-    .video-overlay-play {
+    /* Cloudinary Player Overlay (Unmute) */
+    .video-overlay-unmute {
       position: absolute;
       inset: 0;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: rgba(0, 0, 0, 0.3);
+      background: rgba(0, 0, 0, 0.4);
       cursor: pointer;
-      transition: background 0.3s ease;
+      transition: opacity 0.3s ease, background 0.3s ease;
       z-index: 10;
     }
 
-    .video-overlay-play:hover {
-      background: rgba(0, 0, 0, 0.1);
+    .video-overlay-unmute:hover {
+      background: rgba(0, 0, 0, 0.5);
     }
 
-    .video-overlay-play.playing {
+    .video-overlay-unmute.playing {
       opacity: 0;
       pointer-events: none;
     }
 
-    .play-button-icon {
-      width: 64px;
-      height: 64px;
-      background-color: #ffa100;
-      /* brand-orange */
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    .unmute-box {
+      background: rgba(30, 58, 138, 0.85);
+      /* brand-navy-ish */
+      backdrop-filter: blur(8px);
+      border: 2px solid rgba(255, 255, 255, 0.8);
+      border-radius: 12px;
+      padding: 1.5rem 1rem;
+      text-align: center;
       color: white;
-      font-size: 24px;
-      padding-left: 6px;
-      /* visually center the play triangle */
-      box-shadow: 0 10px 25px rgba(255, 161, 0, 0.5);
-      transition: transform 0.3s ease;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      transform: scale(1);
+      transition: transform 0.2s ease, background 0.2s ease;
+      width: 85%;
+      max-width: 250px;
     }
 
-    .video-overlay-play:hover .play-button-icon {
-      transform: scale(1.1);
+    .video-overlay-unmute:hover .unmute-box {
+      transform: scale(1.05);
+      background: rgba(30, 58, 138, 0.95);
+    }
+
+    .unmute-icon {
+      font-size: 40px;
+      margin-bottom: 12px;
+      animation: pulse-vol 2s infinite;
+    }
+
+    @keyframes pulse-vol {
+      0% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.1);
+      }
+
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    .unmute-text-1 {
+      font-size: 16px;
+      font-weight: 800;
+      margin-bottom: 4px;
+      line-height: 1.2;
+    }
+
+    .unmute-text-2 {
+      font-size: 14px;
+      font-weight: 600;
+      opacity: 0.9;
     }
 
     /* Review Card Styles */
@@ -4087,7 +4120,7 @@
 
   <!-- Hero Section - Sales Funnel with Background Video -->
   <section id="hero"
-    class="relative min-h-[calc(100vh-4rem)] flex items-center justify-center px-4 sm:px-6 pt-16 pb-20 md:py-20 overflow-hidden">
+    class="relative min-h-[75vh] md:min-h-[calc(100vh-4rem)] flex items-center justify-center px-4 sm:px-6 py-10 md:py-20 overflow-hidden">
 
     <!-- Fullscreen Background Video -->
     <div class="absolute inset-0 -z-10">
@@ -4102,10 +4135,10 @@
     </div>
 
     <div
-      class="max-w-4xl mx-auto text-center relative z-10 bg-black/40 backdrop-blur-sm rounded-3xl p-4 sm:p-10 border border-white/10">
+      class="max-w-4xl mx-auto text-center relative z-10 bg-black/40 backdrop-blur-sm rounded-3xl p-4 sm:p-6 md:p-10 border border-white/10 mt-6 md:mt-0">
 
       <!-- Prominent Category Header -->
-      <div class="flex flex-col items-center justify-center mb-6">
+      <div class="flex flex-col items-center justify-center mb-3 md:mb-6">
         <span
           class="text-brand-orange font-black uppercase tracking-widest text-xl sm:text-2xl md:text-3xl drop-shadow-lg mb-3 leading-tight">
           SPRING BREAK ROBOTICS CAMP
@@ -4121,17 +4154,17 @@
 
       <!-- Main Headline -->
       <h1
-        class="text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.15] mb-2 md:mb-8 drop-shadow-lg">
+        class="text-3xl sm:text-4xl lg:text-6xl font-black text-white tracking-tight leading-[1.15] mb-2 md:mb-6 drop-shadow-lg">
         Build & Keep Your Own Robot This Spring.
       </h1>
 
       <!-- Supporting Subheadline -->
-      <p class="text-lg sm:text-xl text-white/80 leading-relaxed max-w-2xl mx-auto mb-4 md:mb-10">
+      <p class="text-base sm:text-xl text-white/80 leading-relaxed max-w-2xl mx-auto mb-3 md:mb-8">
         Includes a Professional Robotics Kit ($100 Value) — Yours to Keep Forever.
       </p>
 
       <!-- Trust Icons Row -->
-      <div class="flex flex-wrap justify-center gap-6 sm:gap-8 mb-4 md:mb-10 text-sm text-white/80">
+      <div class="flex flex-wrap justify-center gap-3 sm:gap-6 mb-4 md:mb-8 text-xs sm:text-sm text-white/80">
         <div class="flex items-center gap-2">
           <i class="fa-solid fa-shield-check text-green-400"></i>
           <span class="font-medium">Day 1 Risk-Free: Full Refund Guarantee</span>
@@ -4205,7 +4238,7 @@
 
             <video id="neil-video" class="w-full h-full object-cover"
               poster="https://res.cloudinary.com/drr3ss2j7/video/upload/f_auto,q_auto,so_0/v1772049022/Landingpage_e9fxya.jpg"
-              preload="none" playsinline>
+              preload="auto" autoplay loop muted playsinline>
               <!-- Optimized Cloudinary delivery URL -->
               <source
                 src="https://res.cloudinary.com/drr3ss2j7/video/upload/f_auto,q_auto/v1772049022/Landingpage_e9fxya.mp4"
@@ -4213,23 +4246,26 @@
               Your browser does not support the video tag.
             </video>
 
-            <!-- Custom Play Button Overlay -->
-            <div id="video-overlay" class="video-overlay-play" onclick="playNeilVideo()">
-              <div class="play-button-icon">
-                <i class="fa-solid fa-play"></i>
+            <!-- Custom Unmute Button Overlay -->
+            <div id="video-overlay" class="video-overlay-unmute" onclick="unmuteNeilVideo()">
+              <div class="unmute-box">
+                <div class="unmute-icon">
+                  <i class="fa-solid fa-volume-high"></i>
+                </div>
+                <div class="unmute-text-1">Your Video Is Playing</div>
+                <div class="unmute-text-2">Click To Unmute</div>
               </div>
             </div>
 
             <script>
-              function playNeilVideo() {
+              function unmuteNeilVideo() {
                 const video = document.getElementById('neil-video');
                 const overlay = document.getElementById('video-overlay');
 
-                if (video.paused) {
-                  video.play();
-                  video.controls = true; // Show native controls once playing
-                  overlay.classList.add('playing');
-                }
+                video.muted = false;       // Unmute the video
+                video.currentTime = 0;     // Restart from the beginning
+                video.controls = true;     // Show native controls once unmuted
+                overlay.classList.add('playing'); // Hide the overlay
               }
             </script>
           </div>
