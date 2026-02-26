@@ -4317,7 +4317,7 @@
       class="bg-brand-navy/90 backdrop-blur-xl rounded-full p-2 flex items-center gap-2 sm:gap-3 shadow-2xl border border-white/10">
 
       <!-- Video Anchor Button -->
-      <a href="#video-message"
+      <a href="#video-message" id="stickyVideoBtn"
         class="flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center bg-white/10 hover:bg-white/20 border border-white/20 transition-all shadow-lg hover:-translate-y-0.5 text-white"
         title="Watch Video Message">
         <i class="fa-solid fa-play ml-1"></i>
@@ -6928,6 +6928,82 @@
                 action: 'view_details'
               });
             }
+          });
+        }
+
+        // D. Founder Video Tracking (Neil's Video)
+        const neilVideo = document.getElementById('neil-video');
+        const videoOverlay = document.getElementById('video-overlay');
+        const stickyVideoBtn = document.getElementById('stickyVideoBtn');
+
+        let videoWatchProgress = {
+          q1: false, // 25%
+          q2: false, // 50%
+          q3: false, // 75%
+          completed: false // 100%
+        };
+
+        if (neilVideo) {
+          // Track explicit user unmute/play (indicates they are actually watching)
+          if (videoOverlay) {
+            videoOverlay.addEventListener('click', () => {
+              logEvent('founder_video_start', {
+                action: 'unmute_overlay_clicked'
+              });
+            });
+          }
+
+          // Track pause
+          neilVideo.addEventListener('pause', () => {
+            // Only log pause if they've genuinely started watching (currentTime > 0 and it's not at the end)
+            if (neilVideo.currentTime > 0 && !neilVideo.ended) {
+              logEvent('founder_video_pause', {
+                current_time: Math.round(neilVideo.currentTime),
+                duration: Math.round(neilVideo.duration)
+              });
+            }
+          });
+
+          // Track duration progress
+          neilVideo.addEventListener('timeupdate', () => {
+            if (!neilVideo.duration) return;
+
+            const percent = (neilVideo.currentTime / neilVideo.duration) * 100;
+
+            if (percent >= 25 && !videoWatchProgress.q1) {
+              videoWatchProgress.q1 = true;
+              logEvent('founder_video_progress', { quartile: '25%' });
+            } else if (percent >= 50 && !videoWatchProgress.q2) {
+              videoWatchProgress.q2 = true;
+              logEvent('founder_video_progress', { quartile: '50%' });
+            } else if (percent >= 75 && !videoWatchProgress.q3) {
+              videoWatchProgress.q3 = true;
+              logEvent('founder_video_progress', { quartile: '75%' });
+            }
+          });
+
+          // Track completion (handles loop reset)
+          neilVideo.addEventListener('ended', () => {
+            if (!videoWatchProgress.completed) {
+              videoWatchProgress.completed = true;
+              logEvent('founder_video_complete', {
+                duration: Math.round(neilVideo.duration)
+              });
+
+              // Reset progress for next loop if applicable
+              setTimeout(() => {
+                videoWatchProgress = { q1: false, q2: false, q3: false, completed: false };
+              }, 1000);
+            }
+          });
+        }
+
+        // Track floating Sticky CTA Video play click
+        if (stickyVideoBtn) {
+          stickyVideoBtn.addEventListener('click', () => {
+            logEvent('sticky_footer_video_click', {
+              action: 'scroll_to_video'
+            });
           });
         }
       }
