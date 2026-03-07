@@ -7062,16 +7062,19 @@
       // ======= LEAD CAPTURE LOGIC =======
       const LEAD_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwLfQEuMnQmTWCTycq0257dlHdsqpdfgK3lwgZ1VSTOSMRqXL_trjxaGF3wia-wuOu-/exec';
       const LEAD_LANDING_PAGE = 'LEAD-Spring-Break-Camp-2026';
+      const ENABLE_LEAD_POPUP = false;
 
-      setTimeout(() => {
-        if (!localStorage.getItem('leadCaptured_' + LEAD_LANDING_PAGE)) {
-          const modal = document.getElementById('leadPopupModal');
-          if (modal) {
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
+      if (ENABLE_LEAD_POPUP) {
+        setTimeout(() => {
+          if (!localStorage.getItem('leadCaptured_' + LEAD_LANDING_PAGE)) {
+            const modal = document.getElementById('leadPopupModal');
+            if (modal) {
+              modal.classList.remove('hidden');
+              modal.classList.add('flex');
+            }
           }
-        }
-      }, 15000);
+        }, 15000);
+      }
 
       window.closeLeadPopup = function () {
         const modal = document.getElementById('leadPopupModal');
