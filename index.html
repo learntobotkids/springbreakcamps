@@ -5791,23 +5791,24 @@
 
         AREAS = {};
         allServices.forEach(s => {
+          // HYBRID LOGIC: Parse hyphen from Column V if present, otherwise use full value
           // Normalize Location Data:
-          // If "Location Picker" (Column V) is empty, build it from Column C (Area) and Column O (Location)
-          if (!s['Location Picker'] && s['Area'] && s['Location']) {
+          // If "Location Picker" (Column V) is empty, use Column C (Area code)
+          if (!s['Location Picker'] && s['Area']) {
             const fullArea = AREA_CODE_MAP[String(s['Area']).trim().toUpperCase()] || s['Area'];
-            s['Location Picker'] = `${fullArea} - ${s['Location']}`;
+            s['Location Picker'] = fullArea;
           }
 
-          const locPickerValue = s['Location Picker'];
-          if (!locPickerValue) return;
+          let areaName = s['Location Picker'];
+          if (!areaName) return;
 
-          // Split "Area - SubLocation"
-          const parts = locPickerValue.split(' - ');
-          const areaName = parts[0].trim();
-          // If no hyphen, use the area name itself as the sub-location name
-          const subLocName = parts.length > 1 ? parts.slice(1).join(' - ').trim() : areaName;
+          // Parse hyphen if present: "CYPRESS - Location Name" -> "CYPRESS"
+          if (areaName.includes(' - ')) {
+            areaName = areaName.split(' - ')[0].trim();
+          }
 
-          const fullAddress = s['Location'] || '';
+          // Sub-location comes directly from Column O (Location)
+          const subLocName = s['Location'] || areaName;
           const mapLink = s['Map Link'] || '';
 
           if (!AREAS[areaName]) {
@@ -5821,7 +5822,7 @@
           if (!AREAS[areaName].subLocations[subLocName]) {
             AREAS[areaName].subLocations[subLocName] = {
               name: subLocName,
-              address: fullAddress,
+              address: subLocName, // Column O is both the name and address
               mapLink: mapLink,
               // Try to extract coords from link
               coords: extractCoordsFromLink(mapLink)
@@ -5912,8 +5913,11 @@
       // Filter by Area (match start of Location Picker)
       if (selectedArea) {
         filteredServices = filteredServices.filter(s => {
-          const sArea = s['Location Picker'].split(' - ')[0].trim();
-          return sArea === selectedArea;
+          let rowArea = s['Location Picker'];
+          if (rowArea && rowArea.includes(' - ')) {
+            rowArea = rowArea.split(' - ')[0].trim();
+          }
+          return rowArea === selectedArea;
         });
       }
 
@@ -5925,9 +5929,7 @@
       // Filter by SubLocation (if clicked on Map/Card)
       if (selectedSubLocation) {
         filteredServices = filteredServices.filter(s => {
-          const parts = s['Location Picker'].split(' - ');
-          const sSub = parts.length > 1 ? parts.slice(1).join(' - ').trim() : parts[0].trim();
-          return sSub === selectedSubLocation;
+          return s['Location'] === selectedSubLocation;
         });
       }
 
@@ -5981,10 +5983,13 @@
 
       let filteredServices = allServices;
       if (area) {
-        // Filter by Area (start of Location Picker)
+        // Filter by Area (parse hyphen if present)
         filteredServices = allServices.filter(s => {
-          const sArea = s['Location Picker'].split(' - ')[0].trim();
-          return sArea === area;
+          let rowArea = s['Location Picker'];
+          if (rowArea && rowArea.includes(' - ')) {
+            rowArea = rowArea.split(' - ')[0].trim();
+          }
+          return rowArea === area;
         });
       }
 
@@ -6145,14 +6150,14 @@
 
       if (activeWeek) {
         const weekServices = allServices.filter(s => {
-          const sArea = s['Location Picker'].split(' - ')[0].trim();
-          return sArea === areaName && s['Week #'] === activeWeek;
+          let rowArea = s['Location Picker'];
+          if (rowArea && rowArea.includes(' - ')) {
+            rowArea = rowArea.split(' - ')[0].trim();
+          }
+          return rowArea === areaName && s['Week #'] === activeWeek;
         });
 
-        activeSubLocNames = new Set(weekServices.map(s => {
-          const parts = s['Location Picker'].split(' - ');
-          return parts.length > 1 ? parts.slice(1).join(' - ').trim() : parts[0].trim();
-        }));
+        activeSubLocNames = new Set(weekServices.map(s => s['Location']));
       }
 
       // Render List
