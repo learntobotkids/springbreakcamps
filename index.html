@@ -5791,7 +5791,7 @@
 
         AREAS = {};
         allServices.forEach(s => {
-          // HYBRID LOGIC: Parse hyphen from Column V if present, otherwise use full value
+          // NEW LOGIC: Column V = Area only, Column O = Sub-location
           // Normalize Location Data:
           // If "Location Picker" (Column V) is empty, use Column C (Area code)
           if (!s['Location Picker'] && s['Area']) {
@@ -5799,13 +5799,8 @@
             s['Location Picker'] = fullArea;
           }
 
-          let areaName = s['Location Picker'];
+          const areaName = s['Location Picker'];
           if (!areaName) return;
-
-          // Parse hyphen if present: "CYPRESS - Location Name" -> "CYPRESS"
-          if (areaName.includes(' - ')) {
-            areaName = areaName.split(' - ')[0].trim();
-          }
 
           // Sub-location comes directly from Column O (Location)
           const subLocName = s['Location'] || areaName;
@@ -5913,11 +5908,7 @@
       // Filter by Area (match start of Location Picker)
       if (selectedArea) {
         filteredServices = filteredServices.filter(s => {
-          let rowArea = s['Location Picker'];
-          if (rowArea && rowArea.includes(' - ')) {
-            rowArea = rowArea.split(' - ')[0].trim();
-          }
-          return rowArea === selectedArea;
+          return s['Location Picker'] === selectedArea;
         });
       }
 
@@ -5983,13 +5974,9 @@
 
       let filteredServices = allServices;
       if (area) {
-        // Filter by Area (parse hyphen if present)
+        // Filter by Area (exact match)
         filteredServices = allServices.filter(s => {
-          let rowArea = s['Location Picker'];
-          if (rowArea && rowArea.includes(' - ')) {
-            rowArea = rowArea.split(' - ')[0].trim();
-          }
-          return rowArea === area;
+          return s['Location Picker'] === area;
         });
       }
 
@@ -6150,11 +6137,7 @@
 
       if (activeWeek) {
         const weekServices = allServices.filter(s => {
-          let rowArea = s['Location Picker'];
-          if (rowArea && rowArea.includes(' - ')) {
-            rowArea = rowArea.split(' - ')[0].trim();
-          }
-          return rowArea === areaName && s['Week #'] === activeWeek;
+          return s['Location Picker'] === areaName && s['Week #'] === activeWeek;
         });
 
         activeSubLocNames = new Set(weekServices.map(s => s['Location']));
